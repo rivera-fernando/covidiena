@@ -6,12 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="icons.css">
     <link rel="stylesheet" href="materialize.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="materialize.min.js"></script>
+    <script>
+    $(document).ready(function(){
+        $('.sidenav').sidenav();
+    });
+    </script>
   </head>
   <body>
       <nav>
     	<div class="nav-wrapper blue-grey lighten-4">
-            <ul id="nav-mobile" class="left">
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
+            <ul id="nav-mobile" class="left hide-on-med-and-down">
                 <li><a style="color: #42a5f5;font-weight: bold;" href="../">Covidiena</a></li>
                 <li><a style="color: #42a5f5;font-weight: bold;" href="/dashboard.html">Dashboard</a></li>
                 <li class="active"><a style="color: #42a5f5;font-weight: bold;" href="/info.html">Information</a></li>
@@ -24,6 +31,12 @@
             </ul>
     	</div>
       </nav>
+      <ul class="sidenav" id="mobile-demo">
+        <li><a style="color: #42a5f5;font-weight: bold;" href="../">Covidiena</a></li>
+        <li><a style="color: #42a5f5;font-weight: bold;" href="/dashboard.html">Dashboard</a></li>
+        <li class="active"><a style="color: #42a5f5;font-weight: bold;" href="/info.html">Information</a></li>
+        <li><a style="color: #42a5f5;font-weight: bold;" href="/events.html">Events</a></li>
+      </ul>
     <div class="container">
       <h1>Stay Informed</h1>
       <div class="card-panel blue-grey lighten-4">
@@ -40,16 +53,15 @@
             <div class="col s12 m6 l4">
                 <div class="card white">
                     <div class="card-content blue-grey-text-darken-2">
-                        <span class="card-title">Card Title</span>
+                        <span class="card-title">POTUS</span>
                         <a class="twitter-timeline" data-height="300" data-theme="light" href="https://twitter.com/POTUS?ref_src=twsrc%5Etfw">Tweets by POTUS</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>                    </div>
                 </div>
             </div>
             <div class="col s12 m6 l4">
                 <div class="card white">
                     <div class="card-content blue-grey-text-darken-2">
-                        <span class="card-title">Card Title</span>
-                        <p>I am a very simple card. I am good at containing small bits of information.
-                        I am convenient because I require little markup to use effectively.</p>
+                        <span class="card-title">WHO</span>
+                        <a class="twitter-timeline" data-height="300" data-theme="light" href="https://twitter.com/WHO?ref_src=twsrc%5Etfw">Tweets by WHO</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
                     </div>
                 </div>
             </div>
@@ -60,34 +72,54 @@
       </div>
       <div class="card-panel blue-grey lighten-4">
           <h3>Important Videos</h3>
+          <div class="row">
+              <div class="col m4 s12">
+                  <iframe id="ytplayer" type="text/html" style="width: 100%"
+                    src="https://www.youtube.com/embed/2xLjCfmx0iE?autoplay=0&origin=http://example.com"
+                    frameborder="0">
+                  </iframe>
+              </div>
+              <div class="col m4 s12">
+                  <iframe id="ytplayer" type="text/html" style="width: 100%"
+                    src="https://www.youtube.com/embed/seA1wbXUQTs?autoplay=0&origin=http://example.com"
+                    frameborder="0">
+                  </iframe>
+              </div>
+              <div class="col m4 s12">
+                  <iframe id="ytplayer" type="text/html" style="width: 100%"
+                    src="https://www.youtube.com/embed/U8r3oTVMtQ0?autoplay=0&origin=http://example.com"
+                    frameborder="0">
+                  </iframe>
+              </div>
+          </div>
       </div>
 
 
 
-
+    <br><br>
     </div>
-        <footer class="page-footer">
+        <footer class="page-footer blue-grey lighten-4">
           <div class="container">
             <div class="row">
               <div class="col l6 s12">
-                <h5 class="white-text">Footer Content</h5>
-                <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
+                <h5 class="blue-grey-text text-darken-2">Footer Content</h5>
+                <p class="blue-grey-text text-darken-2">You can use rows and columns here to organize your footer content.</p>
               </div>
               <div class="col l4 offset-l2 s12">
-                <h5 class="white-text">Links</h5>
+                <h5 class="blue-grey-text text-darken-2">Links</h5>
                 <ul>
-                  <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
-                  <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
-                  <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
-                  <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
+                  <li><a class="blue-grey-text text-darken-2" href="#!">Link 1</a></li>
+                  <li><a class="blue-grey-text text-darken-2" href="#!">Link 2</a></li>
+                  <li><a class="blue-grey-text text-darken-2" href="#!">Link 3</a></li>
+                  <li><a class="blue-grey-text text-darken-2" href="#!">Link 4</a></li>
                 </ul>
               </div>
             </div>
           </div>
-          <div class="footer-copyright">
-            <div class="container">
-            © 2014 Copyright Text
-            <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+          <div class="footer-copyright blue-grey lighten-2">
+            <div class="container blue-grey-text text-darken-2">
+            © 2020 Covidiena. All Rights Reserved.
+            <a class="blue-text text-darken-1 right" href="#!">Contact Us</a>
             </div>
           </div>
         </footer>
