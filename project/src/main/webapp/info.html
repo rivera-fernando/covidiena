@@ -8,13 +8,14 @@
     <link rel="stylesheet" href="materialize.min.css">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="materialize.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGiqqHxV-dvFdgBu_CXqovT85uLxs5m-c&libraries=places&callback=initMap" async defer></script>
     <script>
     $(document).ready(function(){
         $('.sidenav').sidenav();
     });
     </script>
   </head>
-  <body>
+  <body onload="handlePermission();">
       <nav>
     	<div class="nav-wrapper blue-grey lighten-4">
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
@@ -69,25 +70,31 @@
       </div>
       <div class="card-panel blue-grey lighten-4">
           <h3>Important Places</h3>
+          <div id="map"></div>
+            <div style="display: none" id="right-panel">
+                <h2>Results</h2>
+                <ul id="places"></ul>
+                <button id="more">More results</button>
+            </div>
       </div>
       <div class="card-panel blue-grey lighten-4">
           <h3>Important Videos</h3>
           <div class="row">
               <div class="col m4 s12">
                   <iframe id="ytplayer" type="text/html" style="width: 100%"
-                    src="https://www.youtube.com/embed/2xLjCfmx0iE?autoplay=0&origin=http://example.com"
+                    src="https://www.youtube.com/embed/2xLjCfmx0iE?autoplay=0"
                     frameborder="0">
                   </iframe>
               </div>
               <div class="col m4 s12">
                   <iframe id="ytplayer" type="text/html" style="width: 100%"
-                    src="https://www.youtube.com/embed/seA1wbXUQTs?autoplay=0&origin=http://example.com"
+                    src="https://www.youtube.com/embed/seA1wbXUQTs?autoplay=0"
                     frameborder="0">
                   </iframe>
               </div>
               <div class="col m4 s12">
                   <iframe id="ytplayer" type="text/html" style="width: 100%"
-                    src="https://www.youtube.com/embed/U8r3oTVMtQ0?autoplay=0&origin=http://example.com"
+                    src="https://www.youtube.com/embed/U8r3oTVMtQ0?autoplay=0"
                     frameborder="0">
                   </iframe>
               </div>
