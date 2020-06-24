@@ -5,6 +5,7 @@
     <title>Covidiena</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="icons.css">
+    <script src="covid_data.js"></script>
     <link rel="stylesheet" href="materialize.min.css">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="materialize.min.js"></script>
@@ -38,8 +39,95 @@
         <li><a style="color: #42a5f5;font-weight: bold;" href="/events.html">Events</a></li>
       </ul>
     <div class="container">
-      <h1>Covidiena</h1>
-      <p>This is our project.</p>
+      <div class="section">
+        <h4>Our Vision</h4>
+        <p>With the recent pandemic interrupting the education of millions of students throughout the country, colleges and universities are struggling to find ways to let students back on campus. That’s where Covidiena comes in. Our platform aims at easing the transition to in-person learning for college students, staff, and faculty during the ongoing crisis so students can continue their education in a stable and safe environment.</p>
+      </div>
+      <div class="card-panel blue-grey lighten-4">
+        <h4>What We Do</h4>
+        <div class="row">
+          <div class="col s12 m4 14">
+            <div style="border-radius: 5px;" class="card medium white hoverable">
+              <div class="card-content blue-grey-text-darken-2" style="overflow-y: scroll">
+                <div class="center promo promo-example">
+                  <span class="card-title bold">Symptom Tracking</span>
+                  <i class="large material-icons dp48">healing</i>
+                  <p class="promo-caption">Students are encouraged to report their daily temperature and any other symptoms they might be experiencing. This allows the college's administration to monitor any possible cases of Covid19 on campus, and react appropriately.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col s12 m4 14">
+            <div style="border-radius: 5px;" class="card medium white hoverable">
+              <div class="card-content blue-grey-text-darken-2" style="overflow-y: scroll">
+                <div class="center promo">
+                  <span class="card-title bold">Event Tracking</span>
+                  <i class="large material-icons dp48">event</i>
+                  <p class="promo-caption">All official on-campus events are submitted to Covidiena, where students, staff, and faculty can browse through events, their health/safety regulations, and maximum capacity.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col s12 m4 14">
+            <div style="border-radius: 5px;" class="card medium white hoverable">
+              <div class="card-content blue-grey-text-darken-2" style="overflow-y: scroll">
+                <div class="center promo">
+                  <span class="card-title bold">Spread Information</span>
+                  <i class="large material-icons dp48">info_outline</i>
+                  <p class="promo-caption">Valuable information on how to keep yourself and your community healthy and safe is available at our <a style="color: #42a5f5;font-weight: bold;" href="/info.html">Stay Informed</a> page. </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <h4>News and Updates</h4>
+        <div class="card-panel blue-grey lighten-4">
+          <div class="row">
+            <div class="col s8">
+              <div class="row">
+                <div class="card white hoverable center" style="border-radius: 5px;">
+                  <div class="card-content">
+                    <p class="card-title bold">World Data</p>
+                    <div class="row">
+                      <div class="col s12 m4 14">
+                        <b>Cases:</b> <div id="world-cases"></div>
+                      </div>
+                      <div class="col s12 m4 14">
+                        <b>Deaths:</b> <div id="world-deaths"></div>
+                      </div>
+                      <div class="col s12 m4 14">
+                        <b>Recoveries:</b> <div id="world-recoveries"></div>
+                      </div>
+                    </div>
+                    <p class="left">This data is taken from <a style="color: #42a5f5;font-weight: bold;" href="https://en.wikipedia.org/wiki/Template:COVID-19_pandemic_data">this</a> wikipedia page.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="card white medium hoverable" style="border-radius: 5px;">
+                  <div class="card-content" style="overflow-y: scroll; overflow-x: scroll">
+                    <p class="card-title bold center">By Country</p>
+                    <table id="country-table">
+                      <thead id="country-table-head"></thead>
+                      <tbody id="country-table-body"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col s4">
+              <div class="card large white hoverable" style="border-radius: 5px;">
+                <div class="card-content" style="overflow-y: scroll;">
+                  <p class="card-title bold">News</p>
+                  <div id="news"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>
