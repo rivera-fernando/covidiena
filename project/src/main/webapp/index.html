@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <title>Covidiena</title>
     <link rel="stylesheet" href="icons.css">
+    <script src="covid_data.js"></script>
     <link rel="stylesheet" href="materialize.min.css">
     <script src="materialize.min.js"></script>
-    <script src="covid_data.js"></script>
   </head>
   <body>
       <nav>
@@ -34,7 +34,7 @@
         <div class="row">
           <div class="col s12 m4 14">
             <div style="border-radius: 5px;" class="card medium white hoverable">
-              <div class="card-content blue-grey-text-darken-2">
+              <div class="card-content blue-grey-text-darken-2" style="overflow-y: scroll">
                 <div class="center promo promo-example">
                   <span class="card-title bold">Symptom Tracking</span>
                   <i class="large material-icons dp48">healing</i>
@@ -45,7 +45,7 @@
           </div>
           <div class="col s12 m4 14">
             <div style="border-radius: 5px;" class="card medium white hoverable">
-              <div class="card-content blue-grey-text-darken-2">
+              <div class="card-content blue-grey-text-darken-2" style="overflow-y: scroll">
                 <div class="center promo">
                   <span class="card-title bold">Event Tracking</span>
                   <i class="large material-icons dp48">event</i>
@@ -56,7 +56,7 @@
           </div>
           <div class="col s12 m4 14">
             <div style="border-radius: 5px;" class="card medium white hoverable">
-              <div class="card-content blue-grey-text-darken-2">
+              <div class="card-content blue-grey-text-darken-2" style="overflow-y: scroll">
                 <div class="center promo">
                   <span class="card-title bold">Spread Information</span>
                   <i class="large material-icons dp48">info_outline</i>
@@ -69,11 +69,46 @@
       </div>
       <div class="section">
         <h4>News and Updates</h4>
-        <div class="row">
-          <div class="card-panel blue-grey lighten-4">
-            <div class="card white medium">
-              <div class="card-content blue-grey-text-darken-2">
-                <div id="data-container"></div>
+        <div class="card-panel blue-grey lighten-4">
+          <div class="row">
+            <div class="col s8">
+              <div class="row">
+                <div class="card white hoverable center" style="border-radius: 5px;">
+                  <div class="card-content">
+                    <p class="card-title bold">World Data</p>
+                    <div class="row">
+                      <div class="col s12 m4 14">
+                        <b>Cases:</b> <div id="world-cases"></div>
+                      </div>
+                      <div class="col s12 m4 14">
+                        <b>Deaths:</b> <div id="world-deaths"></div>
+                      </div>
+                      <div class="col s12 m4 14">
+                        <b>Recoveries:</b> <div id="world-recoveries"></div>
+                      </div>
+                    </div>
+                    <p class="left">This data is taken from <a style="color: #42a5f5;font-weight: bold;" href="https://en.wikipedia.org/wiki/Template:COVID-19_pandemic_data">this</a> wikipedia page.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="card white medium hoverable" style="border-radius: 5px;">
+                  <div class="card-content" style="overflow-y: scroll; overflow-x: scroll">
+                    <p class="card-title bold center">By Country</p>
+                    <table id="country-table">
+                      <thead id="country-table-head"></thead>
+                      <tbody id="country-table-body"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col s4">
+              <div class="card large white hoverable" style="border-radius: 5px;">
+                <div class="card-content" style="overflow-y: scroll;">
+                  <p class="card-title bold">News</p>
+                  <div id="news"></div>
+                </div>
               </div>
             </div>
           </div>
