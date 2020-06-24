@@ -3,14 +3,22 @@
   <head>
     <meta charset="UTF-8">
     <title>Settings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="icons.css">
     <link rel="stylesheet" href="materialize.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="materialize.min.js"></script>
+    <script>
+    $(document).ready(function(){
+        $('.sidenav').sidenav();
+    });
+    </script>
   </head>
   <body>
       <nav>
     	<div class="nav-wrapper blue-grey lighten-4">
-            <ul id="nav-mobile" class="left">
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
+            <ul id="nav-mobile" class="left hide-on-med-and-down">
                 <li><a style="color: #42a5f5;font-weight: bold;" href="../">Covidiena</a></li>
                 <li><a style="color: #42a5f5;font-weight: bold;" href="/dashboard.html">Dashboard</a></li>
                 <li><a style="color: #42a5f5;font-weight: bold;" href="/info.html">Information</a></li>
@@ -21,6 +29,12 @@
             </ul>
     	</div>
       </nav>
+      <ul class="sidenav" id="mobile-demo">
+        <li><a style="color: #42a5f5;font-weight: bold;" href="../">Covidiena</a></li>
+        <li><a style="color: #42a5f5;font-weight: bold;" href="/dashboard.html">Dashboard</a></li>
+        <li class="active"><a style="color: #42a5f5;font-weight: bold;" href="/info.html">Information</a></li>
+        <li><a style="color: #42a5f5;font-weight: bold;" href="/events.html">Events</a></li>
+      </ul>
     <div class="container">
       <h1>Settings</h1>
       <p>This is our project.</p>
