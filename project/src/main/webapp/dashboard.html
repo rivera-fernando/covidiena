@@ -14,7 +14,7 @@
     });
     </script>
   </head>
-  <body>
+  <body onload="populateLinks()">
       <nav>
     	<div class="nav-wrapper blue-grey lighten-4">
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
@@ -105,56 +105,56 @@
                         <div style="border-radius: 10px;" class="card white">
                             <div class="card-content blue-grey-text-darken-2">
                                 <span class="card-title">Possible Symptoms</span>
-                                <form action="#">
+                                <div onchange="populateLinks()">
                                     <p>
                                         <label>
-                                        <input type="checkbox" class="filled-in"/>
+                                        <input type="checkbox" id="fever" class="filled-in"/>
                                         <span>Fever or chills</span>
                                         </label>
                                     </p>
                                     <p>
                                         <label>
-                                        <input type="checkbox" class="filled-in"/>
+                                        <input type="checkbox" id="cough" class="filled-in"/>
                                         <span>Cough</span>
                                         </label>
                                     </p>
                                     <p>
                                         <label>
-                                        <input type="checkbox" class="filled-in"/>
+                                        <input type="checkbox" id="sob" class="filled-in"/>
                                         <span>Shortness of breath</span>
                                         </label>
                                     </p>
                                     <p>
                                         <label>
-                                        <input type="checkbox" class="filled-in"/>
+                                        <input type="checkbox" id="fatigue" class="filled-in"/>
                                         <span>Fatigue</span>
                                         </label>
                                     </p>
                                     <p>
                                         <label>
-                                        <input type="checkbox" class="filled-in"/>
+                                        <input type="checkbox" id="aches" class="filled-in"/>
                                         <span>Muscle or body aches</span>
                                         </label>
                                     </p>
                                     <p>
                                         <label>
-                                        <input type="checkbox" class="filled-in"/>
+                                        <input type="checkbox" id="head" class="filled-in"/>
                                         <span>Headache</span>
                                         </label>
                                     </p>
                                     <p>
                                         <label>
-                                        <input type="checkbox" class="filled-in"/>
+                                        <input type="checkbox" id="throat" class="filled-in"/>
                                         <span>Sore throat</span>
                                         </label>
                                     </p>
                                     <p>
                                         <label>
-                                        <input type="checkbox" class="filled-in" />
+                                        <input type="checkbox" id="nausea" class="filled-in" />
                                         <span>Nausea or vomiting</span>
                                         </label>
                                     </p>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -162,6 +162,16 @@
                         <div style="border-radius: 10px;" class="card white">
                             <div class="card-content blue-grey-text-darken-2">
                                 <span class="card-title">Helpful Links</span>
+                                <ul id="links"> 
+                                    <li style="display:none;"id="fever_info"><a href="https://medlineplus.gov/ency/article/003091.htm#:~:text=Chills%20are%20caused%20by%20rapid,certain%20diseases%20such%20as%20malaria.">Chills</a></li>
+                                    <li style="display:none;"id="cough_info"><a href="https://www.mayoclinic.org/symptoms/cough/basics/definition/sym-20050846#:~:text=A%20cough%20is%20your%20body's,cough%20is%20normal%20and%20healthy.">Cough</a></li>
+                                    <li style="display:none;"id="sob_info"><a href="https://www.healthline.com/health/coronavirus-shortness-of-breath">Shortness of Breath</a></li>
+                                    <li style="display:none;"id="fatigue_info"><a href="https://www.medicalnewstoday.com/articles/248002">Fatigue</a></li>
+                                    <li style="display:none;"id="aches_info"><a href="https://www.solvhealth.com/health-a-z/body-and-muscle-aches">Aches</a></li>
+                                    <li style="display:none;"id="head_info"><a href="https://www.medicalnewstoday.com/articles/73936#types">Headache</a></li>
+                                    <li style="display:none;"id="throat_info"><a href="https://www.mayoclinic.org/diseases-conditions/sore-throat/symptoms-causes/syc-20351635">Sore Throat</a></li>
+                                    <li style="display:none;"id="nausea_info"><a href="https://www.webmd.com/digestive-disorders/digestive-diseases-nausea-vomiting">Nausea</a></li>
+                                </ul>
                             </div>
                         </div>
                     </div>
