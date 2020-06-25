@@ -14,7 +14,7 @@
     });
     </script>
   </head>
-  <body>
+  <body onload ="getUserLogin();">
       <nav>
     	<div class="nav-wrapper blue-grey lighten-4">
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
@@ -25,7 +25,8 @@
                 <li><a style="color: #42a5f5;font-weight: bold;" href="/events.html">Events</a></li>
             </ul>
             <ul id="nav-mobile" class="right">
-                <li><a href="/settings.html"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
+                <li><a class="waves-effect waves-light btn blue lighten-1" id= "loginButton">Log In</a></li>
+                <li><a href="/settings.html" id="settingButton"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
             </ul>
     	</div>
       </nav>
