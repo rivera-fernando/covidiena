@@ -87,3 +87,48 @@ function loadExplore() {
 function loadEventInfo() {
 
 }
+
+function validateEvent() {
+  var name = document.getElementsByName('name')[0].value;
+  var date = document.getElementsByName('date')[0].value;
+  var description = document.getElementsByName('description')[0].value;
+
+  const nameError = document.getElementById('name-error');
+  const dateError = document.getElementById('date-error');
+  const descriptionError = document.getElementById('description-error');
+  const injectionError = document.getElementById('injection-error');
+
+  // If comment contains any html of javascript don't submit the form
+  if ((description.includes("<html>")) || (description.includes("<script>")) || (name.includes("<html>")) || (name.includes("<script>"))) {
+      injectionError.style.display = "block";
+      return false;
+  } else {
+      injectionError.style.display = "none";
+
+  }
+  // If name, description, or both are empty don't submit the form
+  if ((description === "") || (name === "") || (date === "")) {
+      if (description === "") {
+          descriptionError.style.display = "block";
+      } else {
+          descriptionError.style.display = "none";
+      }
+      if (name === "") {
+          nameError.style.display = "block";
+      } else {
+          nameError.style.display = "none";
+      }
+      if (date === "") {
+          dateError.style.display = "block";
+      } else {
+          dateError.style.display = "none";
+      }
+      return false;
+  } else {
+      descriptionError.style.display = "none";
+      nameError.style.display = "none";
+      dateError.style.display = "none";
+      injectionError.style.display = "none";
+  }
+  return true;
+}

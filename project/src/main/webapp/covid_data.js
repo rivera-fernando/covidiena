@@ -36,9 +36,7 @@ request.onload = function (e) {
       const tableBody = table.getElementsByTagName('tbody')[0];
       const tableData = tableBody.getElementsByTagName('tr');
       const worldData = tableData[1].getElementsByTagName('th');
-      console.log(worldData);
       getWorldData(worldData);
-      console.log(tableData[0]);
       createTableHead(tableData[0]);
       for (row = 2; row < 230; row++) {
         createTableRow(tableData[row]);
@@ -132,5 +130,28 @@ function extractData(tableDataRow, tableRowDOM) {
 }
 
 function loadUpdates() {
-    
+  const url = "/announcements";
+  fetch(url, {
+    method: 'GET'
+  }).then(response => response.json()).then((announcements) => {
+    const updates = document.getElementById('updates');
+    updates.innerHTML = '';
+    announcements.forEach((announcement) => {
+        updates.appendChild(createAnnouncementElement(announcement));
+    })
+  });
+}
+
+function createAnnouncementElement(announcement) {
+  const announcementElement = document.createElement('div');
+  announcementElement.classList.add('card', 'white');
+
+  const description = document.createElement('p');
+  description.classList.add('card-content');
+
+  description.innerText = announcement.description;
+  
+  announcementElement.appendChild(description);
+
+  return announcementElement;
 }
