@@ -1,29 +1,59 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Log In</title>
-    <link rel="stylesheet" href="icons.css">
-    <link rel="stylesheet" href="materialize.min.css">
-    <script src="materialize.min.js"></script>
-  </head>
-  <body>
-      <nav>
-    	<div class="nav-wrapper blue-grey lighten-4">
-            <ul id="nav-mobile" class="left">
-                <li><a style="color: #42a5f5;font-weight: bold;" href="../">Covidiena</a></li>
-                <li><a style="color: #42a5f5;font-weight: bold;" href="/dashboard.html">Dashboard</a></li>
-                <li><a style="color: #42a5f5;font-weight: bold;" href="/info.html">Information</a></li>
-                <li><a style="color: #42a5f5;font-weight: bold;" href="/events.html">Events</a></li>
-            </ul>
-            <ul id="nav-mobile" class="right">
-                <li><a href="/settings.html"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
-            </ul>
-    	</div>
-      </nav>
-    <div class="container">
-      <h1>Log In</h1>
-      <p>This is our project.</p>
-    </div>
-  </body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Log In</title>
+        <link rel="stylesheet" href="icons.css">
+        <link rel="stylesheet" href="materialize.min.css">
+        <script src="materialize.min.js"></script>
+    </head>
+    <body>
+        <nav>
+            <div class="nav-wrapper blue-grey lighten-4">
+                <ul id="nav-mobile" class="left">
+                    <li><a style="color: #42a5f5;font-weight: bold;" href="../">Covidiena</a></li>
+                    <li><a style="color: #42a5f5;font-weight: bold;" href="/dashboard.html">Dashboard</a></li>
+                    <li><a style="color: #42a5f5;font-weight: bold;" href="/info.html">Information</a></li>
+                    <li><a style="color: #42a5f5;font-weight: bold;" href="/events.html">Events</a></li>
+                </ul>
+                <ul id="nav-mobile" class="right">
+                    <li><a href="/settings.html" id="seetingButton"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
+                </ul>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="row">
+                <div class="col s12 l8 offset-l2">
+                    <h3>Log In</h3>
+                    <h6>Please remember to use your school email!</h6>
+                </div>
+            </div>
+            <form action="/login" method="POST">
+                <div class="row">
+                    <div class="input-field col s12 l8 offset-l2">
+                        <input type="text" name="schoolEmail" id="schoolEmail" placeholder = ".edu" required>
+                        <label for="schoolEmail">School Email</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 l8 offset-l2">
+                        <input type="password" name="password" id="password" class="validate" required>
+                        <label for="password">Password</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 l8 offset-l2">
+                        <div class="input-field right">
+                            <button class="btn white-text" style="background-color: #42a5f5;">Log In</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="row">
+                <div class="col s12 l8 offset-l2">
+                    <h6>Don't have an account? Create an account <a href="/signup.html">here</a></h6> 
+                </div>
+            </div>
+        </div>
+    </body>
 </html>

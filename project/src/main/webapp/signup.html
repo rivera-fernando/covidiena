@@ -1,29 +1,79 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Sign Up</title>
-    <link rel="stylesheet" href="icons.css">
-    <link rel="stylesheet" href="materialize.min.css">
-    <script src="materialize.min.js"></script>
-  </head>
-  <body>
-      <nav>
-    	<div class="nav-wrapper blue-grey lighten-4">
-            <ul id="nav-mobile" class="left">
-                <li><a style="color: #42a5f5;font-weight: bold;" href="../">Covidiena</a></li>
-                <li><a style="color: #42a5f5;font-weight: bold;" href="/dashboard.html">Dashboard</a></li>
-                <li><a style="color: #42a5f5;font-weight: bold;" href="/info.html">Information</a></li>
-                <li><a style="color: #42a5f5;font-weight: bold;" href="/events.html">Events</a></li>
-            </ul>
-            <ul id="nav-mobile" class="right">
-                <li><a href="/settings.html"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
-            </ul>
-    	</div>
-      </nav>
-    <div class="container">
-      <h1>Sign Up</h1>
-      <p>This is our project.</p>
-    </div>
-  </body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Sign Up</title>
+        <link rel="stylesheet" href="icons.css">
+        <link rel="stylesheet" href="materialize.min.css">
+        <script src="materialize.min.js"></script>
+    </head>
+    <body onload = "addSignUp();">
+        <nav>
+            <div class="nav-wrapper blue-grey lighten-4">
+                <ul id="nav-mobile" class="left">
+                    <li><a style="color: #42a5f5;font-weight: bold;" href="../">Covidiena</a></li>
+                    <li><a style="color: #42a5f5;font-weight: bold;" href="/dashboard.html">Dashboard</a></li>
+                    <li><a style="color: #42a5f5;font-weight: bold;" href="/info.html">Information</a></li>
+                    <li><a style="color: #42a5f5;font-weight: bold;" href="/events.html">Events</a></li>
+                </ul>
+                <ul id="nav-mobile" class="right">
+                    <li><a href="/settings.html" id="seetingButton"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
+                </ul>
+            </div>
+        </nav>
+        <div class="container">
+            <h3> Create Account</h3>
+            <h6> Use your school email to access your school's events, important announcements, and much more!</h6>
+            <form action="/user" method="POST" form class="my-form">
+                <div class="row">
+                    <div class="input-field col s12 l6">
+                        <input type="text" name="fname" id = "fname" required>
+                        <label for="fname">First Name</label>
+                    </div>
+                    <div class="input-field col s12 l6">
+                        <input type="text" name="lname" id= "lname" required>
+                        <label for="lname">Last Name</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 l8">
+                        <input type="text" name="schoolEmail" id="email" disabled>
+                        <label for="schoolEmail">School Email</label>
+                    </div>
+                    <div class="input-field col s12 l4">
+                        <input type="text" name="studentID" id="studentID" required>
+                        <label for="studentID">Student ID</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 l8">
+                        <input type="text" name="school" id="school" required>
+                        <label for="school">School Name</label>
+                    </div>
+                    <div class="input-field col s12 l4">
+                        <select name="sex" id= "sex" required>
+                            <option value="" disabled selected>Select Your Sex</option>
+                            <option value="Female">Female</option>
+                            <option value="Male">Male</option>
+                        </select>
+                        <label for="sex">Sex</label>
+                    </div>
+                </div>
+                <div class ="row">
+                    <div class="input-field col s12 l6">
+                        <input type="text" placeholder="MM/DD/YYYY" name="birthdate" id="birthdate" class= "datepicker" required>
+                        <label for="birthdate">Birthdate</label>
+                    </div>
+                    <div class="input-field col s12 l6">
+                        <input type="tel" name="phone" id="phone" placeholder= "000-000-0000" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+                        <label for="phone">Cell Phone</label>
+                    </div>
+                </div>
+                <div class="input-field center">
+                    <button type ="submit" class="btn white-text" style="background-color: #42a5f5;" value="submit">Create My Profile</button>
+                    <input type="reset" class="btn red white-text " value="Reset">
+                </div>
+            </form>
+        </div>
+    </body>
 </html>

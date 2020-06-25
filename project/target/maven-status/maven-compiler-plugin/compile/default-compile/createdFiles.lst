@@ -1,0 +1,5 @@
+com/google/sps/data/User.class
+com/google/sps/servlets/SignUpServlet.class
+com/google/sps/servlets/LogInServlet.class
+com/google/sps/servlets/EditUserServlet.class
+com/google/sps/servlets/DeleteAccountServlet.class
