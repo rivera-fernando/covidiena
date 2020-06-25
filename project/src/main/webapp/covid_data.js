@@ -130,35 +130,3 @@ function extractData(tableDataRow, tableRowDOM) {
     tableRowDOM.appendChild(deathsDOM);
     tableRowDOM.appendChild(recoveriesDOM);
 }
-
-/*
- * News web scraping section
- */
-
-// Create the XMLHttpRequest to parse data from Google News page
-var request2 = new XMLHttpRequest();
-
-// Use a CORS proxy from herokuapp
-request2.open("GET", "https://cors-anywhere.herokuapp.com/https://news.google.com/covid19/map?hl=en-US&gl=US&ceid=US:en", true);  // last parameter must be true
-
-// When the request loads, get data and display in DOM
-request2.responseType = "document";
-request2.onload = function (e) {
-  if (request2.readyState === 4) {
-    if (request2.status === 200) {
-      const doc2 = request2.responseXML;
-      // The class below is the class for div containing the Cases data by nation
-      const news = doc2.querySelectorAll('.lxmZnf, .pym81b')[6];
-      const newsDOM = document.getElementById('news');
-      newsDOM.innerHTML = news.innerHTML;
-    } else {
-      console.error(request2.status, request2.statusText);
-    }
-  }
-};
-
-request2.onerror = function (e) {
-  console.error(request2.status, request2.statusText);
-};
-
-request2.send(null);  // not a POST request, so don't send extra data

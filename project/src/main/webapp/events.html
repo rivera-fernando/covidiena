@@ -13,8 +13,11 @@
         $('.sidenav').sidenav();
     });
     </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="materialize.min.js"></script>
+    <script src="event_script.js"></script>
   </head>
-  <body>
+  <body onload="loadPending()">
       <nav>
     	<div class="nav-wrapper blue-grey lighten-4">
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
@@ -36,8 +39,93 @@
         <li class="active"><a style="color: #42a5f5;font-weight: bold;" href="/events.html">Events</a></li>
       </ul>
     <div class="container">
-      <h1>Events</h1>
-      <p>This is our project.</p>
+      <h4>Events</h4>
+      <div class="section">
+        <form action="/post-event" method="POST" onsubmit="">
+          <div class="card blue-grey lighten-4">
+            <p class="card-title">Post an Event</p>
+            <div class="row">
+              <div class="col s4">
+                <input placeholder="Event Name" name="name" type="text" class="validate" style="font-color: white" autocomplete="off" spellcheck="false"> 
+                <input type="text" placeholder="Event Date" class="datepicker" name="date" style="font-color: white">
+                <div class="row left">
+                  <div class="col s6">
+                    <p><b>Type</b></p>
+                    <label>
+                      <input name="event-type" type="radio" value="Academic"/>
+                      <span class="black-text">Academic</span>
+                    </label>
+                    <label>
+                      <input name="event-type" type="radio" value="Social"/>
+                      <span class="black-text">Social</span>
+                    </label>
+                    <label>
+                      <input name="event-type" type="radio" value="School"/>
+                      <span class="black-text">School</span>
+                    </label>
+                  </div>
+                  <div class="col s6">
+                    <p><b>Attendance</b></p>
+                    <label>
+                      <input name="event-attendance" type="radio" value="Optional"/>
+                      <span class="black-text">Optional</span>
+                    </label>
+                    <label>
+                      <input name="event-attendance" type="radio" value="Mandatory"/>
+                      <span class="black-text">Mandatory</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col s5">
+                <textarea class="materialize-textarea" name="description" placeholder="Event Description" autocomplete="off" spellcheck="false"></textarea>
+              </div>
+              <div class="col s3">
+                <div class="center">
+                  <div style="height: 200px; padding: 10px;">
+                    <img id="output-image" style="max-height: 100%; max-width: 100%; overflow: scroll;" src="/images/meme.png">
+                  </div>
+                  <div class="file-field input-field">
+                    <div class="btn">
+                      <span>Image</span>
+                      <input type="file" accept="image/*" onchange="preview_image(event)" style="max-width: 100%">
+                    </div>
+                    <div class="file-path-wrapper">
+                      <input class="file-path validate" type="text">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <input class="waves-effect waves-light btn blue lighten-1" type="submit" value="POST">
+        </form>
+        <div class="section">
+          <div class="row">
+            <div class="col s6">
+              <div class="card-panel large blue-grey lighten-4">
+                <h4>Pending Events</h4>
+                <div id="pending-events"></div>
+              </div>
+            </div>
+            <div class="col s6">
+              <div class="card-panel large blue-grey lighten-4">
+                <h4>Upcoming Events</h4>
+                <div id="upcoming-events"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="row">
+            <h4>Explore Events</h4>
+            <div id="explore-events"></div>
+          </div>
+          <div class="row">
+            <div id="event-info"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>
