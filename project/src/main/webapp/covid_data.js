@@ -130,3 +130,7 @@ function extractData(tableDataRow, tableRowDOM) {
     tableRowDOM.appendChild(deathsDOM);
     tableRowDOM.appendChild(recoveriesDOM);
 }
+
+function loadUpdates() {
+    
+}
