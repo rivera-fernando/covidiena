@@ -16,6 +16,10 @@ $(document).ready(function(){
   $('.datepicker').datepicker();
 });
 
+$(document).ready(function(){
+    $('.tabs').tabs();
+  });
+
 function preview_image(event) {
   var reader = new FileReader();
   reader.onload = function() {

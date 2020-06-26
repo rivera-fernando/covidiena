@@ -42,22 +42,22 @@ public class LoadPendingEventsServlet extends HttpServlet {
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
-    List < Entity > resultsList = results.asList(FetchOptions.Builder.withDefaults());
-    List < Event > pendingEvents = new ArrayList < > ();
+    List <Entity> resultsList = results.asList(FetchOptions.Builder.withDefaults());
+    List <Event> pendingEvents = new ArrayList < > ();
 
     for (int i = 0; i < resultsList.size(); i++) {
 
-        Entity entity = resultsList.get(i);
-        long id = entity.getKey().getId();
-        String name = (String) entity.getProperty("name");
-        String date = (String) entity.getProperty("date");
-        String description = (String) entity.getProperty("description");
-        String type = (String) entity.getProperty("attendance");
-        String attendance = (String) entity.getProperty("type");
-        long timestamp = (long) entity.getProperty("timestamp");
+      Entity entity = resultsList.get(i);
+      long id = entity.getKey().getId();
+      String name = (String) entity.getProperty("name");
+      String date = (String) entity.getProperty("date");
+      String description = (String) entity.getProperty("description");
+      String type = (String) entity.getProperty("attendance");
+      String attendance = (String) entity.getProperty("type");
+      long timestamp = (long) entity.getProperty("timestamp");
 
-        Event event = new Event(id, name, date, description, type, attendance, timestamp, false, false);
-        pendingEvents.add(event);
+      Event event = new Event(id, name, date, description, type, attendance, timestamp, false, false);
+      pendingEvents.add(event);
     }
 
     Gson gson = new Gson();

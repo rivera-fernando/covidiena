@@ -37,9 +37,13 @@ request.onload = function (e) {
       const tableData = tableBody.getElementsByTagName('tr');
       const worldData = tableData[1].getElementsByTagName('th');
       getWorldData(worldData);
-      createTableHead(tableData[0]);
-      for (row = 2; row < 230; row++) {
-        createTableRow(tableData[row]);
+      try {
+        createTableHead(tableData[0]);
+        for (row = 2; row < 230; row++) {
+          createTableRow(tableData[row]);
+        }
+      } catch (error) {
+        console.log("An Error occured when retrieving data from Wikipedia");
       }
     } else {
       console.error(request.status, request.statusText);

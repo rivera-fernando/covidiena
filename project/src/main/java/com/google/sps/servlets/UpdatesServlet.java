@@ -64,20 +64,20 @@ public class UpdatesServlet extends HttpServlet {
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
-    List < Entity > resultsList = results.asList(FetchOptions.Builder.withDefaults());
-    List < Update > updates = new ArrayList < > ();
+    List <Entity> resultsList = results.asList(FetchOptions.Builder.withDefaults());
+    List <Update> updates = new ArrayList < > ();
 
     for (int i = 0; i < resultsList.size(); i++) {
 
-        Entity entity = resultsList.get(i);
-        long id = entity.getKey().getId();
-        String title = (String) entity.getProperty("title");
-        String description = (String) entity.getProperty("description");
-        String author = (String) entity.getProperty("author");
-        long timestamp = (long) entity.getProperty("timestamp");
+      Entity entity = resultsList.get(i);
+      long id = entity.getKey().getId();
+      String title = (String) entity.getProperty("title");
+      String description = (String) entity.getProperty("description");
+      String author = (String) entity.getProperty("author");
+      long timestamp = (long) entity.getProperty("timestamp");
 
-        Update update = new Update(id, title, description, author, timestamp);
-        updates.add(update);
+      Update update = new Update(id, title, description, author, timestamp);
+      updates.add(update);
     }
 
     Gson gson = new Gson();
