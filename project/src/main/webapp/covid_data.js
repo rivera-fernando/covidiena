@@ -36,12 +36,14 @@ request.onload = function (e) {
       const tableBody = table.getElementsByTagName('tbody')[0];
       const tableData = tableBody.getElementsByTagName('tr');
       const worldData = tableData[1].getElementsByTagName('th');
-      console.log(worldData);
       getWorldData(worldData);
-      console.log(tableData[0]);
-      createTableHead(tableData[0]);
-      for (row = 2; row < 230; row++) {
-        createTableRow(tableData[row]);
+      try {
+        createTableHead(tableData[0]);
+        for (row = 2; row < 230; row++) {
+          createTableRow(tableData[row]);
+        }
+      } catch (error) {
+        console.log("An Error occured when retrieving data from Wikipedia");
       }
     } else {
       console.error(request.status, request.statusText);
@@ -131,34 +133,41 @@ function extractData(tableDataRow, tableRowDOM) {
     tableRowDOM.appendChild(recoveriesDOM);
 }
 
-/*
- * News web scraping section
- */
+function loadUpdates() {
+  const url = "/updates";
+  fetch(url, {
+    method: 'GET'
+  }).then(response => response.json()).then((updates) => {
+    const updatesHistory = document.getElementById('updates');
+    updatesHistory.innerHTML = '';
+    updates.forEach((update) => {
+        updatesHistory.appendChild(createUpdateElement(update));
+    })
+  });
+}
 
-// Create the XMLHttpRequest to parse data from Google News page
-var request2 = new XMLHttpRequest();
+function createUpdateElement(update) {
+  const updateElement = document.createElement('div');
+  updateElement.classList.add('card', 'pink', 'lighten-2', 'z-depth-1');
+  updateElement.style.borderRadius = '5px';
 
-// Use a CORS proxy from herokuapp
-request2.open("GET", "https://cors-anywhere.herokuapp.com/https://news.google.com/covid19/map?hl=en-US&gl=US&ceid=US:en", true);  // last parameter must be true
+  const container = document.createElement('div');
+  container.classList.add('card-content');
 
-// When the request loads, get data and display in DOM
-request2.responseType = "document";
-request2.onload = function (e) {
-  if (request2.readyState === 4) {
-    if (request2.status === 200) {
-      const doc2 = request2.responseXML;
-      // The class below is the class for div containing the Cases data by nation
-      const news = doc2.querySelectorAll('.lxmZnf, .pym81b')[6];
-      const newsDOM = document.getElementById('news');
-      newsDOM.innerHTML = news.innerHTML;
-    } else {
-      console.error(request2.status, request2.statusText);
-    }
-  }
-};
+  const title = document.createElement('p');
+  title.classList.add('card-title');
+  title.style.fontSize = "16px";
+  const description = document.createElement('p');
+  const author = document.createElement('p');
 
-request2.onerror = function (e) {
-  console.error(request2.status, request2.statusText);
-};
+  title.innerText = update.title;
+  description.innerText = update.description;
+  author.innerText = "- " + update.author;
+  
+  container.appendChild(title);
+  container.appendChild(description);
+  container.appendChild(author);
+  updateElement.appendChild(container);
 
-request2.send(null);  // not a POST request, so don't send extra data
+  return updateElement;
+}
