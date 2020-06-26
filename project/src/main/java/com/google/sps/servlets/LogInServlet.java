@@ -51,14 +51,12 @@ public class LogInServlet extends HttpServlet {
         ArrayList<String> userInfo = new ArrayList<String>();
 
         Query query = new Query("User");
-        String userId = null;
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
         ArrayList<String> users = new ArrayList<String>();
         for(Entity entity:results.asIterable()){
             users.add((String) entity.getProperty("email"));
-            userId = entity.getKey().getId();
         }
 
         if (userService.isUserLoggedIn()) {
@@ -72,7 +70,6 @@ public class LogInServlet extends HttpServlet {
             }else{
                 userInfo.add(null);
             }
-            userInfo.add(userId);
             response.getWriter().println(gson.toJson(userInfo));
 
         } else {
@@ -80,7 +77,6 @@ public class LogInServlet extends HttpServlet {
             String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
             userInfo.add(null);
             userInfo.add(loginUrl);
-            userInfo.add(null);
             userInfo.add(null);
             response.getWriter().println(gson.toJson(userInfo));
         }
