@@ -15,18 +15,22 @@
 package com.google.sps.classes;
 
 /**
- * Class representing an individual announcement.
+ * Class representing an individual update.
  *
  */
-public final class Announcement {
+public final class Update {
 
   private final long id;
+  private final String title;
   private final String description;
+  private final String author;
   private final long timeStamp;
 
-  public Announcement(long id, String description, long timeStamp) {
+  public Update(long id, String title, String description, String author, long timeStamp) {
     this.id = id;
+    this.title = title;
     this.description = description;
+    this.author = author;
     this.timeStamp = timeStamp;
   }
 }

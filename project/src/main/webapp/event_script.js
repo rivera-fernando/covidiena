@@ -54,11 +54,13 @@ function loadUpcoming() {
 function createEventElement(event) {
   const eventElement = document.createElement('div');
   eventElement.classList.add('card', 'white');
+  eventElement.style.borderRadius = '5px';
+
+  const container = document.createElement('div');
+  container.classList.add('card-content');
 
   const name = document.createElement('p');
   name.classList.add('card-title');
-  const content = document.createElement('div');
-  content.classList.add('card-content')
   const date = document.createElement('p');
   const description = document.createElement('p');
   const type = document.createElement('p');
@@ -70,12 +72,12 @@ function createEventElement(event) {
   type.innerText = event.type;
   attendance.innerText = event.attendance;
 
-  eventElement.appendChild(name);
-  content.appendChild(date);
-  content.appendChild(description);
-  content.appendChild(type);
-  content.appendChild(attendance);
-  eventElement.appendChild(content);
+  container.appendChild(name);
+  container.appendChild(date);
+  container.appendChild(description);
+  container.appendChild(type);
+  container.appendChild(attendance);
+  eventElement.appendChild(container);
 
   return eventElement;
 }

@@ -130,28 +130,40 @@ function extractData(tableDataRow, tableRowDOM) {
 }
 
 function loadUpdates() {
-  const url = "/announcements";
+  const url = "/updates";
   fetch(url, {
     method: 'GET'
-  }).then(response => response.json()).then((announcements) => {
-    const updates = document.getElementById('updates');
-    updates.innerHTML = '';
-    announcements.forEach((announcement) => {
-        updates.appendChild(createAnnouncementElement(announcement));
+  }).then(response => response.json()).then((updates) => {
+    const updatesHistory = document.getElementById('updates');
+    updatesHistory.innerHTML = '';
+    updates.forEach((update) => {
+        updatesHistory.appendChild(createUpdateElement(update));
     })
   });
 }
 
-function createAnnouncementElement(announcement) {
-  const announcementElement = document.createElement('div');
-  announcementElement.classList.add('card', 'white');
+function createUpdateElement(update) {
+  const updateElement = document.createElement('div');
+  updateElement.classList.add('card', 'pink', 'lighten-2', 'z-depth-1');
+  updateElement.style.borderRadius = '5px';
 
+  const container = document.createElement('div');
+  container.classList.add('card-content');
+
+  const title = document.createElement('p');
+  title.classList.add('card-title');
+  title.style.fontSize = "16px";
   const description = document.createElement('p');
-  description.classList.add('card-content');
+  const author = document.createElement('p');
 
-  description.innerText = announcement.description;
+  title.innerText = update.title;
+  description.innerText = update.description;
+  author.innerText = "- " + update.author;
   
-  announcementElement.appendChild(description);
+  container.appendChild(title);
+  container.appendChild(description);
+  container.appendChild(author);
+  updateElement.appendChild(container);
 
-  return announcementElement;
+  return updateElement;
 }
