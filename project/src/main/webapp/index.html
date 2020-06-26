@@ -15,28 +15,34 @@
     });
     </script>
   </head>
-  <body onload ="getUserLogin();">
+  <body onload ="getUserLogin();loadUpdates();">
+  <body onload="loadUpdates()">
       <nav>
     	<div class="nav-wrapper blue-grey lighten-4">
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
-            <ul id="nav-mobile" class="left hide-on-med-and-down">
-                <li class="active"><a style="color: #42a5f5;font-weight: bold;" href="#">Covidiena</a></li>
-                <li><a style="color: #42a5f5;font-weight: bold;" href="/dashboard.html">Dashboard</a></li>
-                <li><a style="color: #42a5f5;font-weight: bold;" href="/info.html">Information</a></li>
-                <li><a style="color: #42a5f5;font-weight: bold;" href="/events.html">Events</a></li>
-            </ul>
+            <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
             <ul id="nav-mobile" class="right">
                 <li><a class="waves-effect waves-light btn blue lighten-1" id="createButton" href="/signup.html">Sign Up</a></li>
                 <li><a class="waves-effect waves-light btn blue lighten-1" id= "loginButton">Log In</a></li>
                 <li><a href="/settings.html" id="settingButton"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
+                <li><a href="/settings.html"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
+            </ul>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a style="color: #42a5f5;" href="/dashboard.html">Dashboard</a></li>
+                <li><a style="color: #42a5f5;" href="/info.html">Information</a></li>
+                <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+                <li style="width: 50px; height: 60px;">&nbsp;</li>
+                <li><a style="color: #42a5f5;" href="/signup.html">Sign Up</a></li>
+                <li><a style="color: #42a5f5;" href="/login.html">Log In</a></li>
             </ul>
     	</div>
       </nav>
       <ul class="sidenav" id="mobile-demo">
-        <li class="active"><a style="color: #42a5f5;font-weight: bold;" href="../">Covidiena</a></li>
-        <li><a style="color: #42a5f5;font-weight: bold;" href="/dashboard.html">Dashboard</a></li>
-        <li><a style="color: #42a5f5;font-weight: bold;" href="/info.html">Information</a></li>
-        <li><a style="color: #42a5f5;font-weight: bold;" href="/events.html">Events</a></li>
+        <li><a style="color: #42a5f5;" href="/dashboard.html">Dashboard</a></li>
+        <li><a style="color: #42a5f5;" href="/info.html">Information</a></li>
+        <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+        <li><a style="color: #42a5f5;" href="/signup.html">Sign Up</a></li>
+        <li><a style="color: #42a5f5;" href="/login.html">Log In</a></li>
       </ul>
     <div class="container">
       <div class="section">
@@ -47,33 +53,33 @@
         <h4>What We Do</h4>
         <div class="row">
           <div class="col s12 m4 14">
-            <div style="border-radius: 5px;" class="card medium white hoverable">
+            <div style="border-radius: 10px;" class="card medium white hoverable">
               <div class="card-content blue-grey-text-darken-2" style="overflow-y: scroll">
                 <div class="center promo promo-example">
-                  <span class="card-title bold">Symptom Tracking</span>
                   <i class="large material-icons dp48">healing</i>
+                  <span class="card-title bold">Symptom Tracking</span>
                   <p class="promo-caption">Students are encouraged to report their daily temperature and any other symptoms they might be experiencing. This allows the college's administration to monitor any possible cases of Covid19 on campus, and react appropriately.</p>
                 </div>
               </div>
             </div>
           </div>
           <div class="col s12 m4 14">
-            <div style="border-radius: 5px;" class="card medium white hoverable">
+            <div style="border-radius: 10px;" class="card medium white hoverable">
               <div class="card-content blue-grey-text-darken-2" style="overflow-y: scroll">
                 <div class="center promo">
-                  <span class="card-title bold">Event Tracking</span>
                   <i class="large material-icons dp48">event</i>
+                  <span class="card-title bold">Event Tracking</span>
                   <p class="promo-caption">All official on-campus events are submitted to Covidiena, where students, staff, and faculty can browse through events, their health/safety regulations, and maximum capacity.</p>
                 </div>
               </div>
             </div>
           </div>
           <div class="col s12 m4 14">
-            <div style="border-radius: 5px;" class="card medium white hoverable">
+            <div style="border-radius: 10px;" class="card medium white hoverable">
               <div class="card-content blue-grey-text-darken-2" style="overflow-y: scroll">
                 <div class="center promo">
-                  <span class="card-title bold">Spread Information</span>
                   <i class="large material-icons dp48">info_outline</i>
+                  <span class="card-title bold">Spread Information</span>
                   <p class="promo-caption">Valuable information on how to keep yourself and your community healthy and safe is available at our <a style="color: #42a5f5;font-weight: bold;" href="/info.html">Stay Informed</a> page. </p>
                 </div>
               </div>
@@ -85,9 +91,9 @@
         <h4>News and Updates</h4>
         <div class="card-panel blue-grey lighten-4">
           <div class="row">
-            <div class="col s8">
+            <div class="col s7">
               <div class="row">
-                <div class="card white hoverable center" style="border-radius: 5px;">
+                <div class="card white hoverable center" style="border-radius: 10px;">
                   <div class="card-content">
                     <p class="card-title bold">World Data</p>
                     <div class="row">
@@ -106,9 +112,11 @@
                 </div>
               </div>
               <div class="row">
-                <div class="card white medium hoverable" style="border-radius: 5px;">
-                  <div class="card-content" style="overflow-y: scroll; overflow-x: scroll">
+                <div class="card white large hoverable" style="border-radius: 10px;">
+                  <div class="card-content">
                     <p class="card-title bold center">By Country</p>
+                  </div>
+                  <div class="card-content" style="overflow-y: scroll; overflow-x: scroll; max-height: 80%">
                     <table id="country-table">
                       <thead id="country-table-head"></thead>
                       <tbody id="country-table-body"></tbody>
@@ -117,12 +125,25 @@
                 </div>
               </div>
             </div>
-            <div class="col s4">
-              <div class="card large white hoverable" style="border-radius: 5px;">
-                <div class="card-content" style="overflow-y: scroll;">
-                  <p class="card-title bold">News</p>
-                  <div id="news"></div>
+            <div class="col s4 push-s1">
+              <div class="row">
+                <div class="card large white hoverable" style="border-radius: 10px; overflow-y: hidden;">
+                  <div class="card-content">
+                    <p class="card-title bold">Covidiena Updates</p>
+                  </div>
+                  <div class="card-content" style="overflow-y: scroll; max-height: 80%">
+                    <div id="updates"></div>
+                  </div>
                 </div>
+              <div class="row">
+                <h5>Post an update</h5>
+                <form action="/updates" method="POST">
+                  <input name="update-title" placeholder="Update Title" autocomplete="off" spellcheck="false">
+                  <textarea class="materialize-textarea" name="update-description" placeholder="Update description" autocomplete="off" spellcheck="false"></textarea>
+                  <button class="btn waves-effect waves-light" type="submit" name="action">POST
+                    <i class="material-icons right">send</i>
+                  </button>
+                </form>
               </div>
             </div>
           </div>
