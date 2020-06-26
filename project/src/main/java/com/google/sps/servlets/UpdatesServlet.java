@@ -64,8 +64,8 @@ public class UpdatesServlet extends HttpServlet {
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
-    List <Entity> resultsList = results.asList(FetchOptions.Builder.withDefaults());
-    List <Update> updates = new ArrayList < > ();
+    List<Entity> resultsList = results.asList(FetchOptions.Builder.withDefaults());
+    List<Update> updates = new ArrayList<>();
 
     for (int i = 0; i < resultsList.size(); i++) {
 

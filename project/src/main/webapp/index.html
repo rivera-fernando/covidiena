@@ -109,8 +109,10 @@
               </div>
               <div class="row">
                 <div class="card white large hoverable" style="border-radius: 10px;">
-                  <div class="card-content" style="overflow-y: scroll; overflow-x: scroll">
+                  <div class="card-content">
                     <p class="card-title bold center">By Country</p>
+                  </div>
+                  <div class="card-content" style="overflow-y: scroll; overflow-x: scroll; max-height: 80%">
                     <table id="country-table">
                       <thead id="country-table-head"></thead>
                       <tbody id="country-table-body"></tbody>
@@ -121,9 +123,11 @@
             </div>
             <div class="col s4 push-s1">
               <div class="row">
-                <div class="card large white hoverable" style="border-radius: 10px;">
-                  <div class="card-content" style="overflow-y: scroll;">
+                <div class="card large white hoverable" style="border-radius: 10px; overflow-y: hidden;">
+                  <div class="card-content">
                     <p class="card-title bold">Covidiena Updates</p>
+                  </div>
+                  <div class="card-content" style="overflow-y: scroll; max-height: 80%">
                     <div id="updates"></div>
                   </div>
                 </div>
