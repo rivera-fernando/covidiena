@@ -39,8 +39,7 @@ public class LogInServlet extends HttpServlet {
     Gson gson = gsonBuilder.create();
 
     /*
-        if they dont have an account, ie in the database, redirect after 
-        log in to the sign in page and save that email so that it autofils that space for email
+    directs user to log in with gmail and prints with gson the email, admin permission, and log out/in url
     */
 
     @Override

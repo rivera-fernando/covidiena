@@ -17,6 +17,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/*
+gets the user's userId and edits their entity in the datastore
+*/
+
 @WebServlet("/edit-user")
 public class EditUserServlet extends HttpServlet {
 

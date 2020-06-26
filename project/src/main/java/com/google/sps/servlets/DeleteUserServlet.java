@@ -17,6 +17,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/*
+deletes user using userId
+*/
 
 @WebServlet("/delete-user")
 public class DeleteUserServlet extends HttpServlet {
