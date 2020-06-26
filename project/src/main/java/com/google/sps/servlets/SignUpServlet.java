@@ -41,7 +41,7 @@ public class SignUpServlet extends HttpServlet {
       String name = request.getParameter("fname") + " " + request.getParameter("lname");
       String email = userService.getCurrentUser().getEmail();
       String birthdate = request.getParameter("birthdate");
-      long studentID = Long.parseLong(request.getParameter("studentID"));
+      long studentId = Long.parseLong(request.getParameter("studentID"));
       String sex = request.getParameter("sex");
       String school = request.getParameter("school");
       String phone = request.getParameter("phone");
@@ -50,7 +50,7 @@ public class SignUpServlet extends HttpServlet {
       userEntity.setProperty("name", name);
       userEntity.setProperty("email", email);
       userEntity.setProperty("birthdate", birthdate);
-      userEntity.setProperty("studentID", studentID);
+      userEntity.setProperty("studentId", studentId);
       userEntity.setProperty("sex", sex);
       userEntity.setProperty("school", school);
       userEntity.setProperty("phone", phone);
@@ -61,7 +61,7 @@ public class SignUpServlet extends HttpServlet {
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       datastore.put(userEntity);
 
-      User user = new User(userEntity.getKey().getId(), name, email, birthdate, studentID, sex, school, phone);
+      User user = new User(userEntity.getKey().getId(), name, email, birthdate, studentId, sex, school, phone, "f", false);
       Gson gson = new Gson();
       response.setContentType("application/json;");
       response.getWriter().println(gson.toJson(user));
