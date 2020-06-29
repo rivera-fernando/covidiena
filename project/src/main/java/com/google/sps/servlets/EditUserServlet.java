@@ -41,6 +41,7 @@ public class EditUserServlet extends HttpServlet {
                     userId,
                     (String)entity.getProperty("name"),
                     userEmail,
+                    (String)entity.getProperty("password"),
                     (String)entity.getProperty("birthdate"),
                     Long.parseLong(String.valueOf(entity.getProperty("studentId"))),
                     (String)entity.getProperty("sex"),

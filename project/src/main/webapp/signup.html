@@ -13,7 +13,7 @@
         });
         </script>
     </head>
-    <body onload = "getUserLogin(); addSignUp();">
+    <body onload = "">
         <nav>
     	<div class="nav-wrapper blue-grey lighten-4">
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
@@ -52,8 +52,8 @@
                 </div>
                 <div class="row">
                     <div class="input-field col s12 l8">
-                        <input type="text" name="schoolEmail" id="email" disabled>
-                        <!-- <label for="schoolEmail">School Email</label> -->
+                        <input type="text" name="email" id="email" placeholder =".edu" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.edu$" class="validate" required>
+                        <label for="schoolEmail">School Email</label>
                     </div>
                     <div class="input-field col s12 l4">
                         <input type="text" name="studentID" id="studentID" required>
@@ -82,6 +82,12 @@
                     <div class="input-field col s12 l6">
                         <input type="tel" name="phone" id="phone" placeholder= "000-000-0000" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
                         <label for="phone">Cell Phone</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input type="password" name="password" class="validate" id="password" required>
+                        <label for="password">Password</label>
                     </div>
                 </div>
                 <div class="input-field center">
