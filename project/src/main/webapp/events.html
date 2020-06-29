@@ -17,7 +17,7 @@
     <script src="materialize.min.js"></script>
     <script src="event_script.js"></script>
   </head>
-  <body onload="getUserLogin();loadUpcoming();loadPending();">
+  <body onload="getUserLogin();loadUpcoming();loadPending();loadExplore()">
       <nav>
     	<div class="nav-wrapper blue-grey lighten-4">
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
@@ -37,7 +37,6 @@
       </nav>
       <ul class="sidenav" id="mobile-demo">
         <li><a style="color: #42a5f5;" href="/dashboard.html">Dashboard</a></li>
-        <li><a style="color: #42a5f5;" href="/info.html">Information</a></li>
         <li class="active"><a style="color: #42a5f5;" href="/events.html">Events</a></li>
         <li><a style="color: #42a5f5;" href="/signup.html">Sign Up</a></li>
         <li><a style="color: #42a5f5;" href="/login.html">Log In</a></li>
@@ -108,7 +107,7 @@
               <input class="btn waves-effect waves-light red lighten-1" type="reset" value="CANCEL">
             </div>
             <div class="col s2 push-s8">
-              <button class="btn waves-effect waves-light" type="submit" name="action">POST
+              <button class="btn waves-effect waves-light" type="submit" name="action" onclick="loadPending()">POST
                 <i class="material-icons right">send</i>
               </button>
             </div>
