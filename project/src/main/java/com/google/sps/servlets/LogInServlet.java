@@ -72,7 +72,7 @@ public class LogInServlet extends HttpServlet {
             response.getWriter().println(gson.toJson(userInfo));
 
         } else {
-            String urlToRedirectToAfterUserLogsIn = "/dashboard.html";
+            String urlToRedirectToAfterUserLogsIn = "/dashboard";
             String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
             userInfo.add(null);
             userInfo.add(loginUrl);
