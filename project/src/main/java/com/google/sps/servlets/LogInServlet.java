@@ -40,6 +40,9 @@ public class LogInServlet extends HttpServlet {
 
     /*
     directs user to log in with gmail and prints with gson the email, admin permission, and log out/in url
+    userInfo[0] = user email
+    userinfo[1] = log in/out url
+    userInfo[2] = does user have account
     */
 
     @Override
@@ -61,18 +64,22 @@ public class LogInServlet extends HttpServlet {
         if (userService.isUserLoggedIn()) {
             String userEmail = userService.getCurrentUser().getEmail().toLowerCase();
             String urlToRedirectToAfterUserLogsOut = "/";
-            String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
             userInfo.add(userEmail);
-            userInfo.add(logoutUrl);
             if(users.contains(userEmail)){
+                urlToRedirectToAfterUserLogsOut = "/dashboard.html";
+                String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
+                userInfo.add(logoutUrl);
                 userInfo.add("true");
             }else{
+                urlToRedirectToAfterUserLogsOut = "/signup.html";
+                String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
+                userInfo.add(logoutUrl);
                 userInfo.add(null);
             }
             response.getWriter().println(gson.toJson(userInfo));
 
         } else {
-            String urlToRedirectToAfterUserLogsIn = "/dashboard.html";
+            String urlToRedirectToAfterUserLogsIn = "/";
             String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
             userInfo.add(null);
             userInfo.add(loginUrl);

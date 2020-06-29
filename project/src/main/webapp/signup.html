@@ -13,20 +13,29 @@
         });
         </script>
     </head>
-    <body onload = "addSignUp();">
+    <body onload = "getUserLogin(); addSignUp();">
         <nav>
-            <div class="nav-wrapper blue-grey lighten-4">
-                <ul id="nav-mobile" class="left">
-                    <li><a style="color: #42a5f5;font-weight: bold;" href="../">Covidiena</a></li>
-                    <li><a style="color: #42a5f5;font-weight: bold;" href="/dashboard.html">Dashboard</a></li>
-                    <li><a style="color: #42a5f5;font-weight: bold;" href="/info.html">Information</a></li>
-                    <li><a style="color: #42a5f5;font-weight: bold;" href="/events.html">Events</a></li>
-                </ul>
-                <ul id="nav-mobile" class="right">
-                    <li><a href="/settings.html" id="seetingButton"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
-                </ul>
-            </div>
-        </nav>
+    	<div class="nav-wrapper blue-grey lighten-4">
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
+            <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
+            <ul id="nav-mobile" class="right">
+                <li><a href="/settings.html" id="settingButton"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
+            </ul>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a style="color: #42a5f5;" href="/dashboard.html">Dashboard</a></li>
+                <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
+                <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+                <li style="width: 50px; height: 60px;">&nbsp;</li>
+                <li><a style="color: #42a5f5;" href="/login.html" id= "loginButton">Log In</a></li>
+            </ul>
+    	</div>
+      </nav>
+      <ul class="sidenav" id="mobile-demo">
+        <li><a style="color: #42a5f5;" href="/dashboard.html">Dashboard</a></li>
+        <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
+        <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+        <li><a style="color: #42a5f5;" href="/login.html" id= "loginButton">Log In</a></li>
+      </ul>
         <div class="container">
             <h3> Create Account</h3>
             <h6> Use your school email to access your school's events, important announcements, and much more!</h6>
@@ -44,7 +53,7 @@
                 <div class="row">
                     <div class="input-field col s12 l8">
                         <input type="text" name="schoolEmail" id="email" disabled>
-                        <label for="schoolEmail">School Email</label>
+                        <!-- <label for="schoolEmail">School Email</label> -->
                     </div>
                     <div class="input-field col s12 l4">
                         <input type="text" name="studentID" id="studentID" required>
