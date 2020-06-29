@@ -3,10 +3,8 @@
   <head>
     <meta charset="UTF-8">
     <title>Settings</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="icons.css">
     <link rel="stylesheet" href="materialize.min.css">
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="materialize.min.js"></script>
     <script>
     $(document).ready(function(){
@@ -14,30 +12,85 @@
     });
     </script>
   </head>
-  <body>
+  <body onload ="getUserLogin();">
       <nav>
-    	<div class="nav-wrapper blue-grey lighten-4">
-            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
-            <ul id="nav-mobile" class="left hide-on-med-and-down">
+        <div class="nav-wrapper blue-grey lighten-4">
+            <ul id="nav-mobile" class="left">
                 <li><a style="color: #42a5f5;font-weight: bold;" href="../">Covidiena</a></li>
                 <li><a style="color: #42a5f5;font-weight: bold;" href="/dashboard.html">Dashboard</a></li>
                 <li><a style="color: #42a5f5;font-weight: bold;" href="/info.html">Information</a></li>
                 <li><a style="color: #42a5f5;font-weight: bold;" href="/events.html">Events</a></li>
             </ul>
             <ul id="nav-mobile" class="right">
-                <li><a href="/settings.html"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
+                <li><a class="waves-effect waves-light btn blue lighten-1" id= "loginButton">Log In</a></li>
+                <li><a href="/settings.html" id="seetingButton"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
             </ul>
-    	</div>
+        </div>
       </nav>
-      <ul class="sidenav" id="mobile-demo">
-        <li><a style="color: #42a5f5;font-weight: bold;" href="../">Covidiena</a></li>
-        <li><a style="color: #42a5f5;font-weight: bold;" href="/dashboard.html">Dashboard</a></li>
-        <li class="active"><a style="color: #42a5f5;font-weight: bold;" href="/info.html">Information</a></li>
-        <li><a style="color: #42a5f5;font-weight: bold;" href="/events.html">Events</a></li>
-      </ul>
     <div class="container">
-      <h1>Settings</h1>
-      <p>This is our project.</p>
+        <h3>Profile</h3>
+        <form action="/edit-user" method="POST" form class="my-form">
+            <div class="row">
+                <div class="input-field col s12 l12">
+                    <input type="text" name="name" id= "name" placeholder="name">
+                    <label for="name">Name</label>
+                    <i style="color: #42a5f5;" class="material-icons prefix">edit</i>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12 l12">
+                    <input type="text" name="birthdate" id="birthdate" placeholder ="birthday" disabled >
+                    <label for="birthdate">Birthdate</label>
+                </div>
+            </div>
+            <div class ="row">
+                <div class="input-field col s12 l12">
+                    <input type="text" name="sex" id="sex" placeholder="sex" disabled>
+                    <label for="sex">Sex</label>
+                </div>
+            </div>
+            <div class= "row">
+                <div class="input-field col s12 l12">
+                    <input type="text" name="school" id="school" placeholder= "school" disabled>
+                    <label for="school">School</label>
+                </div>
+            </div>
+            <div clas="row">
+                <label>Metric Preference</label>
+                <div class="input-field col s12 l2">
+                    <div class="switch">
+                        <label>
+                        °C
+                        <input type="checkbox" id="metric" name="metric">
+                        <span class="lever"></span>
+                        °F
+                        </label>
+                    </div>
+                    <i style="color: #42a5f5;" class="material-icons right">edit</i>
+
+                </div>
+            </div>
+            <h3>Contact Information</h3>
+            <div class="row">
+                <div class="input-field col s12 l12">
+                    <input type="text" name="email" id="email" placeholder="email.edu" disabled>
+                    <label for="email">Email</label>
+                </div>
+            </div>
+            <div class= "row">
+                <div class="input-field col s12 l12">
+                    <input type="tel" name="phone" id="phone" placeholder= "000-000-0000" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
+                    <label for="phone">Cell Phone #</label>
+                    <i style="color: #42a5f5;" class="material-icons prefix">edit</i>
+                </div>
+            </div>
+            <div class="input-field right">
+                <button type ="submit" class="btn white-text" style="background-color: #42a5f5;" value="submit">Save Changes</button>
+                <button class="btn white-text" style="background-color: #42a5f5;" disabled>Request Admin Access</button>
+                <button onclick= "deleteUser()" class="btn red white-text" disabled>Delete My Accont</button>
+            </div>
+        </form>
     </div>
   </body>
 </html>
+ 
