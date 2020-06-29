@@ -37,8 +37,16 @@ function loadPending() {
   }).then(response => response.json()).then((events) => {
     const pendingEvents = document.getElementById('pending-events');
     pendingEvents.innerHTML = '';
+    // Right now this if statement won't work for admins
     if (Object.keys(events).length == 0) {
       pendingEvents.innerText = "You have no pending events";
+    } else if (events[0].name === "Admin") {
+      delete events[0];
+      events.forEach((event) => {
+        var eventElement = createEventElement(event);
+        eventElement = addApprovalBtn(eventElement);
+        pendingEvents.appendChild(eventElement);
+      })
     } else {
       events.forEach((event) => {
         pendingEvents.appendChild(createEventElement(event));
@@ -48,17 +56,21 @@ function loadPending() {
 }
 
 function loadUpcoming() {
-  // For now don't do anything
-  return;
-  const url ="/load-pending";
+  const url ="/load-upcoming";
   fetch(url, {
     method: 'GET'
   }).then(response => response.json()).then((events) => {
-    const pendingEvents = document.getElementById('pending-events');
-    pendingEvents.innerHTML = '';
-    events.forEach((event) => {
-      pendingEvents.appendChild(createEventElement(event));
-    })
+    const upcomingEvents = document.getElementById('upcoming-events');
+    upcomingEvents.innerHTML = '';
+    if (Object.keys(events).length == 0) {
+      upcomingEvents.innerText = "You have no upcoming events";
+    } else {
+      events.forEach((event) => {
+        var eventElement = createEventElement(event);
+        eventElement = addRemovalBtn(eventElement);
+        upcomingEvents.appendChild(eventElement);
+      })
+    }
   });
 }
 
@@ -66,6 +78,7 @@ function createEventElement(event) {
   const eventElement = document.createElement('div');
   eventElement.classList.add('card', 'white');
   eventElement.style.borderRadius = '5px';
+  eventElement.id = event.id;
 
   const container = document.createElement('div');
   container.classList.add('card-content');
@@ -93,8 +106,81 @@ function createEventElement(event) {
   return eventElement;
 }
 
-function loadExplore() {
+function addApprovalBtn(eventElement) {
+  const approvalBtn = document.createElement('button');
+  approvalBtn.className = "waves-effect waves-light btn";
+  approvalBtn.innerText = "Approve";
 
+  approvalBtn.addEventListener('click', async () => {
+    const eventID = eventElement.id;
+    const params = new URLSearchParams();
+    params.append('id', eventID);
+    await fetch('/approve-event', {
+      method: 'POST',
+      body: params
+    });
+    loadPending();
+    loadUpcoming();
+    loadExplore();
+  });
+
+  eventElement.appendChild(approvalBtn);
+  return eventElement;
+}
+
+function addRemovalBtn(eventElement) {
+  const removalBtn = document.createElement('button');
+  removalBtn.className = "waves-effect waves-light btn";
+  removalBtn.innerText = "Remove";
+  
+  removalBtn.addEventListener('click', async () => {
+    const eventID = eventElement.id;
+    const params = new URLSearchParams();
+    params.append('id', eventID);
+    await fetch('/remove-event-rsvp', {
+      method: 'POST',
+      body: params
+    });
+    loadUpcoming();
+  })
+
+  eventElement.appendChild(removalBtn);
+  return eventElement;
+}
+
+function loadExplore() {
+  const url = "/load-explore";
+  fetch(url, {
+    method: 'GET'
+  }).then(response => response.json()).then((events) => {
+    const exploreEvents = document.getElementById('explore-events');
+    exploreEvents.innerHTML = '';
+    events.forEach((event) => {
+      var eventElement = createEventElement(event);
+      eventElement = addRSVPBtn(eventElement);
+      exploreEvents.appendChild(eventElement);
+    })
+  });
+}
+
+function addRSVPBtn(eventElement) {
+  const RSVPBtn = document.createElement('button');
+  RSVPBtn.className = "waves-effect waves-light btn";
+  RSVPBtn.innerText = "RSVP";
+
+  RSVPBtn.addEventListener('click', async () => {
+    const eventID = eventElement.id;
+    const params = new URLSearchParams();
+    params.append('id', eventID);
+    await fetch('/RSVP-event', {
+      method: 'POST',
+      body: params
+    });
+    loadUpcoming();
+  });
+
+  eventElement.appendChild(RSVPBtn);
+  return eventElement;
 }
 
 function loadEventInfo() {
