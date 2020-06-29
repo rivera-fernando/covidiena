@@ -33,7 +33,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that posts and loads announcemnts*/
 @WebServlet("/dashboard")
 public class Dashboard extends HttpServlet {
   UserService userService = UserServiceFactory.getUserService();
@@ -53,7 +52,12 @@ public class Dashboard extends HttpServlet {
             for(Entity entity:results.asIterable()){
                 if (((String) entity.getProperty("email")).toLowerCase().equals(userService.getCurrentUser().getEmail().toLowerCase())) {
                     found = true;
-                    response.sendRedirect("/dashboard.html");
+                    if(((Boolean)entity.getProperty("admin")) == true) {
+                        response.sendRedirect("/admin_dash.html");
+                    }
+                    else {
+                        response.sendRedirect("/dashboard.html");
+                    }
                 }
             }
             if (!found) {

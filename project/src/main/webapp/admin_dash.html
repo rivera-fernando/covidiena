@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="icons.css">
+    <link rel="stylesheet" href="materialize.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="materialize.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+    $(document).ready(function(){
+        $('.sidenav').sidenav();
+    });
+    $(window).resize(function(){
+        //drawBasic();
+    });
+    </script>
+    <script>
+    // Load the Visualization API and the corechart package.
+      google.charts.load('current', {'packages':['corechart', 'line']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.charts.setOnLoadCallback();
+    </script>
+  </head>
+  <body onload ="getUserLogin();">
+
+      <nav>
+    	<div class="nav-wrapper blue-grey lighten-4">
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
+            <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
+            <ul id="nav-mobile" class="right">
+                <li><a href="/settings.html" id="settingButton"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
+            </ul>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li  class="active"><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
+                <li><a style="color: #42a5f5;" href="/info.html">Information</a></li>
+                <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+                <li style="width: 50px; height: 60px;">&nbsp;</li>
+                <li><a style="color: #42a5f5;" id= "createButton" href="/signup.html">Sign Up</a></li>
+                <li><a style="color: #42a5f5;" href="/login.html" id= "loginButton">Log In</a></li>
+            </ul>
+    	</div>
+      </nav>
+      <ul class="sidenav" id="mobile-demo">
+        <li><a style="color: #42a5f5;" href="/dashboard.html">Dashboard</a></li>
+        <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
+        <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+        <li><a style="color: #42a5f5;" href="/signup.html">Sign Up</a></li>
+        <li><a style="color: #42a5f5;" href="/login.html">Log In</a></li>
+      </ul>
+    <div class="container">
+      <h1>Admin Dashboard</h1>
+      <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
+            <div class="row">
+                <div class="col s12 m5">
+                    <div style="border-radius: 10px;" class="card white">
+                        <div class="card-content blue-grey-text-darken-2">
+                            <span class="card-title">Daily Temperature</span>
+                            <p>This should hold avg temp today</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 m7">
+                    <div style="border-radius: 10px;" class="card white">
+                        <div class="card-content blue-grey-text-darken-2">
+                            <span class="card-title">Temperature Trends</span>
+                            <div id="chart" class="goog-chart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+      </div>
+    </div>
+  </body>
+</html>
