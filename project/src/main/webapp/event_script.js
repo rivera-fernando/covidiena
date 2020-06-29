@@ -1,3 +1,4 @@
+
 // Copyright 2019 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,6 +44,8 @@ function loadPending() {
 }
 
 function loadUpcoming() {
+  // For now don't do anything
+  return;
   const url ="/load-pending";
   fetch(url, {
     method: 'GET'

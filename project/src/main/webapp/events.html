@@ -17,7 +17,7 @@
     <script src="materialize.min.js"></script>
     <script src="event_script.js"></script>
   </head>
-  <body onload="getUserLogin();loadUpdates();">
+  <body onload="getUserLogin();loadUpcoming();loadPending();">
       <nav>
     	<div class="nav-wrapper blue-grey lighten-4">
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
@@ -27,8 +27,8 @@
             </ul>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li><a style="color: #42a5f5;" href="/dashboard.html">Dashboard</a></li>
-                <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
-                <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+                <li><a style="color: #42a5f5;" href="/info.html">Information</a></li>
+                <li class="active"><a style="color: #42a5f5;" href="/events.html">Events</a></li>
                 <li style="width: 50px; height: 60px;">&nbsp;</li>
                 <li><a style="color: #42a5f5;" id= "createButton" href="/signup.html">Sign Up</a></li>
                 <li><a style="color: #42a5f5;" href="/login.html" id= "loginButton">Log In</a></li>
@@ -37,8 +37,8 @@
       </nav>
       <ul class="sidenav" id="mobile-demo">
         <li><a style="color: #42a5f5;" href="/dashboard.html">Dashboard</a></li>
-        <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
-        <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+        <li><a style="color: #42a5f5;" href="/info.html">Information</a></li>
+        <li class="active"><a style="color: #42a5f5;" href="/events.html">Events</a></li>
         <li><a style="color: #42a5f5;" href="/signup.html">Sign Up</a></li>
         <li><a style="color: #42a5f5;" href="/login.html">Log In</a></li>
       </ul>
