@@ -30,7 +30,7 @@ public class EditUserServlet extends HttpServlet {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
         UserService userService = UserServiceFactory.getUserService();
-        String userEmail = userService.getCurrentUser().getEmail();
+        String userEmail = userService.getCurrentUser().getEmail().toLowerCase();
         User oldInfo = null;
 
         long userId = -1;
@@ -48,12 +48,13 @@ public class EditUserServlet extends HttpServlet {
                     (String)entity.getProperty("phone"),
                     (String)entity.getProperty("metric"),
                     Boolean.parseBoolean(String.valueOf(entity.getProperty("admin"))));
+                break;
             }
         }
 
-        Key userKey = KeyFactory.createKey("User", userId);
         Entity user = null;
         try{
+            Key userKey = KeyFactory.createKey("User", userId);
             user = datastore.get(userKey);
         }
         catch( Exception EntityNotFoundException){
@@ -67,9 +68,9 @@ public class EditUserServlet extends HttpServlet {
         }
         if(request.getParameter("metric")!= null){
             if(request.getParameter("metric").equals("on")){
-                user.setProperty("metric", "c");
+                user.setProperty("metric", "celsius");
             }else{
-                user.setProperty("metric", "f");
+                user.setProperty("metric", "fahrenheit");
             }
         }
         if(!request.getParameter("phone").isEmpty()){

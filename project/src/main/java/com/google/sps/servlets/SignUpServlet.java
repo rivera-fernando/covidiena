@@ -43,7 +43,7 @@ public class SignUpServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
       UserService userService = UserServiceFactory.getUserService();
       String name = request.getParameter("fname") + " " + request.getParameter("lname");
-      String email = userService.getCurrentUser().getEmail();
+      String email = userService.getCurrentUser().getEmail().toLowerCase();
       String birthdate = request.getParameter("birthdate");
       long studentId = Long.parseLong(request.getParameter("studentID"));
       String sex = request.getParameter("sex");
@@ -58,14 +58,14 @@ public class SignUpServlet extends HttpServlet {
       userEntity.setProperty("sex", sex);
       userEntity.setProperty("school", school);
       userEntity.setProperty("phone", phone);
-      userEntity.setProperty("metric", "f");
+      userEntity.setProperty("metric", "fahrenheit");
       userEntity.setProperty("admin", false);
 
 
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       datastore.put(userEntity);
 
-      User user = new User(userEntity.getKey().getId(), name, email, birthdate, studentId, sex, school, phone, "f", false);
+      User user = new User(userEntity.getKey().getId(), name, email, birthdate, studentId, sex, school, phone, "fahrenheit", false);
       Gson gson = new Gson();
       response.setContentType("application/json;");
       response.getWriter().println(gson.toJson(user));

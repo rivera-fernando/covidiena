@@ -55,11 +55,11 @@ public class LogInServlet extends HttpServlet {
         PreparedQuery results = datastore.prepare(query);
         ArrayList<String> users = new ArrayList<String>();
         for(Entity entity:results.asIterable()){
-            users.add((String) entity.getProperty("email"));
+            users.add(((String) entity.getProperty("email")).toLowerCase());
         }
 
         if (userService.isUserLoggedIn()) {
-            String userEmail = userService.getCurrentUser().getEmail();
+            String userEmail = userService.getCurrentUser().getEmail().toLowerCase();
             String urlToRedirectToAfterUserLogsOut = "/";
             String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
             userInfo.add(userEmail);

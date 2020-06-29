@@ -29,7 +29,7 @@ public class DeleteUserServlet extends HttpServlet {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
         UserService userService = UserServiceFactory.getUserService();
-        String userEmail = userService.getCurrentUser().getEmail();
+        String userEmail = userService.getCurrentUser().getEmail().toLowerCase();
         User oldInfo = null;
 
         long userId = -1;
