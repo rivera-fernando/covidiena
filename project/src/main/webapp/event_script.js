@@ -37,9 +37,13 @@ function loadPending() {
   }).then(response => response.json()).then((events) => {
     const pendingEvents = document.getElementById('pending-events');
     pendingEvents.innerHTML = '';
-    events.forEach((event) => {
+    if (Object.keys(events).length == 0) {
+      pendingEvents.innerText = "You have no pending events";
+    } else {
+      events.forEach((event) => {
         pendingEvents.appendChild(createEventElement(event));
-    })
+      })
+    }
   });
 }
 

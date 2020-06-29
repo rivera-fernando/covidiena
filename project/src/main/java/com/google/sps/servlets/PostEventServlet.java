@@ -28,6 +28,9 @@ import java.util.List;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.sps.data.User;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 
 /** Servlet that posts an event*/
 @WebServlet("/post-event")
@@ -44,17 +47,25 @@ public class PostEventServlet extends HttpServlet {
     String description = request.getParameter("description");
     long timestamp = System.currentTimeMillis();
 
-    Entity unapprovedEventEntity = new Entity("UnapprovedEvent");
-    unapprovedEventEntity.setProperty("name", name);
-    unapprovedEventEntity.setProperty("date", date);
-    unapprovedEventEntity.setProperty("type", type);
-    unapprovedEventEntity.setProperty("attendance", attendance);
-    unapprovedEventEntity.setProperty("description", description);
-    unapprovedEventEntity.setProperty("timestamp", timestamp);
+    UserService userService = UserServiceFactory.getUserService();
+    if (userService.isUserLoggedIn()) {
+      String userEmail = userService.getCurrentUser().getEmail().toLowerCase();
+      Entity unapprovedEventEntity = new Entity("UnapprovedEvent");
+      
+      unapprovedEventEntity.setProperty("name", name);
+      unapprovedEventEntity.setProperty("date", date);
+      unapprovedEventEntity.setProperty("type", type);
+      unapprovedEventEntity.setProperty("attendance", attendance);
+      unapprovedEventEntity.setProperty("description", description);
+      unapprovedEventEntity.setProperty("timestamp", timestamp);
+      unapprovedEventEntity.setProperty("email", userEmail);
 
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.put(unapprovedEventEntity);
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      datastore.put(unapprovedEventEntity);
 
-    response.sendRedirect("/events.html");
+      response.sendRedirect("/events.html");
+    } else {
+      response.sendRedirect("/login.html");
+    }
   }
 }
