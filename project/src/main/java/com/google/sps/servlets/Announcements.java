@@ -37,8 +37,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 /** Servlet that posts and loads announcemnts*/
-@WebServlet("/temp")
-public class Temperature extends HttpServlet {
+@WebServlet("/announcement")
+public class Announcements extends HttpServlet {
   DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   UserService userService = UserServiceFactory.getUserService();
   GsonBuilder gsonBuilder = new GsonBuilder();
@@ -46,32 +46,52 @@ public class Temperature extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      //this part will create the db entries
-      String temp = request.getParameter("temp");
-      Entity commentEntity = new Entity("user_temp");
-      java.util.Date now=new java.util.Date();  
-      commentEntity.setProperty("email", userService.getCurrentUser().getEmail().toLowerCase());
-      commentEntity.setProperty("temp", Double.parseDouble(temp));
+      String name = "";
+      String school = "";
+      Query query = new Query("User");
+      PreparedQuery results = datastore.prepare(query);
+      for(Entity entity:results.asIterable()){
+          if (((String) entity.getProperty("email")).toLowerCase().equals(userService.getCurrentUser().getEmail().toLowerCase())) {
+              name = (String) entity.getProperty("name");
+              school = (String) entity.getProperty("school");
+          }
+      }
+      String title = request.getParameter("title");
+      String content = request.getParameter("content");
+      Entity commentEntity = new Entity("Announcements");
+      java.util.Date now=new java.util.Date();
+      commentEntity.setProperty("from", name);
+      commentEntity.setProperty("title", title);
+      commentEntity.setProperty("content", content);
       commentEntity.setProperty("when", now);
+      commentEntity.setProperty("school", school);
       datastore.put(commentEntity);
   }
   
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      Query query = new Query("user_temp").addSort("when", SortDirection.ASCENDING);
-      PreparedQuery results = datastore.prepare(query);
       ArrayList<Object> data = new ArrayList<Object>();
+      String school = "";
+      Query query = new Query("User");
+      PreparedQuery results = datastore.prepare(query);
       for(Entity entity:results.asIterable()){
           if (((String) entity.getProperty("email")).toLowerCase().equals(userService.getCurrentUser().getEmail().toLowerCase())) {
+              school = (String) entity.getProperty("school");
+          }
+      }
+      query = new Query("Announcements").addSort("when", SortDirection.DESCENDING);
+      results = datastore.prepare(query);
+      for(Entity entity:results.asIterable()){
+          if (((String) entity.getProperty("school")).toLowerCase().equals(school)) {
               ArrayList<Object> pair = new ArrayList<Object>();
-              pair.add(entity.getProperty("when"));
-              pair.add(entity.getProperty("temp"));
-              pair.add(96);
-              pair.add(99);
+              pair.add(entity.getProperty("from"));
+              pair.add(entity.getProperty("title"));
+              pair.add(entity.getProperty("content"));
               data.add(pair);
           }
       }
       response.setContentType("application/json;");
       response.getWriter().println(gson.toJson(data));
+      //this will get all announcements entities, with school = current user school
   }
 }
