@@ -82,11 +82,11 @@ public class Announcements extends HttpServlet {
       query = new Query("Announcements").addSort("when", SortDirection.DESCENDING);
       results = datastore.prepare(query);
       for(Entity entity:results.asIterable()){
-          if (((String) entity.getProperty("school")).toLowerCase().equals(school)) {
+          if (((String) entity.getProperty("school")).toLowerCase().equals(school.toLowerCase())) {
               ArrayList<Object> pair = new ArrayList<Object>();
-              pair.add(entity.getProperty("from"));
-              pair.add(entity.getProperty("title"));
-              pair.add(entity.getProperty("content"));
+              pair.add((String) entity.getProperty("from"));
+              pair.add((String) entity.getProperty("title"));
+              pair.add((String) entity.getProperty("content"));
               data.add(pair);
           }
       }
