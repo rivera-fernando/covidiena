@@ -43,62 +43,14 @@ import java.security.spec.InvalidKeySpecException;
 @WebServlet("/login")
 public class LogInServlet extends HttpServlet {
 
-    /*
-    directs user to log in with gmail and prints with gson the email, admin permission, and log out/in url
-    userInfo[0] = user email
-    userinfo[1] = log in/out url
-    userInfo[2] = does user have account
-    */
-
-    // @Override
-    // public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    //     response.setContentType("application/json;");
-    //     UserService userService = UserServiceFactory.getUserService();
-    //     Gson gson = new Gson();
-    //     ArrayList<String> userInfo = new ArrayList<String>();
-
-    //     Query query = new Query("User");
-
-    //     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    //     PreparedQuery results = datastore.prepare(query);
-    //     ArrayList<String> users = new ArrayList<String>();
-    //     for(Entity entity:results.asIterable()){
-    //         users.add(((String) entity.getProperty("email")).toLowerCase());
-    //     }
-
-    //     if (userService.isUserLoggedIn()) {
-    //         String userEmail = userService.getCurrentUser().getEmail().toLowerCase();
-    //         String urlToRedirectToAfterUserLogsOut = "/";
-    //         userInfo.add(userEmail);
-    //         if(users.contains(userEmail)){
-    //             urlToRedirectToAfterUserLogsOut = "/dashboard.html";
-    //             String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
-    //             userInfo.add(logoutUrl);
-    //             userInfo.add("true");
-    //         }else{
-    //             urlToRedirectToAfterUserLogsOut = "/signup.html";
-    //             String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
-    //             userInfo.add(logoutUrl);
-    //             userInfo.add(null);
-    //         }
-    //         response.getWriter().println(gson.toJson(userInfo));
-
-    //     } else {
-    //         String urlToRedirectToAfterUserLogsIn = "/";
-    //         String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
-    //         userInfo.add(null);
-    //         userInfo.add(loginUrl);
-    //         userInfo.add(null);
-    //         response.getWriter().println(gson.toJson(userInfo));
-    //     }
-    // }
+    public User user = null;
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String password = hashPassword(request.getParameter("password").toCharArray());
         String email = request.getParameter("email").toLowerCase();
         Gson gson = new Gson();
-        response.setContentType("application/json;");
+        response.setContentType("text/html");
 
         Query query = new Query("User");
 
@@ -107,7 +59,7 @@ public class LogInServlet extends HttpServlet {
         ArrayList<String> users = new ArrayList<String>();
         for(Entity entity:results.asIterable()){
             if(entity.getProperty("password").equals(password) && entity.getProperty("email").equals(email)){
-                User user = new User(
+                user = new User(
                     (long) entity.getKey().getId(),
                     (String) entity.getProperty("name"),
                     (String) entity.getProperty("email"),
@@ -126,6 +78,13 @@ public class LogInServlet extends HttpServlet {
             }
         }
         response.sendRedirect("/login.html");
+    }
+
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        Gson gson = new Gson();
+        response.setContentType("application/json;");
+        response.getWriter().println(gson.toJson(user));
     }
 
     private String hashPassword(final char[] password){

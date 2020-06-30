@@ -64,4 +64,8 @@ public final class User {
   public String getMetric(){
       return metric;
   }
+
+  public String getPassword(){
+      return password;
+  }
 } 

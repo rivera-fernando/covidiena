@@ -25,28 +25,10 @@ deletes user using userId
 public class DeleteUserServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        Query query = new Query("User");
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        PreparedQuery results = datastore.prepare(query);
-        UserService userService = UserServiceFactory.getUserService();
-        String userEmail = userService.getCurrentUser().getEmail().toLowerCase();
-        User oldInfo = null;
+      long userId = Long.parseLong(request.getParameter("userId"));
 
-        long userId = -1;
-        for(Entity entity : results.asIterable()){
-            if(userEmail.equals((String)entity.getProperty("email"))){
-                userId = entity.getKey().getId();
-            }
-        }
-
-        Key userKey = KeyFactory.createKey("User", userId);
-        Entity user = null;
-        try{
-            user = datastore.get(userKey);
-        }
-        catch( Exception EntityNotFoundException){
-            return;
-        }
-        datastore.delete(userKey);
+      Key userEntityKey = KeyFactory.createKey("User", userId);
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      datastore.delete(userEntityKey);
     }
 }

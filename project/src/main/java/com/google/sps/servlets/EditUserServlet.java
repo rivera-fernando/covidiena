@@ -16,6 +16,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.codec.binary.Hex;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 /*
 gets the user's userId and edits their entity in the datastore
@@ -24,13 +31,11 @@ gets the user's userId and edits their entity in the datastore
 @WebServlet("/edit-user")
 public class EditUserServlet extends HttpServlet {
 
-    @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
         Query query = new Query("User");
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
-        UserService userService = UserServiceFactory.getUserService();
-        String userEmail = userService.getCurrentUser().getEmail().toLowerCase();
+        String userEmail = request.getParameter("userEmail");
         User oldInfo = null;
 
         long userId = -1;
@@ -79,6 +84,11 @@ public class EditUserServlet extends HttpServlet {
         }else{
             user.setProperty("phone", oldInfo.getPhone());
         }
+        if(!request.getParameter("password").isEmpty()){
+            user.setProperty("password", hashPassword((request.getParameter("password")).toCharArray()));
+        }else{
+            user.setProperty("password", oldInfo.getPassword());
+        }
     
         user.setProperty("birthdate", oldInfo.getBirthdate());
         user.setProperty("studentId", oldInfo.getStudentId());
@@ -88,6 +98,22 @@ public class EditUserServlet extends HttpServlet {
         user.setProperty("email", oldInfo.getEmail());
 
         datastore.put(user);
-        response.sendRedirect("/settings.html");
+        response.sendRedirect("/login.html");
+    }
+
+     private String hashPassword(final char[] password){
+        try {
+                String salt = "@*1!";
+                int iterations = 500;
+                int keyLength = 412;
+                byte[] saltBytes = salt.getBytes();
+                SecretKeyFactory skf = SecretKeyFactory.getInstance( "PBKDF2WithHmacSHA512" );
+                PBEKeySpec spec = new PBEKeySpec( password, saltBytes, iterations, keyLength );
+                SecretKey key = skf.generateSecret( spec );
+                byte[] res = key.getEncoded( );
+                return Hex.encodeHexString(res);
+            } catch ( NoSuchAlgorithmException | InvalidKeySpecException e ) {
+                throw new RuntimeException( e );
+            }
     }
 }
