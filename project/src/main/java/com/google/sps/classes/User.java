@@ -1,4 +1,4 @@
-package com.google.sps.data;
+package com.google.sps.classes;
 
 public final class User {
 

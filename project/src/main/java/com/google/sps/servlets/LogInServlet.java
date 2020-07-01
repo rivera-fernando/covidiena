@@ -17,7 +17,8 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.sps.data.User;
+import com.google.sps.classes.User;
+import com.google.sps.classes.PasswordHash;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -31,13 +32,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.codec.binary.Hex;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
+import javax.swing.JOptionPane;
+
 
 
 @WebServlet("/login")
@@ -47,7 +43,7 @@ public class LogInServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String password = hashPassword(request.getParameter("password").toCharArray());
+        String password = PasswordHash.hashPassword(request.getParameter("password").toCharArray());
         String email = request.getParameter("email").toLowerCase();
         Gson gson = new Gson();
         response.setContentType("text/html");
@@ -77,6 +73,8 @@ public class LogInServlet extends HttpServlet {
                 return;
             }
         }
+
+        response.getWriter().println(gson.toJson(user));
         response.sendRedirect("/login.html");
     }
 
@@ -85,21 +83,5 @@ public class LogInServlet extends HttpServlet {
         Gson gson = new Gson();
         response.setContentType("application/json;");
         response.getWriter().println(gson.toJson(user));
-    }
-
-    private String hashPassword(final char[] password){
-      try {
-            String salt = "@*1!";
-            int iterations = 500;
-            int keyLength = 412;
-            byte[] saltBytes = salt.getBytes();
-            SecretKeyFactory skf = SecretKeyFactory.getInstance( "PBKDF2WithHmacSHA512" );
-            PBEKeySpec spec = new PBEKeySpec( password, saltBytes, iterations, keyLength );
-            SecretKey key = skf.generateSecret( spec );
-            byte[] res = key.getEncoded( );
-            return Hex.encodeHexString(res);
-        } catch ( NoSuchAlgorithmException | InvalidKeySpecException e ) {
-            throw new RuntimeException( e );
-        }
     }
 }

@@ -10,7 +10,8 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.google.sps.data.User;
+import com.google.sps.classes.User;
+import com.google.sps.classes.PasswordHash;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -85,7 +86,7 @@ public class EditUserServlet extends HttpServlet {
             user.setProperty("phone", oldInfo.getPhone());
         }
         if(!request.getParameter("password").isEmpty()){
-            user.setProperty("password", hashPassword((request.getParameter("password")).toCharArray()));
+            user.setProperty("password", PasswordHash.hashPassword((request.getParameter("password")).toCharArray()));
         }else{
             user.setProperty("password", oldInfo.getPassword());
         }
@@ -99,21 +100,5 @@ public class EditUserServlet extends HttpServlet {
 
         datastore.put(user);
         response.sendRedirect("/login.html");
-    }
-
-     private String hashPassword(final char[] password){
-        try {
-                String salt = "@*1!";
-                int iterations = 500;
-                int keyLength = 412;
-                byte[] saltBytes = salt.getBytes();
-                SecretKeyFactory skf = SecretKeyFactory.getInstance( "PBKDF2WithHmacSHA512" );
-                PBEKeySpec spec = new PBEKeySpec( password, saltBytes, iterations, keyLength );
-                SecretKey key = skf.generateSecret( spec );
-                byte[] res = key.getEncoded( );
-                return Hex.encodeHexString(res);
-            } catch ( NoSuchAlgorithmException | InvalidKeySpecException e ) {
-                throw new RuntimeException( e );
-            }
     }
 }

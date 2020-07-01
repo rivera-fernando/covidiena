@@ -17,7 +17,8 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
-import com.google.sps.data.User;
+import com.google.sps.classes.User;
+import com.google.sps.classes.PasswordHash;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -57,7 +58,7 @@ public class SignUpServlet extends HttpServlet {
         String sex = request.getParameter("sex");
         String school = request.getParameter("school");
         String phone = request.getParameter("phone");
-        String password = hashPassword(request.getParameter("password").toCharArray());
+        String password = PasswordHash.hashPassword(request.getParameter("password").toCharArray());
 
         Query query = new Query("User");
 
@@ -93,27 +94,10 @@ public class SignUpServlet extends HttpServlet {
         response.sendRedirect("/dashboard.html");
     }
 
-        @Override
-        public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
-            Gson gson = new Gson();
-            response.setContentType("application/json;");
-            response.getWriter().println(gson.toJson(user));
-        }
-
-
-    private String hashPassword(final char[] password){
-        try {
-                String salt = "@*1!";
-                int iterations = 500;
-                int keyLength = 412;
-                byte[] saltBytes = salt.getBytes();
-                SecretKeyFactory skf = SecretKeyFactory.getInstance( "PBKDF2WithHmacSHA512" );
-                PBEKeySpec spec = new PBEKeySpec( password, saltBytes, iterations, keyLength );
-                SecretKey key = skf.generateSecret( spec );
-                byte[] res = key.getEncoded( );
-                return Hex.encodeHexString(res);
-            } catch ( NoSuchAlgorithmException | InvalidKeySpecException e ) {
-                throw new RuntimeException( e );
-            }
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        Gson gson = new Gson();
+        response.setContentType("application/json;");
+        response.getWriter().println(gson.toJson(user));
     }
 }
