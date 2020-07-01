@@ -12,125 +12,62 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/*
- * Currently, this script will run when the home page loads and display data from 
- * https://news.google.com/covid19/map?hl=en-US&gl=US&ceid=US:en in the DOM. TODO:
- * reformat into a function that loads data when different components in the DOM
- * are rendered, so that we can load different sections asynchronously.
-*/
-
-// Create the XMLHttpRequest to parse data from the page
-var request = new XMLHttpRequest();
-
-// Use a CORS proxy from herokuapp
-request.open("GET", "https://cors-anywhere.herokuapp.com/https://en.wikipedia.org/wiki/Template:COVID-19_pandemic_data", true);  // last parameter must be true
-
-// When the request loads, get data and display in DOM
-request.responseType = "document";
-request.onload = function (e) {
-  if (request.readyState === 4) {
-    if (request.status === 200) {
-      const doc = request.responseXML;
-      // The class below is the class for div containing the Cases data by nation
-      const table = doc.getElementById('thetable');
-      const tableBody = table.getElementsByTagName('tbody')[0];
-      const tableData = tableBody.getElementsByTagName('tr');
-      const worldData = tableData[1].getElementsByTagName('th');
-      getWorldData(worldData);
-      try {
-        createTableHead(tableData[0]);
-        for (row = 2; row < 230; row++) {
-          createTableRow(tableData[row]);
-        }
-      } catch (error) {
-        console.log("An Error occured when retrieving data from Wikipedia");
-      }
-    } else {
-      console.error(request.status, request.statusText);
-    }
-  }
-};
-
-request.onerror = function (e) {
-  console.error(request.status, request.statusText);
-};
-
-request.send(null);  // not a POST request, so don't send extra data
-
-function getWorldData(worldData) {
-    const worldCases = worldData[2];
-    const worldDeaths = worldData[3];
-    const worldRecoveries = worldData[4];
-
-    const worldCasesDOM = document.getElementById('world-cases');
-    const worldDeathsDOM = document.getElementById('world-deaths');
-    const worldRecoveriesDOM = document.getElementById('world-recoveries');
-    
-    worldCasesDOM.innerHTML = worldCases.innerHTML;
-    worldDeathsDOM.innerHTML = worldDeaths.innerHTML;
-    worldRecoveriesDOM.innerHTML = worldRecoveries.innerHTML;
-}
-
-function createTableHead(tableDataHead) {
-    const tableHeadDOM = document.getElementById('country-table-head');
-    const tableRowDOM = document.createElement('tr');
-
-    const LocationDOM = document.createElement('th');
-    LocationDOM.colSpan = 2;
-    LocationDOM.innerText = "Location";
-    tableRowDOM.appendChild(LocationDOM);
-    
-    const CasesDOM = document.createElement('th');
-    CasesDOM.innerText = "Cases";
-    tableRowDOM.appendChild(CasesDOM);
-    
-    const DeathsDOM = document.createElement('th');
-    DeathsDOM.innerText = "Deaths";
-    tableRowDOM.appendChild(DeathsDOM);
-    
-    const RecoveriesDOM = document.createElement('th');
-    RecoveriesDOM.innerText = "Recoveries";
-    tableRowDOM.appendChild(RecoveriesDOM);
-    
-    tableHeadDOM.appendChild(tableRowDOM);
-}
-
-function createTableRow(tableDataRow) {
+function loadCovidData() {
+  const url = "/load-covid-data";
+  fetch(url, {
+    method: 'GET'
+  }).then(response => response.json()).then((countryData) => {
     const tableBodyDOM = document.getElementById('country-table-body');
-    const tableRowDOM = document.createElement('tr');
-    
-    extractData(tableDataRow, tableRowDOM);
-    tableBodyDOM.appendChild(tableRowDOM);
+    var index = 0;
+    countryData.forEach((country) => {
+      if (index == 0) {
+        loadWorldData(country);
+      } else {
+        createTableRow(tableBodyDOM, country);
+      }
+      index++;
+    })
+  });
 }
 
-function extractData(tableDataRow, tableRowDOM) {
+function loadWorldData(worldData) {
+  const worldCasesDOM = document.getElementById('world-cases');
+  const worldDeathsDOM = document.getElementById('world-deaths');
+  const worldRecoveriesDOM = document.getElementById('world-recoveries');
+  
+  if (worldData.cases == -1) {
+    worldCasesDOM.innerHTML = "No data";
+  } else {
+    worldCasesDOM.innerHTML = Number(worldData.cases).toLocaleString('US');
+  }
+  worldDeathsDOM.innerHTML = worldData.deaths;
+  worldRecoveriesDOM.innerHTML = worldData.recoveries;
+}
 
-    const headerContent = tableDataRow.getElementsByTagName('th');
-    const bodyContent = tableDataRow.getElementsByTagName('td');
+function createTableRow(tableBodyDOM, country) {
+  const tableRowDOM = document.createElement('tr');
 
-    const flag = headerContent[0];
-    const countryName = headerContent[1];
-    const cases = bodyContent[0];
-    const deaths = bodyContent[1];
-    const recoveries = bodyContent[2];
+  const countryNameDOM = document.createElement('th');
+  countryNameDOM.colSpan = 2;
+  const casesDOM = document.createElement('td');
+  const deathsDOM = document.createElement('td');
+  const recoveriesDOM = document.createElement('td');
+  
+  countryNameDOM.innerText = country.location;
+  if (country.cases == -1) {
+    casesDOM.innerHTML = "No data";
+  } else {
+    casesDOM.innerHTML = Number(country.cases).toLocaleString('US');
+  }
+  deathsDOM.innerHTML = country.deaths;
+  recoveriesDOM.innerHTML = country.recoveries;
 
-    const flagDOM = document.createElement('th');
-    const countryNameDOM = document.createElement('th');
-    const casesDOM = document.createElement('td');
-    const deathsDOM = document.createElement('td');
-    const recoveriesDOM = document.createElement('td');
-    
-    flagDOM.innerHTML = flag.innerHTML;
-    countryNameDOM.innerText = countryName.childNodes[0].innerText;
-    casesDOM.innerHTML = cases.innerHTML;
-    deathsDOM.innerHTML = deaths.innerHTML;
-    recoveriesDOM.innerHTML = recoveries.innerHTML;
-
-    tableRowDOM.appendChild(flagDOM);
-    tableRowDOM.appendChild(countryNameDOM);
-    tableRowDOM.appendChild(casesDOM);
-    tableRowDOM.appendChild(deathsDOM);
-    tableRowDOM.appendChild(recoveriesDOM);
+  tableRowDOM.appendChild(countryNameDOM);
+  tableRowDOM.appendChild(casesDOM);
+  tableRowDOM.appendChild(deathsDOM);
+  tableRowDOM.appendChild(recoveriesDOM);
+  
+  tableBodyDOM.appendChild(tableRowDOM);
 }
 
 function loadUpdates() {

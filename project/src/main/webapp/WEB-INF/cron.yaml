@@ -1,0 +1,4 @@
+cron:
+- description: "Update Covid Data"
+  url: /update-covid-data
+  schedule: every 1 hours

@@ -17,6 +17,8 @@
   </head>
   <body onload ="getUserLogin();loadUpdates();">
        <nav>
+  <body onload ="getUserLogin();loadUpdates();loadCovidData();">
+      <nav>
     	<div class="nav-wrapper blue-grey lighten-4">
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
             <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
@@ -114,7 +116,14 @@
                   </div>
                   <div class="card-content" style="overflow-y: scroll; overflow-x: scroll; max-height: 80%">
                     <table id="country-table">
-                      <thead id="country-table-head"></thead>
+                      <thead id="country-table-head">
+                        <tr>
+                          <th colspan="2">Location</th>
+                          <th>Cases</th>
+                          <th>Deaths</th>
+                          <th>Recoveries</th>
+                        </tr>
+                      </thead>
                       <tbody id="country-table-body"></tbody>
                     </table>
                   </div>

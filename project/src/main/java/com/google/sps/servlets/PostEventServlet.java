@@ -25,9 +25,18 @@ import javax.servlet.annotation.WebServlet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.sps.data.User;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 /** Servlet that posts an event*/
 @WebServlet("/post-event")
@@ -39,22 +48,60 @@ public class PostEventServlet extends HttpServlet {
     // Get the input from the form.
     String name = request.getParameter("name");
     String date = request.getParameter("date");
+    SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
+    long dateTimestamp = 0;
+    try {
+      Date formattedDate = formatter.parse(date);
+      dateTimestamp = formattedDate.getTime();
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
     String type = request.getParameter("event-type");
     String attendance = request.getParameter("event-attendance");
     String description = request.getParameter("description");
     long timestamp = System.currentTimeMillis();
 
-    Entity unapprovedEventEntity = new Entity("UnapprovedEvent");
-    unapprovedEventEntity.setProperty("name", name);
-    unapprovedEventEntity.setProperty("date", date);
-    unapprovedEventEntity.setProperty("type", type);
-    unapprovedEventEntity.setProperty("attendance", attendance);
-    unapprovedEventEntity.setProperty("description", description);
-    unapprovedEventEntity.setProperty("timestamp", timestamp);
-
+    UserService userService = UserServiceFactory.getUserService();
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.put(unapprovedEventEntity);
 
-    response.sendRedirect("/events.html");
+    if (userService.isUserLoggedIn()) {
+      String email = userService.getCurrentUser().getEmail().toLowerCase();
+      if (userService.isUserAdmin()) {
+        Entity approvedEventEntity = new Entity("ApprovedEvent");
+        approvedEventEntity.setProperty("name", name);
+        approvedEventEntity.setProperty("date", date);
+        approvedEventEntity.setProperty("type", type);
+        approvedEventEntity.setProperty("attendance", attendance);
+        approvedEventEntity.setProperty("description", description);
+        approvedEventEntity.setProperty("timestamp", timestamp);
+        approvedEventEntity.setProperty("email", email);
+        approvedEventEntity.setProperty("admin-email", email);
+        Collection<String> attendees = new HashSet<String>();
+        // Add the central/mock user for cohesion
+        attendees.add("mock@mock.edu");
+        attendees.add(email);
+        approvedEventEntity.setProperty("attendees", attendees);
+        approvedEventEntity.setProperty("dateTimestamp", dateTimestamp);
+
+        datastore.put(approvedEventEntity);
+      } else {
+        Entity unapprovedEventEntity = new Entity("UnapprovedEvent");
+      
+        unapprovedEventEntity.setProperty("name", name);
+        unapprovedEventEntity.setProperty("date", date);
+        unapprovedEventEntity.setProperty("type", type);
+        unapprovedEventEntity.setProperty("attendance", attendance);
+        unapprovedEventEntity.setProperty("description", description);
+        unapprovedEventEntity.setProperty("timestamp", timestamp);
+        unapprovedEventEntity.setProperty("email", email);
+        unapprovedEventEntity.setProperty("dateTimestamp", dateTimestamp);
+
+        datastore.put(unapprovedEventEntity);
+      }
+
+      response.sendRedirect("/events.html");
+    } else {
+      response.sendRedirect("/login.html");
+    }
   }
 }
