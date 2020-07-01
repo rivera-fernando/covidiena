@@ -68,7 +68,7 @@ public class LogInServlet extends HttpServlet {
                     (Boolean) entity.getProperty("admin")
                 );
                 response.getWriter().println(gson.toJson(user));
-                response.sendRedirect("/dashboard.html");
+                response.sendRedirect("/dashboard");
                 return;
             }
         }
