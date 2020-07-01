@@ -2,3 +2,10 @@ cron:
 - description: "Update Covid Data"
   url: /update-covid-data
   schedule: every 1 hours
+  retry-parameters:
+    min_backoff_seconds: 2.5
+    max_doublings: 5
+
+- description: "Update Past Events"
+  url: /update-past-events
+  schedule: every 1 minutes

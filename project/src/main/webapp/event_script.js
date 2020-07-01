@@ -42,6 +42,9 @@ function loadPending() {
       pendingEvents.innerText = "You have no pending events";
     } else if (events[0].name === "Admin") {
       delete events[0];
+      if (Object.keys(events).length == 0) {
+        pendingEvents.innerText = "You have no pending events";
+      }
       events.forEach((event) => {
         var eventElement = createEventElement(event);
         eventElement = addApprovalBtn(eventElement);
@@ -69,6 +72,23 @@ function loadUpcoming() {
         var eventElement = createEventElement(event);
         eventElement = addRemovalBtn(eventElement);
         upcomingEvents.appendChild(eventElement);
+      })
+    }
+  });
+}
+
+function loadPast() {
+  const url="/load-past";
+  fetch(url, {
+    method: 'GET'
+  }).then((response) => response.json()).then((events) => {
+    const pastEvents = document.getElementById('past-events');
+    if (Object.keys(events).length == 0) {
+      pastEvents.innerText = "You have no past events";
+    } else {
+      events.forEach((event) => {
+        var eventElement = createEventElement(event);
+        pastEvents.appendChild(eventElement);
       })
     }
   });
