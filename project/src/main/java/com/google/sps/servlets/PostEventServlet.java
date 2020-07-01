@@ -48,11 +48,16 @@ public class PostEventServlet extends HttpServlet {
     // Get the input from the form.
     String name = request.getParameter("name");
     String date = request.getParameter("date");
+    String time = request.getParameter("time");
+    // Format: hh:mm XM
+    String hours = time.substring(0, 2);
+    String minutes = time.substring(3, 5);
     SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
     long dateTimestamp = 0;
     try {
       Date formattedDate = formatter.parse(date);
-      dateTimestamp = formattedDate.getTime();
+      long milliseconds = Long.parseLong(hours)*3600000 + Long.parseLong(minutes)*60000;
+      dateTimestamp = formattedDate.getTime() + milliseconds;
     } catch (ParseException e) {
       e.printStackTrace();
     }
@@ -70,6 +75,7 @@ public class PostEventServlet extends HttpServlet {
         Entity approvedEventEntity = new Entity("ApprovedEvent");
         approvedEventEntity.setProperty("name", name);
         approvedEventEntity.setProperty("date", date);
+        approvedEventEntity.setProperty("time", time);
         approvedEventEntity.setProperty("type", type);
         approvedEventEntity.setProperty("attendance", attendance);
         approvedEventEntity.setProperty("description", description);
@@ -89,6 +95,7 @@ public class PostEventServlet extends HttpServlet {
       
         unapprovedEventEntity.setProperty("name", name);
         unapprovedEventEntity.setProperty("date", date);
+        unapprovedEventEntity.setProperty("time", time);
         unapprovedEventEntity.setProperty("type", type);
         unapprovedEventEntity.setProperty("attendance", attendance);
         unapprovedEventEntity.setProperty("description", description);

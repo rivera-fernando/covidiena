@@ -13,13 +13,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-$(document).ready(function(){
-  $('.datepicker').datepicker();
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.datepicker');
+    // Can't select date before today
+    var options = {minDate : new Date()};
+    var instances = M.Datepicker.init(elems, options);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.timepicker');
+    var options = {twelveHour: false};
+    var instances = M.Timepicker.init(elems, options);
 });
 
 $(document).ready(function(){
-    $('.tabs').tabs();
-  });
+  $('.tabs').tabs();
+});
 
 function preview_image(event) {
   var reader = new FileReader();
@@ -106,18 +115,21 @@ function createEventElement(event) {
   const name = document.createElement('p');
   name.classList.add('card-title');
   const date = document.createElement('p');
+  const time = document.createElement('p');
   const description = document.createElement('p');
   const type = document.createElement('p');
   const attendance = document.createElement('p');
 
   name.innerText = event.name;
   date.innerText = event.date;
+  time.innerText = event.time;
   description.innerText = event.description;
   type.innerText = event.type;
   attendance.innerText = event.attendance;
 
   container.appendChild(name);
   container.appendChild(date);
+  container.appendChild(time);
   container.appendChild(description);
   container.appendChild(type);
   container.appendChild(attendance);

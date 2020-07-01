@@ -45,7 +45,7 @@ public class LoadUpcomingEventsServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query query = new Query("ApprovedEvent");
-    query.addSort("dateTimestamp", SortDirection.DESCENDING);
+    query.addSort("dateTimestamp", SortDirection.ASCENDING);
 
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
@@ -67,12 +67,13 @@ public class LoadUpcomingEventsServlet extends HttpServlet {
             long id = entity.getKey().getId();
             String name = (String) entity.getProperty("name");
             String date = (String) entity.getProperty("date");
+            String time = (String) entity.getProperty("time");
             String description = (String) entity.getProperty("description");
             String type = (String) entity.getProperty("attendance");
             String attendance = (String) entity.getProperty("type");
             long timestamp = (long) entity.getProperty("timestamp");
 
-            Event event = new Event(id, name, date, description, type, attendance, timestamp, false, false);
+            Event event = new Event(id, name, date, time, description, type, attendance, timestamp, false, false);
             upcomingEvents.add(event);
           }
         }

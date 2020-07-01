@@ -23,6 +23,7 @@ public final class Event {
   private final long id;
   private final String name;
   private final String date;
+  private final String time;
   private final String description;
   private final String type;
   private final String attendance;
@@ -30,10 +31,11 @@ public final class Event {
   private final boolean isApproved;
   private final boolean isPast;
 
-  public Event(long id, String name, String date, String description, String type, String attendance, long timeStamp, boolean isApproved, boolean isPast) {
+  public Event(long id, String name, String date, String time, String description, String type, String attendance, long timeStamp, boolean isApproved, boolean isPast) {
     this.id = id;
     this.name = name;
     this.date = date;
+    this.time = time;
     this.description = description;
     this.type = type;
     this.attendance = attendance;

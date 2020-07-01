@@ -50,7 +50,14 @@
               <div class="row" style="margin-bottom: 0">
                 <div class="col s4">
                   <input placeholder="Event Name" name="name" type="text" class="validate" style="font-color: white" autocomplete="off" spellcheck="false"> 
-                  <input type="text" placeholder="Event Date" class="datepicker" name="date" style="font-color: white">
+                  <div class="row">
+                    <div class="col s6">
+                      <input type="text" placeholder="Event Date" class="datepicker" name="date" id="datepicker" style="font-color: white">
+                    </div>
+                    <div class="col s6">
+                      <input type="text" placeholder="Event Time" class="timepicker" name="time" id="timepicker" style="font-color: white">
+                    </div>
+                  </div>
                   <div class="row left">
                     <div class="col s6">
                       <p><b>Type</b></p>

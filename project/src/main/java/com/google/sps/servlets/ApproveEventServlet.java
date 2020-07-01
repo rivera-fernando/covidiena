@@ -61,6 +61,7 @@ public class ApproveEventServlet extends HttpServlet {
       Entity approvedEventEntity = new Entity("ApprovedEvent");
       approvedEventEntity.setProperty("name", unapprovedEvent.getProperty("name"));
       approvedEventEntity.setProperty("date", unapprovedEvent.getProperty("date"));
+      approvedEventEntity.setProperty("time", unapprovedEvent.getProperty("time"));
       approvedEventEntity.setProperty("type", unapprovedEvent.getProperty("type"));
       approvedEventEntity.setProperty("attendance", unapprovedEvent.getProperty("attendance"));
       approvedEventEntity.setProperty("description", unapprovedEvent.getProperty("description"));
@@ -72,7 +73,6 @@ public class ApproveEventServlet extends HttpServlet {
       String email = (String) unapprovedEvent.getProperty("email");
       // Add the central/mock user to all the events for cohesion
       attendees.add("mock@mock.edu");
-      attendees.add(email);
       approvedEventEntity.setProperty("attendees", attendees);
 
       datastore.put(approvedEventEntity);

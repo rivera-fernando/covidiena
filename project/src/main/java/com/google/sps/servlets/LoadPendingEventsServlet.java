@@ -42,7 +42,7 @@ public class LoadPendingEventsServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query query = new Query("UnapprovedEvent");
-    query.addSort("dateTimestamp", SortDirection.DESCENDING);
+    query.addSort("dateTimestamp", SortDirection.ASCENDING);
 
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
@@ -56,19 +56,20 @@ public class LoadPendingEventsServlet extends HttpServlet {
       // If the user is an admin, load ALL pending. Otherwise, just the ones that the student posted.
       if (userService.isUserAdmin()) {
         // Should probably find a better way to send this metadata like Lian told me to
-        Event metadata = new Event(0, "Admin", "", "", "", "", 0, false, false);
+        Event metadata = new Event(0, "Admin", "", "", "", "", "", 0, false, false);
         pendingEvents.add(metadata);
         for (int i = 0; i < resultsList.size(); i++) {
           Entity entity = resultsList.get(i);
           long id = entity.getKey().getId();
           String name = (String) entity.getProperty("name");
           String date = (String) entity.getProperty("date");
+          String time = (String) entity.getProperty("time");
           String description = (String) entity.getProperty("description");
           String type = (String) entity.getProperty("attendance");
           String attendance = (String) entity.getProperty("type");
           long timestamp = (long) entity.getProperty("timestamp");
 
-          Event event = new Event(id, name, date, description, type, attendance, timestamp, false, false);
+          Event event = new Event(id, name, date, time, description, type, attendance, timestamp, false, false);
           pendingEvents.add(event);
         }
       } else {
@@ -81,12 +82,13 @@ public class LoadPendingEventsServlet extends HttpServlet {
             long id = entity.getKey().getId();
             String name = (String) entity.getProperty("name");
             String date = (String) entity.getProperty("date");
+            String time = (String) entity.getProperty("time");
             String description = (String) entity.getProperty("description");
             String type = (String) entity.getProperty("attendance");
             String attendance = (String) entity.getProperty("type");
             long timestamp = (long) entity.getProperty("timestamp");
 
-            Event event = new Event(id, name, date, description, type, attendance, timestamp, false, false);
+            Event event = new Event(id, name, date, time, description, type, attendance, timestamp, false, false);
             pendingEvents.add(event);
           }
         }
