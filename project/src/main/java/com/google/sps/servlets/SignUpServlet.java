@@ -19,6 +19,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.sps.classes.User;
 import com.google.sps.classes.PasswordHash;
+import com.google.sps.classes.EmailSender;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -32,13 +33,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.codec.binary.Hex;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 
 /*
 creates a user entity in datastore with user information so they can update it whenever they log in
@@ -91,7 +85,9 @@ public class SignUpServlet extends HttpServlet {
         response.setContentType("application/json;");
         response.getWriter().println(gson.toJson(user));
 
-        response.sendRedirect("/dashboard.html");
+        EmailSender.sendEmail(email);
+
+        response.sendRedirect("/login.html");
     }
 
     @Override
