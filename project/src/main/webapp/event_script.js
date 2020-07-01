@@ -114,25 +114,34 @@ function createEventElement(event) {
 
   const name = document.createElement('p');
   name.classList.add('card-title');
-  const date = document.createElement('p');
-  const time = document.createElement('p');
+  const when = document.createElement('span');
   const description = document.createElement('p');
-  const type = document.createElement('p');
-  const attendance = document.createElement('p');
+  const attendance = document.createElement('span');
+  attendance.style.backgroundColor = '#42a5f5';
+  attendance.style.borderRadius = '8px';
+  attendance.style.padding = '4px 8px 4px 8px';
+  attendance.style.color = 'white';
+  const type = document.createElement('span');
+  type.style.backgroundColor = '#42a5f5';
+  type.style.borderRadius = '8px';
+  type.style.padding = '4px 8px 4px 8px';
+  type.style.color = 'white';
+  const space = document.createElement('span');
 
   name.innerText = event.name;
-  date.innerText = event.date;
-  time.innerText = event.time;
-  description.innerText = event.description;
-  type.innerText = event.type;
+  when.innerText = event.date + " at " + event.time + " ";
+  when.classList.add('grey-text', 'text-darken-2');
   attendance.innerText = event.attendance;
+  type.innerText = event.type;
+  space.innerText = " ";
+  description.innerHTML = "<b>About: </b>" + event.description;
 
   container.appendChild(name);
-  container.appendChild(date);
-  container.appendChild(time);
-  container.appendChild(description);
+  container.appendChild(when);
   container.appendChild(type);
+  container.appendChild(space);
   container.appendChild(attendance);
+  container.appendChild(description);
   eventElement.appendChild(container);
 
   return eventElement;
@@ -140,7 +149,11 @@ function createEventElement(event) {
 
 function addApprovalBtn(eventElement) {
   const approvalBtn = document.createElement('button');
-  approvalBtn.className = "waves-effect waves-light btn";
+  const row = document.createElement('div');
+  row.classList.add('row', 'right-align');
+  row.style.marginBottom = 0;
+
+  approvalBtn.classList.add('waves-effect', 'waves-light', 'btn', 'small', 'right-align');
   approvalBtn.innerText = "Approve";
 
   approvalBtn.addEventListener('click', async () => {
@@ -156,13 +169,19 @@ function addApprovalBtn(eventElement) {
     loadExplore();
   });
 
-  eventElement.appendChild(approvalBtn);
+  row.appendChild(approvalBtn);
+  const content = eventElement.getElementsByClassName('card-content')[0];
+  content.appendChild(row);
   return eventElement;
 }
 
 function addRemovalBtn(eventElement) {
   const removalBtn = document.createElement('button');
-  removalBtn.className = "waves-effect waves-light btn";
+  const row = document.createElement('div');
+  row.classList.add('row', 'right-align');
+  row.style.marginBottom = 0;
+
+  removalBtn.classList.add('waves-effect', 'waves-light', 'btn', 'small','right-align', 'red', 'lighten-1');
   removalBtn.innerText = "Remove";
   
   removalBtn.addEventListener('click', async () => {
@@ -176,7 +195,9 @@ function addRemovalBtn(eventElement) {
     loadUpcoming();
   })
 
-  eventElement.appendChild(removalBtn);
+  row.appendChild(removalBtn);
+  const content = eventElement.getElementsByClassName('card-content')[0];
+  content.appendChild(row);
   return eventElement;
 }
 
@@ -197,7 +218,11 @@ function loadExplore() {
 
 function addRSVPBtn(eventElement) {
   const RSVPBtn = document.createElement('button');
-  RSVPBtn.className = "waves-effect waves-light btn";
+  const row = document.createElement('div');
+  row.classList.add('row', 'right-align');
+  row.style.marginBottom = 0;
+
+  RSVPBtn.classList.add('waves-effect', 'waves-light', 'small', 'btn');
   RSVPBtn.innerText = "RSVP";
 
   RSVPBtn.addEventListener('click', async () => {
@@ -211,7 +236,9 @@ function addRSVPBtn(eventElement) {
     loadUpcoming();
   });
 
-  eventElement.appendChild(RSVPBtn);
+  row.appendChild(RSVPBtn);
+  const content = eventElement.getElementsByClassName('card-content')[0];
+  content.appendChild(row);
   return eventElement;
 }
 

@@ -45,7 +45,7 @@ public class LoadPastEventsServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query query = new Query("PastEvent");
-    query.addSort("dateTimestamp", SortDirection.ASCENDING);
+    query.addSort("dateTimestamp", SortDirection.DESCENDING);
 
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
