@@ -69,7 +69,7 @@ public class CovidDataServlet extends HttpServlet {
       for (int row = 2; row < 230; row++) {
         updateCountryData(datastore, tableData, row);
       }
-
+      
       response.getWriter().println("Datastore updated");
       response.setStatus(200);
       
