@@ -70,12 +70,6 @@ public class CovidDataServlet extends HttpServlet {
         updateCountryData(datastore, tableData, row);
       }
 
-      // Track when the update occured
-      long timestamp = System.currentTimeMillis();
-      Entity metadata = new Entity("Metadata");
-      metadata.setProperty("timestamp", timestamp);
-      datastore.put(metadata);
-
       response.getWriter().println("Datastore updated");
       response.setStatus(200);
       
