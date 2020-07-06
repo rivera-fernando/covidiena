@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="icons.css">
+    <link rel="stylesheet" href="materialize.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="materialize.min.js"></script>
+    <script>
+    $(document).ready(function(){
+        $('.sidenav').sidenav();
+    });
+    </script>
+  </head>
+  <body onload ="getUserLogin();populateLinks();">
+
+      <nav>
+    	<div class="nav-wrapper blue-grey lighten-4">
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
+            <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
+            <ul id="nav-mobile" class="right">
+                <li><a href="/settings.html" id="settingButton"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
+            </ul>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li  class="active"><a style="color: #42a5f5;" href="/dashboard.html">Dashboard</a></li>
+                <li><a style="color: #42a5f5;" href="/info.html">Information</a></li>
+                <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+                <li style="width: 50px; height: 60px;">&nbsp;</li>
+                <li><a style="color: #42a5f5;" id= "createButton" href="/signup.html">Sign Up</a></li>
+                <li><a style="color: #42a5f5;" href="/login.html" id= "loginButton">Log In</a></li>
+            </ul>
+    	</div>
+      </nav>
+      <ul class="sidenav" id="mobile-demo">
+        <li><a style="color: #42a5f5;" href="/dashboard.html">Dashboard</a></li>
+        <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
+        <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+        <li><a style="color: #42a5f5;" href="/signup.html">Sign Up</a></li>
+        <li><a style="color: #42a5f5;" href="/login.html">Log In</a></li>
+      </ul>
+    <div class="container">
+      <h1>Student Dashboard</h1>
+            <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
+                <div class="row">
+                    <div class="col s12 m8 l6">
+                        <p>Have you been diagnosed with COVID-19?</p>
+                    </div>
+                    <div class="center-align col s6 m2 l3">
+                        <a style="width: 100%;" class="center-align waves-effect waves-light btn blue lighten-1" href="#">Yes</a>
+                    </div>
+                    <div class="center-align col s6 m2 l3">
+                        <a style="width: 100%;" class="waves-effect waves-light btn blue lighten-1" href="#">No</a>
+                    </div>
+                </div>
+            </div>
+            <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
+                <div class="row">
+                    <div class="col s12 m8">
+                        <div style="border-radius: 10px;" class="card white">
+                            <div class="card-content blue-grey-text-darken-2">
+                                <p>Have you been exposed (according to our maps data).</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="center-align col s12 m4">
+                        <div style="border-radius: 10px;" class="card white">
+                            <div class="card-content blue-grey-text-darken-2">
+                                <p>Not that we know of</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
+                <div class="row">
+                    <div class="col s12 m5">
+                        <div style="border-radius: 10px;" class="card white">
+                            <div class="card-content blue-grey-text-darken-2">
+                                <span class="card-title">Daily Temperature</span>
+                                <form>
+                                <div class="input-field">
+                                    <i class="material-icons prefix">whatshot</i>
+                                    <input id="icon_prefix" type="text">
+                                    <label for="icon_prefix">Temperature</label>
+                                </div>
+                                <div class="center-align">
+                                    <button class="btn waves-effect waves-light blue lighten-1" type="submit" name="action">Submit</button>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12 m7">
+                        <div style="border-radius: 10px;" class="card white">
+                            <div class="card-content blue-grey-text-darken-2">
+                                <span class="card-title">Temperature Trends</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
+                <div class="row">
+                    <div class="col s12 m5">
+                        <div style="border-radius: 10px;" class="card white">
+                            <div class="card-content blue-grey-text-darken-2">
+                                <span class="card-title">Possible Symptoms</span>
+                                <div onchange="populateLinks()">
+                                    <p>
+                                        <label>
+                                        <input type="checkbox" id="fever" class="filled-in"/>
+                                        <span>Fever or chills</span>
+                                        </label>
+                                    </p>
+                                    <p>
+                                        <label>
+                                        <input type="checkbox" id="cough" class="filled-in"/>
+                                        <span>Cough</span>
+                                        </label>
+                                    </p>
+                                    <p>
+                                        <label>
+                                        <input type="checkbox" id="sob" class="filled-in"/>
+                                        <span>Shortness of breath</span>
+                                        </label>
+                                    </p>
+                                    <p>
+                                        <label>
+                                        <input type="checkbox" id="fatigue" class="filled-in"/>
+                                        <span>Fatigue</span>
+                                        </label>
+                                    </p>
+                                    <p>
+                                        <label>
+                                        <input type="checkbox" id="aches" class="filled-in"/>
+                                        <span>Muscle or body aches</span>
+                                        </label>
+                                    </p>
+                                    <p>
+                                        <label>
+                                        <input type="checkbox" id="head" class="filled-in"/>
+                                        <span>Headache</span>
+                                        </label>
+                                    </p>
+                                    <p>
+                                        <label>
+                                        <input type="checkbox" id="throat" class="filled-in"/>
+                                        <span>Sore throat</span>
+                                        </label>
+                                    </p>
+                                    <p>
+                                        <label>
+                                        <input type="checkbox" id="nausea" class="filled-in" />
+                                        <span>Nausea or vomiting</span>
+                                        </label>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12 m7">
+                        <div style="border-radius: 10px;" class="card white">
+                            <div class="card-content blue-grey-text-darken-2">
+                                <span class="card-title">Helpful Links</span>
+                                <ul id="links"> 
+                                    <li style="display:none;"id="fever_info"><a href="https://medlineplus.gov/ency/article/003091.htm#:~:text=Chills%20are%20caused%20by%20rapid,certain%20diseases%20such%20as%20malaria.">Chills</a></li>
+                                    <li style="display:none;"id="cough_info"><a href="https://www.mayoclinic.org/symptoms/cough/basics/definition/sym-20050846#:~:text=A%20cough%20is%20your%20body's,cough%20is%20normal%20and%20healthy.">Cough</a></li>
+                                    <li style="display:none;"id="sob_info"><a href="https://www.healthline.com/health/coronavirus-shortness-of-breath">Shortness of Breath</a></li>
+                                    <li style="display:none;"id="fatigue_info"><a href="https://www.medicalnewstoday.com/articles/248002">Fatigue</a></li>
+                                    <li style="display:none;"id="aches_info"><a href="https://www.solvhealth.com/health-a-z/body-and-muscle-aches">Aches</a></li>
+                                    <li style="display:none;"id="head_info"><a href="https://www.medicalnewstoday.com/articles/73936#types">Headache</a></li>
+                                    <li style="display:none;"id="throat_info"><a href="https://www.mayoclinic.org/diseases-conditions/sore-throat/symptoms-causes/syc-20351635">Sore Throat</a></li>
+                                    <li style="display:none;"id="nausea_info"><a href="https://www.webmd.com/digestive-disorders/digestive-diseases-nausea-vomiting">Nausea</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+      <h2>Announcements</h2>
+
+    </div>
+  </body>
+</html>

@@ -56,12 +56,13 @@ public class LoadPendingEventsServlet extends HttpServlet {
       // If the user is an admin, load ALL pending. Otherwise, just the ones that the student posted.
       if (userService.isUserAdmin()) {
         // Should probably find a better way to send this metadata like Lian told me to
-        Event metadata = new Event(0, "Admin", "", "", "", "", "", 0, false, false);
+        Event metadata = new Event(0, "Admin", "", "", "", "", "", "", 0, false, "");
         pendingEvents.add(metadata);
         for (int i = 0; i < resultsList.size(); i++) {
           Entity entity = resultsList.get(i);
           long id = entity.getKey().getId();
           String name = (String) entity.getProperty("name");
+          String location = (String) entity.getProperty("location");
           String date = (String) entity.getProperty("date");
           String time = (String) entity.getProperty("time");
           String description = (String) entity.getProperty("description");
@@ -69,7 +70,7 @@ public class LoadPendingEventsServlet extends HttpServlet {
           String attendance = (String) entity.getProperty("type");
           long timestamp = (long) entity.getProperty("timestamp");
 
-          Event event = new Event(id, name, date, time, description, type, attendance, timestamp, false, false);
+          Event event = new Event(id, name, location, date, time, description, type, attendance, timestamp, entity.getProperty("email").equals(email), "unapproved");
           pendingEvents.add(event);
         }
       } else {
@@ -81,6 +82,7 @@ public class LoadPendingEventsServlet extends HttpServlet {
           if (entity.getProperty("email").equals(email)) {
             long id = entity.getKey().getId();
             String name = (String) entity.getProperty("name");
+            String location = (String) entity.getProperty("location");
             String date = (String) entity.getProperty("date");
             String time = (String) entity.getProperty("time");
             String description = (String) entity.getProperty("description");
@@ -88,7 +90,7 @@ public class LoadPendingEventsServlet extends HttpServlet {
             String attendance = (String) entity.getProperty("type");
             long timestamp = (long) entity.getProperty("timestamp");
 
-            Event event = new Event(id, name, date, time, description, type, attendance, timestamp, false, false);
+            Event event = new Event(id, name, location, date, time, description, type, attendance, timestamp, true, "UnapprovedEvent");
             pendingEvents.add(event);
           }
         }

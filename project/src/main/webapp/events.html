@@ -17,7 +17,7 @@
     <script src="materialize.min.js"></script>
     <script src="event_script.js"></script>
   </head>
-  <body onload="getUserLogin();loadUpcoming();loadPending();loadExplore();loadPast();">
+  <body onload="getUserLogin();loadPage();">
       <nav>
     	<div class="nav-wrapper blue-grey lighten-4">
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
@@ -44,12 +44,13 @@
     <div class="container">
       <div class="section">
         <form action="/post-event" method="POST" onsubmit="return validateEvent()">
-          <div class="card blue-grey small lighten-4">
+          <div class="card blue-grey lighten-4">
             <div class="card-content" style="overflow-y: scroll">
               <p class="card-title">Post an Event</p>
               <div class="row" style="margin-bottom: 0">
                 <div class="col s4">
-                  <input placeholder="Event Name" name="name" type="text" class="validate" style="font-color: white" autocomplete="off" spellcheck="false"> 
+                  <input placeholder="Event Name" name="name" type="text" class="validate" autocomplete="off" spellcheck="false"> 
+                  <input type="text" name="location" placeholder="Enter a Location" class="validate" autocomplete="off" spellcheck="false">
                   <div class="row">
                     <div class="col s6">
                       <input type="text" placeholder="Event Date" class="datepicker" name="date" id="datepicker" style="font-color: white">
@@ -143,6 +144,86 @@
               <div id="past-events"></div>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="row">
+          <form id="edit-form" action="/edit-event" method="POST" style="display: none;">
+            <div class="card blue-grey lighten-4">
+              <div class="card-content" style="overflow-y: scroll">
+                <p class="card-title">Edit your Event</p>
+                <input name="event-status" type="text" style="display: none">
+                <input name="event-id" type="text" style="display: none">
+                <div class="row" style="margin-bottom: 0">
+                  <div class="col s4">
+                    <input placeholder="Event Name" name="edit-name" type="text" class="validate" autocomplete="off" spellcheck="false"> 
+                    <input type="text" name="edit-location" placeholder="Enter a Location" class="validate" autocomplete="off" spellcheck="false">
+                    <div class="row">
+                      <div class="col s6">
+                        <input type="text" placeholder="Event Date" class="datepicker" name="edit-date" id="datepicker" style="font-color: white">
+                      </div>
+                      <div class="col s6">
+                        <input type="text" placeholder="Event Time" class="timepicker" name="edit-time" id="timepicker" style="font-color: white">
+                      </div>
+                    </div>
+                    <div class="row left">
+                      <div class="col s6">
+                        <p><b>Type</b></p>
+                        <label>
+                          <input name="edit-event-type" type="radio" id="Academic" value="Academic"/>
+                          <span class="black-text">Academic</span>
+                        </label>
+                        <label>
+                          <input name="edit-event-type" type="radio" id="Social" value="Social"/>
+                          <span class="black-text">Social</span>
+                        </label>
+                      </div>
+                      <div class="col s6">
+                        <p><b>Attendance</b></p>
+                        <label>
+                          <input name="edit-event-attendance" type="radio" id="Optional" value="Optional"/>
+                          <span class="black-text">Optional</span>
+                        </label>
+                        <label>
+                          <input name="edit-event-attendance" type="radio" id="Mandatory" value="Mandatory"/>
+                          <span class="black-text">Mandatory</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col s5">
+                    <textarea class="materialize-textarea" name="edit-description" placeholder="Event Description" autocomplete="off" spellcheck="false"></textarea>
+                  </div>
+                  <div class="col s3">
+                    <div class="center">
+                      <div style="height: 80px; padding: 10px;">
+                        <img id="edit-output-image" style="max-height: 100%; max-width: 100%; overflow: scroll;" src="/images/meme.png">
+                      </div>
+                      <div class="file-field input-field">
+                        <div class="btn-flat">
+                          <span>Upload Image</span>
+                          <input type="file" accept="image/*" onchange="preview_image(event)" style="max-width: 100%">
+                        </div>
+                        <div class="file-path-wrapper">
+                          <input class="file-path validate" type="text">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row right">
+              <div class="col">
+                <input class="btn waves-effect waves-light red lighten-1" type="reset" value="CANCEL" onclick="cancelEdit()">
+              </div>
+              <div class="col">
+                <button class="btn waves-effect waves-light" type="submit" name="action" onclick="loadPending()">POST
+                  <i class="material-icons right">send</i>
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
       <div class="section">

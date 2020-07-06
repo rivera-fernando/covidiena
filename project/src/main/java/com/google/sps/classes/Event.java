@@ -22,25 +22,27 @@ public final class Event {
 
   private final long id;
   private final String name;
+  private final String location;
   private final String date;
   private final String time;
   private final String description;
   private final String type;
   private final String attendance;
   private final long timeStamp;
-  private final boolean isApproved;
-  private final boolean isPast;
+  private final boolean isMine;
+  private final String entityType;
 
-  public Event(long id, String name, String date, String time, String description, String type, String attendance, long timeStamp, boolean isApproved, boolean isPast) {
+  public Event(long id, String name, String location, String date, String time, String description, String attendance, String type, long timeStamp, boolean isMine, String entityType) {
     this.id = id;
     this.name = name;
+    this.location = location;
     this.date = date;
     this.time = time;
     this.description = description;
     this.type = type;
     this.attendance = attendance;
     this.timeStamp = timeStamp;
-    this.isApproved = isApproved;
-    this.isPast = isPast;
+    this.isMine = isMine;
+    this.entityType = entityType;
   }
 }

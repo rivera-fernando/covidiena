@@ -21,6 +21,8 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.sps.classes.Update;
 import java.io.IOException;
@@ -38,21 +40,22 @@ public class UpdatesServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
-    // Get the input from the form.
-    String title = request.getParameter("update-title");
-    String description = request.getParameter("update-description");
-    long timestamp = System.currentTimeMillis();
-    // Hard coded author for now
-    String author = "John Doe";
+    UserService userService = UserServiceFactory.getUserService();
+    if (userService.isUserAdmin()) {
+      // Get the input from the form.
+      String title = request.getParameter("update-title");
+      String description = request.getParameter("update-description");
+      long timestamp = System.currentTimeMillis();
+      String author = userService.getCurrentUser().getNickname();
 
-    Entity updateEntity = new Entity("Update");
-    updateEntity.setProperty("title", title);
-    updateEntity.setProperty("description", description);
-    updateEntity.setProperty("author", author);
-    updateEntity.setProperty("timestamp", timestamp);
-
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.put(updateEntity);
+      Entity updateEntity = new Entity("Update");
+      updateEntity.setProperty("title", title);
+      updateEntity.setProperty("description", description);
+      updateEntity.setProperty("author", author);
+      updateEntity.setProperty("timestamp", timestamp);
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      datastore.put(updateEntity);
+    }
 
     response.sendRedirect("/index.html");
   }
@@ -66,6 +69,12 @@ public class UpdatesServlet extends HttpServlet {
     PreparedQuery results = datastore.prepare(query);
     List<Entity> resultsList = results.asList(FetchOptions.Builder.withDefaults());
     List<Update> updates = new ArrayList<>();
+
+    UserService userService = UserServiceFactory.getUserService();
+    if (userService.isUserAdmin()) {
+      Update update = new Update(0, "Admin", "", "", 0);
+      updates.add(update);
+    }
 
     for (int i = 0; i < resultsList.size(); i++) {
 

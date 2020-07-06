@@ -7,4 +7,4 @@ cron:
     max_doublings: 5
 - description: "Update Past Events"
   url: /update-past-events
-  schedule: every 5 minutes
+  schedule: every 10 minutes

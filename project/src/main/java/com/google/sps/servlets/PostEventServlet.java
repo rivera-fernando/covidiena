@@ -47,6 +47,7 @@ public class PostEventServlet extends HttpServlet {
     
     // Get the input from the form.
     String name = request.getParameter("name");
+    String location = request.getParameter("location");
     String date = request.getParameter("date");
     String time = request.getParameter("time");
     // Format: hh:mm XM
@@ -74,6 +75,7 @@ public class PostEventServlet extends HttpServlet {
       if (userService.isUserAdmin()) {
         Entity approvedEventEntity = new Entity("ApprovedEvent");
         approvedEventEntity.setProperty("name", name);
+        approvedEventEntity.setProperty("location", location);
         approvedEventEntity.setProperty("date", date);
         approvedEventEntity.setProperty("time", time);
         approvedEventEntity.setProperty("type", type);
@@ -94,6 +96,7 @@ public class PostEventServlet extends HttpServlet {
         Entity unapprovedEventEntity = new Entity("UnapprovedEvent");
       
         unapprovedEventEntity.setProperty("name", name);
+        unapprovedEventEntity.setProperty("location", location);
         unapprovedEventEntity.setProperty("date", date);
         unapprovedEventEntity.setProperty("time", time);
         unapprovedEventEntity.setProperty("type", type);

@@ -60,6 +60,7 @@ public class ApproveEventServlet extends HttpServlet {
 
       Entity approvedEventEntity = new Entity("ApprovedEvent");
       approvedEventEntity.setProperty("name", unapprovedEvent.getProperty("name"));
+      approvedEventEntity.setProperty("location", unapprovedEvent.getProperty("location"));
       approvedEventEntity.setProperty("date", unapprovedEvent.getProperty("date"));
       approvedEventEntity.setProperty("time", unapprovedEvent.getProperty("time"));
       approvedEventEntity.setProperty("type", unapprovedEvent.getProperty("type"));

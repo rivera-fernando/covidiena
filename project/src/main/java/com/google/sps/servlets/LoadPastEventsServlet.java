@@ -66,6 +66,7 @@ public class LoadPastEventsServlet extends HttpServlet {
           if (attendees.contains(email)) {
             long id = entity.getKey().getId();
             String name = (String) entity.getProperty("name");
+            String location = (String) entity.getProperty("location");
             String date = (String) entity.getProperty("date");
             String time = (String) entity.getProperty("time");
             String description = (String) entity.getProperty("description");
@@ -73,7 +74,7 @@ public class LoadPastEventsServlet extends HttpServlet {
             String attendance = (String) entity.getProperty("type");
             long timestamp = (long) entity.getProperty("timestamp");
 
-            Event event = new Event(id, name, date, time, description, type, attendance, timestamp, true, true);
+            Event event = new Event(id, name, location, date, time, description, type, attendance, timestamp, true, "PastEvent");
             pastEvents.add(event);
           }
         }

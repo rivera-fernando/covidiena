@@ -77,8 +77,13 @@ function loadUpdates() {
   }).then(response => response.json()).then((updates) => {
     const updatesHistory = document.getElementById('updates');
     updatesHistory.innerHTML = '';
+    if (updates[0].title === "Admin") {
+      const updateForm = document.getElementById('update-form');
+      updateForm.style.display = "block";
+      delete updates[0];
+    }
     updates.forEach((update) => {
-        updatesHistory.appendChild(createUpdateElement(update));
+      updatesHistory.appendChild(createUpdateElement(update));
     })
   });
 }
