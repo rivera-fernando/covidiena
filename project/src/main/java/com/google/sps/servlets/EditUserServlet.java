@@ -25,10 +25,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
-/*
-gets the user's userId and edits their entity in the datastore
-*/
-
+/*gets the user's userId and edits their entity in the datastore and then redirects them to login again*/
 @WebServlet("/edit-user")
 public class EditUserServlet extends HttpServlet {
 

@@ -14,7 +14,7 @@ public final class User {
   private String metric;
   private Boolean admin;
 
-
+  /*User class is instatiated when a user logins so all their info is accesible without the datatsore being queried each time*/
   public User(long userId, String name, String email, String password, String birthdate, long studentId, String sex, String school, String phone, String metric, Boolean admin) {
     this.userId = userId;
     this.name = name;

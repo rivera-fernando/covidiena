@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-
+/*user logs in with school email and their information from the datatstore is printed through json for easy access*/
 @WebServlet("/login")
 public class LogInServlet extends HttpServlet {
 

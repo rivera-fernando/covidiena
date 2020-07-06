@@ -8,7 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
 
-
+/*PasswordHash hashes the password so that the datatsore doesnt have the exposed password, uses salt hashing*/
 public class PasswordHash{
     public static String hashPassword(final char[] password){
         try {

@@ -34,10 +34,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/*
-creates a user entity in datastore with user information so they can update it whenever they log in
-*/
-
+/*creates a user entity in datastore with user information so they can update it whenever they log in*/
 @WebServlet("/user")
 public class SignUpServlet extends HttpServlet {
 

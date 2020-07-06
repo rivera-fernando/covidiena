@@ -4,7 +4,7 @@ import javax.mail.*;
 import javax.mail.internet.*;
 import javax.activation.*;
   
-  
+/*EmailSender creates and sends an email when users create and account to verify that they created the account*/
 public class EmailSender{ 
     public static void sendEmail(String to) {
         String from = "christinachance315@gmail.com";
