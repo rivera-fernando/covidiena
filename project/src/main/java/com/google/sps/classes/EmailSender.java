@@ -20,7 +20,7 @@ public class EmailSender{
             message.setSubject("[Covidiena] Account Verification");
             StringBuilder htmlBuilder = new StringBuilder();
             htmlBuilder.append("<h1>");
-            htmlBuilder.append("An account on Covidiena has vbeen created with this email. To verify this is you, please click");
+            htmlBuilder.append("An account on Covidiena has been created with this email. To verify this is you, please click");
             htmlBuilder.append("<a href='covidiena.appspot.com/login.html'>here</a>");
             htmlBuilder.append("</h1>");
             String html = htmlBuilder.toString();
