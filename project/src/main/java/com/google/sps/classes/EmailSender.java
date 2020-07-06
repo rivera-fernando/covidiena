@@ -18,7 +18,13 @@ public class EmailSender{
             message.setFrom(new InternetAddress(from));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
             message.setSubject("[Covidiena] Account Verification");
-            message.setContent("<h1>An account on Covidiena has been created with this email. To verify this is you, please click <a href='covidiena.appspot.com/login.html'>here</a></h1>.", "text/html");
+            StringBuilder htmlBuilder = new StringBuilder();
+            htmlBuilder.append("<h1>");
+            htmlBuilder.append("An account on Covidiena has vbeen created with this email. To verify this is you, please click");
+            htmlBuilder.append("<a href='covidiena.appspot.com/login.html'>here</a>");
+            htmlBuilder.append("</h1>");
+            String html = htmlBuilder.toString();
+            message.setContent(html, "text/html");
             Transport.send(message);
             System.out.println("Sent message successfully....");
         } catch (MessagingException mex) {
