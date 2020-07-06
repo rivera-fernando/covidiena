@@ -11,9 +11,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
+ 
 package com.google.sps.servlets;
-
+ 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -40,27 +40,29 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.sps.data.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-
+ 
 /** Servlet that loads upcoming events*/
 @WebServlet("/approve-event")
 public class ApproveEventServlet extends HttpServlet {
     
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+ 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     UserService userService = UserServiceFactory.getUserService();
-
+ 
     long requestId = Long.parseLong(request.getParameter("id"));
     Key eventKey = KeyFactory.createKey("UnapprovedEvent", requestId);
     
     try { 
       Entity unapprovedEvent = datastore.get(eventKey);
       datastore.delete(eventKey);
-
+ 
       Entity approvedEventEntity = new Entity("ApprovedEvent");
       approvedEventEntity.setProperty("name", unapprovedEvent.getProperty("name"));
+      approvedEventEntity.setProperty("location", unapprovedEvent.getProperty("location"));
       approvedEventEntity.setProperty("date", unapprovedEvent.getProperty("date"));
+      approvedEventEntity.setProperty("time", unapprovedEvent.getProperty("time"));
       approvedEventEntity.setProperty("type", unapprovedEvent.getProperty("type"));
       approvedEventEntity.setProperty("attendance", unapprovedEvent.getProperty("attendance"));
       approvedEventEntity.setProperty("description", unapprovedEvent.getProperty("description"));
@@ -72,9 +74,8 @@ public class ApproveEventServlet extends HttpServlet {
       String email = (String) unapprovedEvent.getProperty("email");
       // Add the central/mock user to all the events for cohesion
       attendees.add("mock@mock.edu");
-      attendees.add(email);
       approvedEventEntity.setProperty("attendees", attendees);
-
+ 
       datastore.put(approvedEventEntity);
       response.sendRedirect("/events.html");
     } catch(EntityNotFoundException e) {
