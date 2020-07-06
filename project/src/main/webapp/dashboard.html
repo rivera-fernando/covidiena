@@ -8,22 +8,11 @@
     <link rel="stylesheet" href="materialize.min.css">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="materialize.min.js"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
     $(document).ready(function(){
         $('.sidenav').sidenav();
         $('.collapsible').collapsible();
     });
-    $(window).resize(function(){
-        drawBasic();
-    });
-    </script>
-    <script>
-    // Load the Visualization API and the corechart package.
-      google.charts.load('current', {'packages':['corechart', 'line']});
-
-      // Set a callback to run when the Google Visualization API is loaded.
-      google.charts.setOnLoadCallback(drawBasic);
     </script>
   </head>
   <body onload ="getUserLogin();populateLinks();populateAnnouncements();">
@@ -93,11 +82,11 @@
                                 <span class="card-title">Daily Temperature</span>
                                 <div class="input-field">
                                     <i class="material-icons prefix">whatshot</i>
-                                    <input id="temp" type="number" step="0.1">
-                                    <label for="temp">Temperature</label>
+                                    <input id="icon_prefix" type="text">
+                                    <label for="icon_prefix">Temperature</label>
                                 </div>
                                 <div class="center-align">
-                                    <button class="btn waves-effect waves-light blue lighten-1" onclick="sendTemp();">Submit</button>
+                                    <button class="btn waves-effect waves-light blue lighten-1" type="submit" name="action">Submit</button>
                                 </div>
                             </div>
                         </div>
@@ -106,7 +95,6 @@
                         <div style="border-radius: 10px;" class="card white">
                             <div class="card-content blue-grey-text-darken-2">
                                 <span class="card-title">Temperature Trends</span>
-                                <div id="chart" class="goog-chart"></div>
                             </div>
                         </div>
                     </div>

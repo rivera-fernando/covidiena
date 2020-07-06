@@ -6,12 +6,6 @@
  
 /* Always set the map height explicitly to define the size of the div
  * element that contains the map. */
-
-.goog-chart {
-  width: 100%; 
-  min-height: 250px;
-}
-
 #map {
   height: 300px;
 }
