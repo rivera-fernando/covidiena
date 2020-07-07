@@ -10,43 +10,24 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.google.sps.data.User;
+import com.google.sps.classes.User;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/*
-deletes user using userId
-*/
-
+/*deletes user using userId from datatsore*/
 @WebServlet("/delete-user")
 public class DeleteUserServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        Query query = new Query("User");
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        PreparedQuery results = datastore.prepare(query);
-        UserService userService = UserServiceFactory.getUserService();
-        String userEmail = userService.getCurrentUser().getEmail().toLowerCase();
-        User oldInfo = null;
+      long userId = Long.parseLong(request.getParameter("userId"));
 
-        long userId = -1;
-        for(Entity entity : results.asIterable()){
-            if(userEmail.equals((String)entity.getProperty("email"))){
-                userId = entity.getKey().getId();
-            }
-        }
+      Key userEntityKey = KeyFactory.createKey("User", userId);
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      datastore.delete(userEntityKey);
+      response.sendRedirect("/login.html");
 
-        Key userKey = KeyFactory.createKey("User", userId);
-        Entity user = null;
-        try{
-            user = datastore.get(userKey);
-        }
-        catch( Exception EntityNotFoundException){
-            return;
-        }
-        datastore.delete(userKey);
     }
 }

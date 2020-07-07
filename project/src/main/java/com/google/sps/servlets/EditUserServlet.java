@@ -10,37 +10,41 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.google.sps.data.User;
+import com.google.sps.classes.User;
+import com.google.sps.classes.PasswordHash;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.codec.binary.Hex;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
-/*
-gets the user's userId and edits their entity in the datastore
-*/
-
+/*gets the user's userId and edits their entity in the datastore and then redirects them to login again*/
 @WebServlet("/edit-user")
 public class EditUserServlet extends HttpServlet {
 
-    @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
         Query query = new Query("User");
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
-        UserService userService = UserServiceFactory.getUserService();
-        String userEmail = userService.getCurrentUser().getEmail().toLowerCase();
+        String userEmail = request.getParameter("userEmail");
         User oldInfo = null;
 
         long userId = -1;
-        for(Entity entity : results.asIterable()){
-            if(userEmail.equals((String)entity.getProperty("email"))){
+        for (Entity entity : results.asIterable()){
+            if (userEmail.equals((String)entity.getProperty("email"))){
                 userId = entity.getKey().getId();
                 oldInfo = new User(
                     userId,
                     (String)entity.getProperty("name"),
                     userEmail,
+                    (String)entity.getProperty("password"),
                     (String)entity.getProperty("birthdate"),
                     Long.parseLong(String.valueOf(entity.getProperty("studentId"))),
                     (String)entity.getProperty("sex"),
@@ -53,30 +57,35 @@ public class EditUserServlet extends HttpServlet {
         }
 
         Entity user = null;
-        try{
+        try {
             Key userKey = KeyFactory.createKey("User", userId);
             user = datastore.get(userKey);
         }
-        catch( Exception EntityNotFoundException){
+        catch ( Exception EntityNotFoundException){
             return;
         }
 
-        if(!request.getParameter("name").isEmpty()){
+        if (!request.getParameter("name").isEmpty()){
             user.setProperty("name", request.getParameter("name"));
-        }else{
+        } else {
             user.setProperty("name", oldInfo.getName());
         }
-        if(request.getParameter("metric")!= null){
-            if(request.getParameter("metric").equals("on")){
+        if (request.getParameter("metric")!= null){
+            if (request.getParameter("metric").equals("on")){
                 user.setProperty("metric", "celsius");
-            }else{
+            } else {
                 user.setProperty("metric", "fahrenheit");
             }
         }
-        if(!request.getParameter("phone").isEmpty()){
+        if (!request.getParameter("phone").isEmpty()){
             user.setProperty("phone", request.getParameter("phone"));
-        }else{
+        } else {
             user.setProperty("phone", oldInfo.getPhone());
+        }
+        if (!request.getParameter("password").isEmpty()){
+            user.setProperty("password", PasswordHash.hashPassword((request.getParameter("password")).toCharArray()));
+        } else {
+            user.setProperty("password", oldInfo.getPassword());
         }
     
         user.setProperty("birthdate", oldInfo.getBirthdate());
@@ -87,6 +96,6 @@ public class EditUserServlet extends HttpServlet {
         user.setProperty("email", oldInfo.getEmail());
 
         datastore.put(user);
-        response.sendRedirect("/settings.html");
+        response.sendRedirect("/login.html");
     }
 }
