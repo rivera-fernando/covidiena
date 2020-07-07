@@ -99,10 +99,20 @@
                     <i style="color: #42a5f5;" class="material-icons prefix">edit</i>
                 </div>
             </div>
-            <div class="input-field right">
-                <button type ="submit" class="btn white-text" style="background-color: #42a5f5;" value="submit">Save Changes</button>
-                <button class="btn white-text" style="background-color: #42a5f5;" disabled>Request Admin Access</button>
-                <form action="/delete-user" method="POST" form class="my-form"><button onclick= "deleteUser()" class="btn red white-text" >Delete My Accont</button></form>
+            <div class ="row">
+                <div class="input-field col s12 right-align">
+                    <button type ="submit" class="btn white-text" style="background-color: #42a5f5;" value="submit">Save Changes</button>
+                </div>
+                <div class="input-field col s12 right-align">
+                    <form action="/request-admin" method="POST" form class="my-form">
+                        <button onclick= "requestAdmin()" class="btn white-text" style="background-color: #42a5f5;">Request Admin Access</button>
+                    </form>
+                </div>
+                <div class = "input-field col s12 right-align">
+                    <form action="/delete-user" method="POST" form class="my-form">
+                        <button onclick= "deleteUser()" class="btn red white-text">Delete My Accont</button>
+                    </form>
+                </div>
             </div>
         </form>
     </div>
