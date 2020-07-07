@@ -48,14 +48,16 @@ public class PastEventsServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query approvedQuery = new Query("ApprovedEvent");
     Query unapprovedQuery = new Query("UnapprovedEvent");
+    Query pastQuery = new Query("PastEvent");
 
-    cleanDatastore(approvedQuery, true);
-    cleanDatastore(unapprovedQuery, false);
+    cleanDatastore(approvedQuery, true, false);
+    cleanDatastore(unapprovedQuery, false, false);
+    cleanDatastore(pastQuery, false, true);
 
     response.setStatus(200);
   }
 
-  private void cleanDatastore(Query query, boolean isApproved) {
+  private void cleanDatastore(Query query, boolean isApproved, boolean isPast) {
     query.addSort("dateTimestamp", SortDirection.ASCENDING);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -67,21 +69,32 @@ public class PastEventsServlet extends HttpServlet {
     for (int i = 0; i < resultsList.size(); i++) {
       Entity eventEntity = resultsList.get(i);
       long dateTimestamp = (long) eventEntity.getProperty("dateTimestamp");
-
-      if (dateTimestamp <= currentTime) {
-        // If the event is passed and approved, create a new PastEvent.
-        if (isApproved) {
-          Entity pastEventEntity = new Entity("PastEvent");
-          pastEventEntity.setPropertiesFrom(eventEntity);
-          datastore.put(pastEventEntity);
+      if (isPast) {
+        if ((currentTime - dateTimestamp) >= 1209600000) {
+          // Delete the event entity 
+          Key key = eventEntity.getKey();
+          datastore.delete(key);
+        } else {
+          // If the current entity has not passed, as we are sorted in ascending order
+          // we know none of the future entities will be passed either.
+          break;
         }
-        // Delete the event entity 
-        Key key = eventEntity.getKey();
-        datastore.delete(key);
       } else {
-        // If the current entity has not passed, as we are sorted in ascending order
-        // we know none of the future entities will be passed either.
-        break;
+        if (dateTimestamp <= currentTime) {
+          // If the event is passed and approved, create a new PastEvent.
+          if (isApproved) {
+            Entity pastEventEntity = new Entity("PastEvent");
+            pastEventEntity.setPropertiesFrom(eventEntity);
+            datastore.put(pastEventEntity);
+          }
+          // Delete the event entity 
+          Key key = eventEntity.getKey();
+          datastore.delete(key);
+        } else {
+          // If the current entity has not passed, as we are sorted in ascending order
+          // we know none of the future entities will be passed either.
+          break;
+        }
       }
     }
 
