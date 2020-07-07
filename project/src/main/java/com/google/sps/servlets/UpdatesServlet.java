@@ -21,6 +21,8 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.sps.classes.Update;
 import java.io.IOException;
@@ -38,12 +40,14 @@ public class UpdatesServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
+    UserService userService = UserServiceFactory.getUserService();
+
     // Get the input from the form.
     String title = request.getParameter("update-title");
     String description = request.getParameter("update-description");
     long timestamp = System.currentTimeMillis();
     // Hard coded author for now
-    String author = "John Doe";
+    String author = userService.getCurrentUser().getEmail();
 
     Entity updateEntity = new Entity("Update");
     updateEntity.setProperty("title", title);
@@ -62,10 +66,19 @@ public class UpdatesServlet extends HttpServlet {
     Query query = new Query("Update");
     query.addSort("timestamp", SortDirection.DESCENDING);
 
+    UserService userService = UserServiceFactory.getUserService();
+
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
     List<Entity> resultsList = results.asList(FetchOptions.Builder.withDefaults());
     List<Update> updates = new ArrayList<>();
+    
+    if (userService.isUserLoggedIn()) {
+      if (userService.isUserAdmin()) {
+        Update update = new Update(0, "Admin", "", "", 0);
+        updates.add(update);
+      }
+    }
 
     for (int i = 0; i < resultsList.size(); i++) {
 
