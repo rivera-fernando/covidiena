@@ -56,8 +56,8 @@ public class SignUpServlet extends HttpServlet {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
         ArrayList<String> users = new ArrayList<String>();
-        for(Entity entity:results.asIterable()){
-            if(entity.getProperty("email").equals(email)){
+        for (Entity entity:results.asIterable()){
+            if (entity.getProperty("email").equals(email)){
                 response.sendRedirect("/login.html");
                 return;
             }

@@ -45,8 +45,8 @@ public class LogInServlet extends HttpServlet {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
         ArrayList<String> users = new ArrayList<String>();
-        for(Entity entity:results.asIterable()){
-            if(entity.getProperty("password").equals(password) && entity.getProperty("email").equals(email)){
+        for (Entity entity:results.asIterable()){
+            if (entity.getProperty("password").equals(password) && entity.getProperty("email").equals(email)){
                 user = new User(
                     (long) entity.getKey().getId(),
                     (String) entity.getProperty("name"),

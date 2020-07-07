@@ -37,8 +37,8 @@ public class EditUserServlet extends HttpServlet {
         User oldInfo = null;
 
         long userId = -1;
-        for(Entity entity : results.asIterable()){
-            if(userEmail.equals((String)entity.getProperty("email"))){
+        for (Entity entity : results.asIterable()){
+            if (userEmail.equals((String)entity.getProperty("email"))){
                 userId = entity.getKey().getId();
                 oldInfo = new User(
                     userId,
@@ -57,34 +57,34 @@ public class EditUserServlet extends HttpServlet {
         }
 
         Entity user = null;
-        try{
+        try {
             Key userKey = KeyFactory.createKey("User", userId);
             user = datastore.get(userKey);
         }
-        catch( Exception EntityNotFoundException){
+        catch ( Exception EntityNotFoundException){
             return;
         }
 
-        if(!request.getParameter("name").isEmpty()){
+        if (!request.getParameter("name").isEmpty()){
             user.setProperty("name", request.getParameter("name"));
-        }else{
+        } else {
             user.setProperty("name", oldInfo.getName());
         }
-        if(request.getParameter("metric")!= null){
-            if(request.getParameter("metric").equals("on")){
+        if (request.getParameter("metric")!= null){
+            if (request.getParameter("metric").equals("on")){
                 user.setProperty("metric", "celsius");
-            }else{
+            } else {
                 user.setProperty("metric", "fahrenheit");
             }
         }
-        if(!request.getParameter("phone").isEmpty()){
+        if (!request.getParameter("phone").isEmpty()){
             user.setProperty("phone", request.getParameter("phone"));
-        }else{
+        } else {
             user.setProperty("phone", oldInfo.getPhone());
         }
-        if(!request.getParameter("password").isEmpty()){
+        if (!request.getParameter("password").isEmpty()){
             user.setProperty("password", PasswordHash.hashPassword((request.getParameter("password")).toCharArray()));
-        }else{
+        } else {
             user.setProperty("password", oldInfo.getPassword());
         }
     
