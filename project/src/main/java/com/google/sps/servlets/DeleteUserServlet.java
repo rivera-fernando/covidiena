@@ -27,5 +27,7 @@ public class DeleteUserServlet extends HttpServlet {
       Key userEntityKey = KeyFactory.createKey("User", userId);
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       datastore.delete(userEntityKey);
+      response.sendRedirect("/login.html");
+
     }
 }

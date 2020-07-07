@@ -50,7 +50,7 @@ public class RequestAdminServlet extends HttpServlet {
         requestAdminEntity.setProperty("email", email);
         requestAdminEntity.setProperty("status", "pending");
 
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(requestAdminEntity);
+        response.sendRedirect("/login.html");
     }
 }

@@ -3,11 +3,21 @@ import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.activation.*;
+
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.util.Properties;
+
+import javax.mail.Authenticator;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+
   
 /*EmailSender creates and sends an email when users create and account to verify that they created the account*/
 public class EmailSender{ 
     public static void sendEmail(String to) {
-        String from = "christinachance315@gmail.com";
+        String from = "covidiena@gmail.com";
         String host = "localhost";
         Properties properties = System.getProperties();
         properties.setProperty("mail.smtp.host", host);
