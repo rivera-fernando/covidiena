@@ -43,7 +43,31 @@ function preview_image(event) {
 }
  
 function cancelEdit() {
-  
+  const editForm = document.getElementById("edit-events-form");
+  editForm.style.display = "none";
+}
+
+function fetchBlobstoreUrlAndShowForm() {
+  fetch('/blobstore-upload-url').then((response) => response.json())
+  .then((imageUploadUrls) => {
+    const eventsForm = document.getElementById('events-form');
+    eventsForm.action = imageUploadUrls[0];
+    eventsForm.style.display = 'block';
+    const editEventsForm = document.getElementById('edit-events-form');
+    editEventsForm.action = imageUploadUrls[1];
+  });
+}
+
+
+// Redirect the user to log in page if they are here without logging in
+function isLoggedIn() {
+  fetch('/post-event').then((response) => response.json())
+  .then((log) => {
+    console.log(log[0]);
+    if (!log[0]) {
+      window.location.replace("/login.html");
+    }
+  });
 }
  
 /*
@@ -51,6 +75,7 @@ function cancelEdit() {
  */
  
 async function loadPage() {
+  isLoggedIn();
   await loadEvents();
 }
  
@@ -58,8 +83,9 @@ async function loadDropdowns() {
   var elems = document.querySelectorAll('.dropdown-trigger');
   var instances = M.Dropdown.init(elems, {alignment: 'right'})
 }
- 
+
 async function loadEvents() {
+  fetchBlobstoreUrlAndShowForm();
   loadUpcoming();
   loadPending();
   loadPast();
@@ -83,14 +109,14 @@ function loadPending() {
       }
       events.forEach((event) => {
         var eventElement = createEventElement(event);
-        eventElement = addApprovalBtn(eventElement);
+        addApprovalBtn(eventElement);
         pendingEvents.appendChild(eventElement);
         loadDropdowns();
       })
     } else {
       events.forEach((event) => {
         var eventElement = createEventElement(event);
-        eventElement = addApprovalBtn(eventElement);
+        addApprovalBtn(eventElement);
         pendingEvents.appendChild(eventElement);
         loadDropdowns();
       })
@@ -110,7 +136,7 @@ function loadUpcoming() {
     } else {
       events.forEach((event) => {
         var eventElement = createEventElement(event);
-        eventElement = addRemovalBtn(eventElement);
+        addRemovalBtn(eventElement);
         upcomingEvents.appendChild(eventElement);
         loadDropdowns();
       })
@@ -145,7 +171,7 @@ function loadExplore() {
     exploreEvents.innerHTML = '';
     events.forEach((event) => {
       var eventElement = createEventElement(event);
-      eventElement = addRSVPBtn(eventElement);
+      addRSVPBtn(eventElement);
       exploreEvents.appendChild(eventElement);
       loadDropdowns();
     })
@@ -162,8 +188,6 @@ function loadEditForm(event) {
   const editDate = document.getElementsByName("edit-date")[0];
   const editTime = document.getElementsByName("edit-time")[0];
   const editDescription = document.getElementsByName("edit-description")[0];
-  const editType = document.getElementsByName("edit-event-type")[0];
-  const editAttendance = document.getElementsByName("edit-event-attendance")[0];
  
   editName.value = event.name;
   editLocation.value = event.location;
@@ -185,14 +209,34 @@ function loadEditForm(event) {
  */
  
 function createEventElement(event) {
+  // Containers, rows, and columns
   var eventElement = document.createElement('div');
   eventElement.classList.add('card', 'white');
   eventElement.style.borderRadius = '5px';
   eventElement.id = event.id;
- 
+
   const container = document.createElement('div');
   container.classList.add('card-content');
- 
+
+  const headerRow = document.createElement('div');
+  headerRow.classList.add('row');
+
+  const headerColumn = document.createElement('div');
+  headerColumn.classList.add('col', 's11');
+  
+  const row = document.createElement('div');
+  row.classList.add('row');
+
+  const textColumn = document.createElement('div');
+  textColumn.classList.add('col', 's9');
+
+  const imageColumn = document.createElement('div');
+  imageColumn.classList.add('col', 's3', 'valign-wrapper', 'center');
+
+  const dropdownColumn = document.createElement('div');
+  dropdownColumn.classList.add('col', 's1');
+
+  // Text elements
   const name = document.createElement('span');
   name.classList.add('card-title', 'activator');
   const when = document.createElement('span');
@@ -200,12 +244,12 @@ function createEventElement(event) {
   const attendance = document.createElement('span');
   attendance.style.backgroundColor = '#42a5f5';
   attendance.style.borderRadius = '8px';
-  attendance.style.padding = '4px 8px 4px 8px';
+  attendance.style.padding = '3px 8px 3px 8px';
   attendance.style.color = 'white';
   const type = document.createElement('span');
   type.style.backgroundColor = '#42a5f5';
   type.style.borderRadius = '8px';
-  type.style.padding = '4px 8px 4px 8px';
+  type.style.padding = '3px 8px 3px 8px';
   type.style.color = 'white';
   const space = document.createElement('span');
   const location = document.createElement('p');
@@ -219,23 +263,32 @@ function createEventElement(event) {
   description.innerHTML = "<b>About: </b>" + event.description;
   location.innerHTML = "<b>At: </b>" + event.location;
  
-  container.appendChild(name);
-  container.appendChild(when);
-  container.appendChild(type);
-  container.appendChild(space);
-  container.appendChild(attendance);
-  container.appendChild(description);
-  container.appendChild(location);
+  headerColumn.appendChild(name);
+  headerRow.appendChild(headerColumn);
+  container.appendChild(headerRow);
+  textColumn.appendChild(when);
+  textColumn.appendChild(type);
+  textColumn.appendChild(space);
+  textColumn.appendChild(attendance);
+  textColumn.appendChild(location);
+  textColumn.appendChild(description);
+  row.appendChild(textColumn);
+
+  // Image element
+  serveBlob(event, imageColumn);
+  row.appendChild(imageColumn);
+
+  headerRow.appendChild(dropdownColumn);
+  container.appendChild(row);
   eventElement.appendChild(container);
- 
-  eventElement = addDropdownMenu(eventElement, event);
+  addDropdownMenu(dropdownColumn, event, eventElement);
  
   return eventElement;
 }
  
-function addDropdownMenu(eventElement, event) {
+function addDropdownMenu(dropdownColumn, event, eventElement) {
   const dropdown = document.createElement('a');
-  dropdown.classList.add('dropdown-trigger', 'flat-btn', 'right');
+  dropdown.classList.add('dropdown-trigger', 'flat-btn', 'right', 'right-align');
   dropdown.href = '#';
   dropdown.dataset.target = 'dropdown-' + event.id;
   dropdown.innerHTML = '<i class="material-icons">more_vert</i>';
@@ -243,20 +296,28 @@ function addDropdownMenu(eventElement, event) {
   const dropdownList = document.createElement('ul');
   dropdownList.id = 'dropdown-' + event.id;
   dropdownList.classList.add('dropdown-content');
- 
-  var name = eventElement.querySelector('.card-title');
- 
-  name.appendChild(dropdown);
-  name.appendChild(dropdownList);
+
+  dropdownColumn.appendChild(dropdown);
+  dropdownColumn.appendChild(dropdownList);
  
   if (event.isMine) {
-    eventElement = addEditBtn(eventElement, event);
-    eventElement = addDeleteBtn(eventElement, event.entityType);
+    addEditBtn(eventElement, event);
+    addDeleteBtn(eventElement, event.entityType);
   }
-  
-  return eventElement;
 }
  
+function serveBlob(event, eventElement) {
+  if(event.imageKey != null){
+    const imageElement = document.createElement('img');
+    fetch('/serve-blob?imageKey='+event.imageKey).then((image)=>{
+      imageElement.src = image.url;
+    });
+    imageElement.style.maxHeight = '200px';
+    imageElement.style.maxWidth = '200px';
+    eventElement.appendChild(imageElement);
+  }
+}
+
 /*
  * ################# BUTTONS #################
  */
@@ -276,11 +337,11 @@ function addApprovalBtn(eventElement) {
       body: params
     });
     location.reload();
+    loadPage();
   });
  
   var dropdownList = eventElement.getElementsByTagName('ul')[0];
   dropdownList.appendChild(approvalBtn);
-  return eventElement;
 }
  
 function addRemovalBtn(eventElement) {
@@ -298,11 +359,11 @@ function addRemovalBtn(eventElement) {
       body: params
     });
     location.reload();
+    loadPage();
   })
  
   var dropdownList = eventElement.getElementsByTagName('ul')[0];
   dropdownList.appendChild(removalBtn);
-  return eventElement;
 }
  
 function addRSVPBtn(eventElement) {
@@ -320,11 +381,11 @@ function addRSVPBtn(eventElement) {
       body: params
     });
     location.reload();
+    loadPage();
   });
  
   var dropdownList = eventElement.getElementsByTagName('ul')[0];
   dropdownList.appendChild(RSVPBtn);
-  return eventElement;
 }
  
 function addEditBtn(eventElement, event) {
@@ -334,14 +395,13 @@ function addEditBtn(eventElement, event) {
   editBtn.innerText = "EDIT";
  
   editBtn.addEventListener('click', async () => {
-    const editForm = document.getElementById("edit-form");
+    const editForm = document.getElementById("edit-events-form");
     editForm.style.display = "block";
     loadEditForm(event);
   });
  
   var dropdownList = eventElement.getElementsByTagName('ul')[0];
   dropdownList.appendChild(editBtn);
-  return eventElement;
 }
  
 function addDeleteBtn(eventElement, entityType) {
@@ -359,11 +419,11 @@ function addDeleteBtn(eventElement, entityType) {
       body: params
     });
     location.reload();
+    loadPage();
   });
  
   var dropdownList = eventElement.getElementsByTagName('ul')[0];
   dropdownList.appendChild(deleteBtn);
-  return eventElement;
 }
  
 /*

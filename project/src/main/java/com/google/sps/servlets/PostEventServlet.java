@@ -32,19 +32,49 @@ import java.util.Set;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.google.sps.data.User;
+import javax.servlet.http.HttpSession;
+import com.google.sps.classes.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.blobstore.BlobInfo;
+import com.google.appengine.api.blobstore.BlobInfoFactory;
+import java.util.Map;
+import com.google.gson.Gson;
  
 /** Servlet that posts an event*/
 @WebServlet("/post-event")
 public class PostEventServlet extends HttpServlet {
+
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    
+    List<Boolean> log = new ArrayList<>();
+
+    HttpSession session = request.getSession(false); 
+    String name = (String) session.getAttribute("person"); 
+
+    boolean found = true;
+    
+    if (name.equals("null")) {
+      found = false;
+    }
+    
+    log.add(found);
+    
+    Gson gson = new Gson();
  
+    response.setContentType("application/json;");
+    response.getWriter().println(gson.toJson(log));
+  }
+
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
+
     // Get the input from the form.
     String name = request.getParameter("name");
     String location = request.getParameter("location");
@@ -65,11 +95,12 @@ public class PostEventServlet extends HttpServlet {
     String type = request.getParameter("event-type");
     String attendance = request.getParameter("event-attendance");
     String description = request.getParameter("description");
+    String imageKey = getUploadedFileUrl(request, "image");
     long timestamp = System.currentTimeMillis();
- 
+
     UserService userService = UserServiceFactory.getUserService();
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
- 
+
     if (userService.isUserLoggedIn()) {
       String email = userService.getCurrentUser().getEmail().toLowerCase();
       if (userService.isUserAdmin()) {
@@ -90,11 +121,12 @@ public class PostEventServlet extends HttpServlet {
         attendees.add(email);
         approvedEventEntity.setProperty("attendees", attendees);
         approvedEventEntity.setProperty("dateTimestamp", dateTimestamp);
+        approvedEventEntity.setProperty("imageKey", imageKey);
  
         datastore.put(approvedEventEntity);
       } else {
         Entity unapprovedEventEntity = new Entity("UnapprovedEvent");
-      
+
         unapprovedEventEntity.setProperty("name", name);
         unapprovedEventEntity.setProperty("location", location);
         unapprovedEventEntity.setProperty("date", date);
@@ -105,13 +137,34 @@ public class PostEventServlet extends HttpServlet {
         unapprovedEventEntity.setProperty("timestamp", timestamp);
         unapprovedEventEntity.setProperty("email", email);
         unapprovedEventEntity.setProperty("dateTimestamp", dateTimestamp);
- 
+        unapprovedEventEntity.setProperty("imageKey", imageKey);
+
         datastore.put(unapprovedEventEntity);
       }
- 
+
       response.sendRedirect("/events.html");
     } else {
       response.sendRedirect("/login.html");
+    }
+  }
+
+  private String getUploadedFileUrl(HttpServletRequest request, String formInputElementName) {
+    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+    Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
+    List<BlobKey> blobKeys = blobs.get(formInputElementName);
+
+    if (blobKeys == null || blobKeys.isEmpty()) {
+      return null;
+    }
+
+    BlobKey blobKey = blobKeys.get(0);
+
+    BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
+    if (blobInfo.getSize() == 0) {
+      blobstoreService.delete(blobKey);
+      return null;
+    } else {
+      return blobKey.getKeyString();
     }
   }
 }

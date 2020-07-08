@@ -17,7 +17,7 @@
     <script src="materialize.min.js"></script>
     <script src="event_script.js"></script>
   </head>
-  <body onload="getUserLogin();loadPage();">
+  <body onload="loadPage();">
       <nav>
         <div class="nav-wrapper blue-grey lighten-4">
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
@@ -30,7 +30,7 @@
                 <li><a style="color: #42a5f5;" href="/info.html">Information</a></li>
                 <li class="active"><a style="color: #42a5f5;" href="/events.html">Events</a></li>
                 <li style="width: 50px; height: 60px;">&nbsp;</li>
-                <li><a style="color: #42a5f5;" id= "createButton" href="/signup.html">Sign Up</a></li>
+                <li><a style="color: #42a5f5;" href="/signup.html" id= "createButton">Sign Up</a></li>
                 <li><a style="color: #42a5f5;" href="/login.html" id= "loginButton">Log In</a></li>
             </ul>
         </div>
@@ -43,7 +43,7 @@
       </ul>
     <div class="container">
       <div class="section">
-        <form action="/post-event" method="POST" onsubmit="return validateEvent()">
+        <form method="POST" id="events-form" style="display: none;" onsubmit="return validateEvent()" enctype="multipart/form-data">
           <div class="card blue-grey lighten-4">
             <div class="card-content" style="overflow-y: scroll">
               <p class="card-title">Post an Event</p>
@@ -85,7 +85,7 @@
                   </div>
                 </div>
                 <div class="col s5">
-                  <textarea class="materialize-textarea" name="description" placeholder="Event Description" autocomplete="off" spellcheck="false"></textarea>
+                  <textarea class="materialize-textarea" name="description" placeholder="Event Description" autocomplete="off" spellcheck="false" maxlength="500"></textarea>
                 </div>
                 <div class="col s3">
                   <div class="center">
@@ -95,7 +95,7 @@
                     <div class="file-field input-field">
                       <div class="btn-flat">
                         <span>Upload Image</span>
-                        <input type="file" accept="image/*" onchange="preview_image(event)" style="max-width: 100%">
+                        <input type="file" accept="image/*" onchange="preview_image(event)" style="max-width: 100%" name="image">
                       </div>
                       <div class="file-path-wrapper">
                         <input class="file-path validate" type="text">
@@ -148,7 +148,7 @@
       </div>
       <div class="section">
         <div class="row">
-          <form id="edit-form" action="/edit-event" method="POST" style="display: none;">
+          <form id="edit-events-form" method="POST" style="display: none;">
             <div class="card blue-grey lighten-4">
               <div class="card-content" style="overflow-y: scroll">
                 <p class="card-title">Edit your Event</p>
@@ -202,7 +202,7 @@
                       <div class="file-field input-field">
                         <div class="btn-flat">
                           <span>Upload Image</span>
-                          <input type="file" accept="image/*" onchange="preview_image(event)" style="max-width: 100%">
+                          <input type="file" accept="image/*" onchange="preview_image(event)" style="max-width: 100%" id="edit-image" name="edit-image">
                         </div>
                         <div class="file-path-wrapper">
                           <input class="file-path validate" type="text">

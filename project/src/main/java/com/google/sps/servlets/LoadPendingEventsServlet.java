@@ -30,7 +30,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.google.sps.data.User;
+import com.google.sps.classes.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import java.text.SimpleDateFormat;
@@ -56,7 +56,7 @@ public class LoadPendingEventsServlet extends HttpServlet {
       // If the user is an admin, load ALL pending. Otherwise, just the ones that the student posted.
       if (userService.isUserAdmin()) {
         // Should probably find a better way to send this metadata like Lian told me to
-        Event metadata = new Event(0, "Admin", "", "", "", "", "", "", 0, false, "");
+        Event metadata = new Event(0, "Admin", "", "", "", "", "", "", 0, false, "", "");
         pendingEvents.add(metadata);
         for (int i = 0; i < resultsList.size(); i++) {
           Entity entity = resultsList.get(i);
@@ -69,8 +69,9 @@ public class LoadPendingEventsServlet extends HttpServlet {
           String type = (String) entity.getProperty("attendance");
           String attendance = (String) entity.getProperty("type");
           long timestamp = (long) entity.getProperty("timestamp");
+          String imageKey =  (String) entity.getProperty("imageKey");
  
-          Event event = new Event(id, name, location, date, time, description, type, attendance, timestamp, entity.getProperty("email").equals(email), "unapproved");
+          Event event = new Event(id, name, location, date, time, description, type, attendance, timestamp, entity.getProperty("email").equals(email), "UnapprovedEvent", imageKey);
           pendingEvents.add(event);
         }
       } else {
@@ -89,8 +90,9 @@ public class LoadPendingEventsServlet extends HttpServlet {
             String type = (String) entity.getProperty("attendance");
             String attendance = (String) entity.getProperty("type");
             long timestamp = (long) entity.getProperty("timestamp");
+            String imageKey =  (String) entity.getProperty("imageKey");
  
-            Event event = new Event(id, name, location, date, time, description, type, attendance, timestamp, true, "UnapprovedEvent");
+            Event event = new Event(id, name, location, date, time, description, type, attendance, timestamp, true, "UnapprovedEvent", imageKey);
             pendingEvents.add(event);
           }
         }

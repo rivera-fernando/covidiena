@@ -22,6 +22,11 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.blobstore.BlobInfo;
+import com.google.appengine.api.blobstore.BlobInfoFactory;
 import java.util.Date;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
@@ -35,11 +40,12 @@ import java.util.Set;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.google.sps.data.User;
+import com.google.sps.classes.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import java.util.Map;
  
 /** Servlet that posts an event*/
 @WebServlet("/edit-event")
@@ -47,7 +53,6 @@ public class EditEventServlet extends HttpServlet {
  
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
     // Get the input from the form.
     String name = request.getParameter("edit-name");
     String location = request.getParameter("edit-location");
@@ -60,7 +65,7 @@ public class EditEventServlet extends HttpServlet {
     long dateTimestamp = 0;
     try {
       Date formattedDate = formatter.parse(date);
-      long milliseconds = Long.parseLong(hours)*3600000 + Long.parseLong(minutes)*60000;
+      long milliseconds = Long.parseLong(hours) * 3600000 + Long.parseLong(minutes)*60000;
       dateTimestamp = formattedDate.getTime() + milliseconds;
     } catch (ParseException e) {
       e.printStackTrace();
@@ -68,6 +73,7 @@ public class EditEventServlet extends HttpServlet {
     String type = request.getParameter("edit-event-type");
     String attendance = request.getParameter("edit-event-attendance");
     String description = request.getParameter("edit-description");
+    String imageKey = getUploadedFileUrl(request, "edit-image");
  
     UserService userService = UserServiceFactory.getUserService();
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -88,11 +94,33 @@ public class EditEventServlet extends HttpServlet {
       event.setProperty("attendance", attendance);
       event.setProperty("description", description);
       event.setProperty("dateTimestamp", dateTimestamp);
+      event.setProperty("imageKey", imageKey);
  
       datastore.put(event);
       response.sendRedirect("/events.html");
     } catch(EntityNotFoundException e) {
+      response.getWriter().println(e);
       return;
+    }
+  }
+
+  private String getUploadedFileUrl(HttpServletRequest request, String formInputElementName) {
+    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+    Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
+    List<BlobKey> blobKeys = blobs.get(formInputElementName);
+
+    if (blobKeys == null || blobKeys.isEmpty()) {
+      return null;
+    }
+
+    BlobKey blobKey = blobKeys.get(0);
+
+    BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
+    if (blobInfo.getSize() == 0) {
+      blobstoreService.delete(blobKey);
+      return null;
+    } else {
+      return blobKey.getKeyString();
     }
   }
 }
