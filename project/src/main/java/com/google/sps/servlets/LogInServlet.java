@@ -25,6 +25,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 /*user logs in with school email and their information from the datatstore is printed through json for easy access*/
@@ -35,6 +36,7 @@ public class LogInServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session=request.getSession();  
         String password = PasswordHash.hashPassword(request.getParameter("password").toCharArray());
         String email = request.getParameter("email").toLowerCase();
         Gson gson = new Gson();
@@ -60,12 +62,14 @@ public class LogInServlet extends HttpServlet {
                     (String) entity.getProperty("metric"), 
                     (Boolean) entity.getProperty("admin")
                 );
+                session.setAttribute("person",gson.toJson(user));  
+                response.getWriter().println(gson.toJson(user));
                 response.getWriter().println(gson.toJson(user));
                 response.sendRedirect("/dashboard");
                 return;
             }
         }
-
+        session.setAttribute("person",gson.toJson(user));  
         response.getWriter().println(gson.toJson(user));
         response.sendRedirect("/login.html");
     }

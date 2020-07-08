@@ -26,12 +26,15 @@ import com.google.sps.classes.Update;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.nio.charset.*;
+import org.json.JSONObject;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet("/dashboard")
 public class Dashboard extends HttpServlet {
@@ -46,26 +49,18 @@ public class Dashboard extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Boolean found = false;
-        if (userService.isUserLoggedIn()) {
-            Query query = new Query("User");
-            PreparedQuery results = datastore.prepare(query);
-            for(Entity entity:results.asIterable()){
-                if (((String) entity.getProperty("email")).toLowerCase().equals(userService.getCurrentUser().getEmail().toLowerCase())) {
-                    found = true;
-                    if(((Boolean)entity.getProperty("admin")) == true) {
-                        response.sendRedirect("/admin_dash.html");
-                    }
-                    else {
-                        response.sendRedirect("/dashboard.html");
-                    }
-                }
-            }
-            if (!found) {
-                response.sendRedirect("/signup.html");
-            }
+        HttpSession session=request.getSession(false); 
+        response.setContentType("text/html"); 
+        String n=(String)session.getAttribute("person"); 
+        String admin = n.substring(n.indexOf("admin\":")+7, n.indexOf("}"));
+        if (n.equals("null")) {
+            response.sendRedirect("/login.html");
+        }
+        else if (admin.equals("true")) {
+            response.sendRedirect("/admin_dash.html");
         }
         else {
-            response.sendRedirect("/index.html");
+            response.sendRedirect("/dashboard.html");
         }
   }
 }

@@ -30,6 +30,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Date;
  
@@ -46,16 +47,11 @@ public class Announcements extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      String name = "";
-      String school = "";
-      Query query = new Query("User");
-      PreparedQuery results = datastore.prepare(query);
-      for(Entity entity:results.asIterable()){
-          if (((String) entity.getProperty("email")).toLowerCase().equals(userService.getCurrentUser().getEmail().toLowerCase())) {
-              name = (String) entity.getProperty("name");
-              school = (String) entity.getProperty("school");
-          }
-      }
+      HttpSession session=request.getSession(false); 
+      String n=(String)session.getAttribute("person");
+      String admin = n.substring(n.indexOf("admin\":")+7, n.indexOf("}"));
+      String name = n.substring(n.indexOf("name\":")+7, n.indexOf("\",\"userId"));
+      String school = n.substring(n.indexOf("school\":")+9, n.indexOf("\",\"phone"));
       String title = request.getParameter("title");
       String content = request.getParameter("content");
       Entity commentEntity = new Entity("Announcements");
@@ -65,22 +61,19 @@ public class Announcements extends HttpServlet {
       commentEntity.setProperty("content", content);
       commentEntity.setProperty("when", now);
       commentEntity.setProperty("school", school);
-      datastore.put(commentEntity);
+      if (admin.equals("true")) {
+        datastore.put(commentEntity);
+      }
   }
   
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      HttpSession session=request.getSession(false); 
+      String n=(String)session.getAttribute("person");
+      String school = n.substring(n.indexOf("school\":")+9, n.indexOf("\",\"phone"));
       ArrayList<Object> data = new ArrayList<Object>();
-      String school = "";
-      Query query = new Query("User");
+      Query query = new Query("Announcements").addSort("when", SortDirection.DESCENDING);
       PreparedQuery results = datastore.prepare(query);
-      for(Entity entity:results.asIterable()){
-          if (((String) entity.getProperty("email")).toLowerCase().equals(userService.getCurrentUser().getEmail().toLowerCase())) {
-              school = (String) entity.getProperty("school");
-          }
-      }
-      query = new Query("Announcements").addSort("when", SortDirection.DESCENDING);
-      results = datastore.prepare(query);
       for(Entity entity:results.asIterable()){
           if (((String) entity.getProperty("school")).toLowerCase().equals(school.toLowerCase())) {
               ArrayList<Object> pair = new ArrayList<Object>();
@@ -92,6 +85,5 @@ public class Announcements extends HttpServlet {
       }
       response.setContentType("application/json;");
       response.getWriter().println(gson.toJson(data));
-      //this will get all announcements entities, with school = current user school
   }
 }
