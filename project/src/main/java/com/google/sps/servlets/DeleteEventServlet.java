@@ -37,13 +37,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.google.sps.classes.User;
+import com.google.sps.data.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
  
 /** Servlet that loads upcoming events*/
-@WebServlet("/approve-event")
-public class ApproveEventServlet extends HttpServlet {
+@WebServlet("/delete-event")
+public class DeleteEventServlet extends HttpServlet {
     
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -52,34 +52,10 @@ public class ApproveEventServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
  
     long requestId = Long.parseLong(request.getParameter("id"));
-    Key eventKey = KeyFactory.createKey("UnapprovedEvent", requestId);
+    String entityType = request.getParameter("entityType");
+    Key eventKey = KeyFactory.createKey(entityType, requestId);
     
-    try { 
-      Entity unapprovedEvent = datastore.get(eventKey);
-      datastore.delete(eventKey);
- 
-      Entity approvedEventEntity = new Entity("ApprovedEvent");
-      approvedEventEntity.setProperty("name", unapprovedEvent.getProperty("name"));
-      approvedEventEntity.setProperty("location", unapprovedEvent.getProperty("location"));
-      approvedEventEntity.setProperty("date", unapprovedEvent.getProperty("date"));
-      approvedEventEntity.setProperty("time", unapprovedEvent.getProperty("time"));
-      approvedEventEntity.setProperty("type", unapprovedEvent.getProperty("type"));
-      approvedEventEntity.setProperty("attendance", unapprovedEvent.getProperty("attendance"));
-      approvedEventEntity.setProperty("description", unapprovedEvent.getProperty("description"));
-      approvedEventEntity.setProperty("timestamp", unapprovedEvent.getProperty("timestamp"));
-      approvedEventEntity.setProperty("dateTimestamp", unapprovedEvent.getProperty("dateTimestamp"));
-      approvedEventEntity.setProperty("email", unapprovedEvent.getProperty("email"));
-      approvedEventEntity.setProperty("admin-email", userService.getCurrentUser().getEmail().toLowerCase());
-      Collection<String> attendees = new HashSet<String>();
-      String email = (String) unapprovedEvent.getProperty("email");
-      // Add the central/mock user to all the events for cohesion
-      attendees.add("mock@mock.edu");
-      approvedEventEntity.setProperty("attendees", attendees);
- 
-      datastore.put(approvedEventEntity);
-      response.sendRedirect("/events.html");
-    } catch(EntityNotFoundException e) {
-      return;
-    }
+    datastore.delete(eventKey);
+    response.sendRedirect("/events.html");
   }
 }

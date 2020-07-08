@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
+ 
 function loadCovidData() {
   const url = "/load-covid-data";
   fetch(url, {
@@ -29,7 +29,7 @@ function loadCovidData() {
     })
   });
 }
-
+ 
 function loadWorldData(worldData) {
   const worldCasesDOM = document.getElementById('world-cases');
   const worldDeathsDOM = document.getElementById('world-deaths');
@@ -43,10 +43,10 @@ function loadWorldData(worldData) {
   worldDeathsDOM.innerHTML = worldData.deaths;
   worldRecoveriesDOM.innerHTML = worldData.recoveries;
 }
-
+ 
 function createTableRow(tableBodyDOM, country) {
   const tableRowDOM = document.createElement('tr');
-
+ 
   const countryNameDOM = document.createElement('th');
   countryNameDOM.colSpan = 2;
   const casesDOM = document.createElement('td');
@@ -61,7 +61,7 @@ function createTableRow(tableBodyDOM, country) {
   }
   deathsDOM.innerHTML = country.deaths;
   recoveriesDOM.innerHTML = country.recoveries;
-
+ 
   tableRowDOM.appendChild(countryNameDOM);
   tableRowDOM.appendChild(casesDOM);
   tableRowDOM.appendChild(deathsDOM);
@@ -69,7 +69,7 @@ function createTableRow(tableBodyDOM, country) {
   
   tableBodyDOM.appendChild(tableRowDOM);
 }
-
+ 
 function loadUpdates() {
   const url = "/updates";
   fetch(url, {
@@ -77,26 +77,31 @@ function loadUpdates() {
   }).then(response => response.json()).then((updates) => {
     const updatesHistory = document.getElementById('updates');
     updatesHistory.innerHTML = '';
+    if (updates[0].title === "Admin") {
+      const updateForm = document.getElementById('update-form');
+      updateForm.style.display = "block";
+      delete updates[0];
+    }
     updates.forEach((update) => {
-        updatesHistory.appendChild(createUpdateElement(update));
+      updatesHistory.appendChild(createUpdateElement(update));
     })
   });
 }
-
+ 
 function createUpdateElement(update) {
   const updateElement = document.createElement('div');
   updateElement.classList.add('card', 'pink', 'lighten-2', 'z-depth-1');
   updateElement.style.borderRadius = '5px';
-
+ 
   const container = document.createElement('div');
   container.classList.add('card-content');
-
+ 
   const title = document.createElement('p');
   title.classList.add('card-title');
   title.style.fontSize = "16px";
   const description = document.createElement('p');
   const author = document.createElement('p');
-
+ 
   title.innerText = update.title;
   description.innerText = update.description;
   author.innerText = "- " + update.author;
@@ -105,6 +110,6 @@ function createUpdateElement(update) {
   container.appendChild(description);
   container.appendChild(author);
   updateElement.appendChild(container);
-
+ 
   return updateElement;
 }
