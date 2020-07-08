@@ -6,21 +6,37 @@
         <link rel="stylesheet" href="icons.css">
         <link rel="stylesheet" href="materialize.min.css">
         <script src="materialize.min.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script>
+        $(document).ready(function(){
+            $('.sidenav').sidenav();
+        });
+        </script>
     </head>
-    <body>
+    <body onload = "">
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <nav>
-            <div class="nav-wrapper blue-grey lighten-4">
-                <ul id="nav-mobile" class="left">
-                    <li><a style="color: #42a5f5;font-weight: bold;" href="../">Covidiena</a></li>
-                    <li><a style="color: #42a5f5;font-weight: bold;" href="/dashboard.html">Dashboard</a></li>
-                    <li><a style="color: #42a5f5;font-weight: bold;" href="/info.html">Information</a></li>
-                    <li><a style="color: #42a5f5;font-weight: bold;" href="/events.html">Events</a></li>
-                </ul>
-                <ul id="nav-mobile" class="right">
-                    <li><a href="/settings.html" id="seetingButton"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
-                </ul>
-            </div>
+    	<div class="nav-wrapper blue-grey lighten-4">
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
+            <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
+            <ul id="nav-mobile" class="right">
+                <li><a href="/settings.html" id="settingButton"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
+            </ul>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
+                <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
+                <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+                <li style="width: 50px; height: 60px;">&nbsp;</li>
+                <li><a style="color: #42a5f5;" href="/login.html" id= "loginButton">Log In</a></li>
+            </ul>
+    	</div>
         </nav>
+        <ul class="sidenav" id="mobile-demo">
+            <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
+            <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
+            <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+            <li><a style="color: #42a5f5;" href="/login.html" id= "loginButton">Log In</a></li>
+        </ul>
         <div class="container">
             <div class="row">
                 <div class="col s12 l8 offset-l2">
@@ -31,24 +47,25 @@
             <form action="/login" method="POST">
                 <div class="row">
                     <div class="input-field col s12 l8 offset-l2">
-                        <input type="text" name="schoolEmail" id="schoolEmail" placeholder = ".edu" required>
+                        <input type="text" name="email" id="email" placeholder =".edu" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.edu$" class="validate" required>
                         <label for="schoolEmail">School Email</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12 l8 offset-l2">
-                        <input type="password" name="password" id="password" class="validate" required>
+                        <input type="password" name="password" class="validate" id="password" required>
                         <label for="password">Password</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col s12 l8 offset-l2">
                         <div class="input-field right">
-                            <button class="btn white-text" style="background-color: #42a5f5;">Log In</button>
+                            <button onlick="check()" class="btn white-text" style="background-color: #42a5f5;">Log In</button>
                         </div>
                     </div>
                 </div>
             </form>
+            <div id="error"></div>
             <div class="row">
                 <div class="col s12 l8 offset-l2">
                     <h6>Don't have an account? Create an account <a href="/signup.html">here</a></h6> 

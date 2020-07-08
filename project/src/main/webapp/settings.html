@@ -12,28 +12,44 @@
     });
     </script>
   </head>
-  <body onload ="getUserLogin();">
+  <body onload ="populateUser();">
       <nav>
-        <div class="nav-wrapper blue-grey lighten-4">
-            <ul id="nav-mobile" class="left">
-                <li><a style="color: #42a5f5;font-weight: bold;" href="../">Covidiena</a></li>
-                <li><a style="color: #42a5f5;font-weight: bold;" href="/dashboard.html">Dashboard</a></li>
-                <li><a style="color: #42a5f5;font-weight: bold;" href="/info.html">Information</a></li>
-                <li><a style="color: #42a5f5;font-weight: bold;" href="/events.html">Events</a></li>
-            </ul>
+    	<div class="nav-wrapper blue-grey lighten-4">
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
+            <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
             <ul id="nav-mobile" class="right">
-                <li><a class="waves-effect waves-light btn blue lighten-1" id= "loginButton">Log In</a></li>
-                <li><a href="/settings.html" id="seetingButton"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
+                <li><a href="/settings.html" id="settingButton"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
             </ul>
-        </div>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
+                <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
+                <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+                <li style="width: 50px; height: 60px;">&nbsp;</li>
+                <li><a style="color: #42a5f5;" href="/login.html" id= "loginButton">Log In</a></li>
+            </ul>
+    	</div>
       </nav>
+      <ul class="sidenav" id="mobile-demo">
+        <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
+        <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
+        <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+        <li><a style="color: #42a5f5;" href="/login.html" id= "loginButton">Log In</a></li>
+      </ul>
     <div class="container">
         <h3>Profile</h3>
         <form action="/edit-user" method="POST" form class="my-form">
+            <input name="userEmail" id="userEmail" value="" type ="hidden">
             <div class="row">
                 <div class="input-field col s12 l12">
                     <input type="text" name="name" id= "name" placeholder="name">
                     <label for="name">Name</label>
+                    <i style="color: #42a5f5;" class="material-icons prefix">edit</i>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12 l12">
+                    <input type="password" name="password" class="validate" id="password">
+                    <label for="password">Password</label>
                     <i style="color: #42a5f5;" class="material-icons prefix">edit</i>
                 </div>
             </div>
@@ -67,7 +83,6 @@
                         </label>
                     </div>
                     <i style="color: #42a5f5;" class="material-icons right">edit</i>
-
                 </div>
             </div>
             <h3>Contact Information</h3>
@@ -84,13 +99,18 @@
                     <i style="color: #42a5f5;" class="material-icons prefix">edit</i>
                 </div>
             </div>
-            <div class="input-field right">
-                <button type ="submit" class="btn white-text" style="background-color: #42a5f5;" value="submit">Save Changes</button>
-                <button class="btn white-text" style="background-color: #42a5f5;" disabled>Request Admin Access</button>
-                <button onclick= "deleteUser()" class="btn red white-text" disabled>Delete My Accont</button>
+            <div class ="row">
+                <div class="input-field col s12 right-align">
+                    <button type ="submit" class="btn white-text" style="background-color: #42a5f5;" value="submit">Save Changes</button>
+                </div>
+                <div class="input-field col s12 right-align">
+                    <button onclick= "requestAdmin()" class="btn white-text" style="background-color: #42a5f5;">Request Admin Access</button>
+                </div>
+                <div class = "input-field col s12 right-align">
+                    <button onclick= "deleteUser()" class="btn red white-text">Delete My Accont</button>
+                </div>
             </div>
         </form>
     </div>
   </body>
 </html>
- 

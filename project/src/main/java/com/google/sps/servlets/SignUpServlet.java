@@ -17,7 +17,9 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
-import com.google.sps.data.User;
+import com.google.sps.classes.User;
+import com.google.sps.classes.PasswordHash;
+import com.google.sps.classes.EmailSender;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -32,44 +34,63 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/*
-creates a user entity in datastore with user information so they can update it whenever they log in
-*/
-
+/*creates a user entity in datastore with user information so they can update it whenever they log in*/
 @WebServlet("/user")
 public class SignUpServlet extends HttpServlet {
 
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      UserService userService = UserServiceFactory.getUserService();
-      String name = request.getParameter("fname") + " " + request.getParameter("lname");
-      String email = userService.getCurrentUser().getEmail().toLowerCase();
-      String birthdate = request.getParameter("birthdate");
-      long studentId = Long.parseLong(request.getParameter("studentID"));
-      String sex = request.getParameter("sex");
-      String school = request.getParameter("school");
-      String phone = request.getParameter("phone");
+    User user = null;
 
-      Entity userEntity = new Entity("User");
-      userEntity.setProperty("name", name);
-      userEntity.setProperty("email", email);
-      userEntity.setProperty("birthdate", birthdate);
-      userEntity.setProperty("studentId", studentId);
-      userEntity.setProperty("sex", sex);
-      userEntity.setProperty("school", school);
-      userEntity.setProperty("phone", phone);
-      userEntity.setProperty("metric", "fahrenheit");
-      userEntity.setProperty("admin", false);
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String name = request.getParameter("fname") + " " + request.getParameter("lname");
+        String email = request.getParameter("email").toLowerCase();
+        String birthdate = request.getParameter("birthdate");
+        long studentId = Long.parseLong(request.getParameter("studentID"));
+        String sex = request.getParameter("sex");
+        String school = request.getParameter("school");
+        String phone = request.getParameter("phone");
+        String password = PasswordHash.hashPassword(request.getParameter("password").toCharArray());
 
+        Query query = new Query("User");
 
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      datastore.put(userEntity);
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        PreparedQuery results = datastore.prepare(query);
+        ArrayList<String> users = new ArrayList<String>();
+        for (Entity entity:results.asIterable()){
+            if (entity.getProperty("email").equals(email)){
+                response.sendRedirect("/login.html");
+                return;
+            }
+        }
 
-      User user = new User(userEntity.getKey().getId(), name, email, birthdate, studentId, sex, school, phone, "fahrenheit", false);
-      Gson gson = new Gson();
-      response.setContentType("application/json;");
-      response.getWriter().println(gson.toJson(user));
+        Entity userEntity = new Entity("User");
+        userEntity.setProperty("name", name);
+        userEntity.setProperty("email", email);
+        userEntity.setProperty("birthdate", birthdate);
+        userEntity.setProperty("studentId", studentId);
+        userEntity.setProperty("sex", sex);
+        userEntity.setProperty("school", school);
+        userEntity.setProperty("phone", phone);
+        userEntity.setProperty("metric", "fahrenheit");
+        userEntity.setProperty("admin", false);
+        userEntity.setProperty("password", password);
 
-      response.sendRedirect("/dashboard.html");
-  }
+        datastore.put(userEntity);
+
+        user = new User(userEntity.getKey().getId(), name, email, password, birthdate, studentId, sex, school, phone, "fahrenheit", false);
+        Gson gson = new Gson();
+        response.setContentType("application/json;");
+        response.getWriter().println(gson.toJson(user));
+
+        EmailSender.sendEmail(email);
+
+        response.sendRedirect("/login.html");
+    }
+
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        Gson gson = new Gson();
+        response.setContentType("application/json;");
+        response.getWriter().println(gson.toJson(user));
+    }
 }
