@@ -84,8 +84,10 @@ public class dataAnalytics extends HttpServlet {
       ArrayList<String> data = new ArrayList<String>();
       data.add(val);
       data.add(Integer.toString(fevers));
-      response.setContentType("application/json;");
-      response.getWriter().println(gson.toJson(data));
+      if (n.substring(n.indexOf("admin\":")+7, n.indexOf("}")).equals("true")) {
+          response.setContentType("application/json;");
+          response.getWriter().println(gson.toJson(data));
+      }
 
   }
   

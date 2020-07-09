@@ -64,8 +64,7 @@ public class LogInServlet extends HttpServlet {
                 );
                 session.setAttribute("person",gson.toJson(user));  
                 response.getWriter().println(gson.toJson(user));
-                response.getWriter().println(gson.toJson(user));
-                response.sendRedirect("/dashboard");
+                response.sendRedirect("../dashboard");
                 return;
             }
         }
