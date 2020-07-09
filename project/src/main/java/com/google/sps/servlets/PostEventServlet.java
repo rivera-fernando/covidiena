@@ -51,7 +51,7 @@ public class PostEventServlet extends HttpServlet {
     SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
     long dateTimestamp = 0;
     try {
-      Date formattedDate = formatter.parse(date);
+      Date formattedDate = formatter.parse(date.substring(4));
       dateTimestamp = formattedDate.getTime();
     } catch (ParseException e) {
       e.printStackTrace();

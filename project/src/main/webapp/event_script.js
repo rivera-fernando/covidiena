@@ -13,10 +13,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-$(document).ready(function(){
-  $('.datepicker').datepicker();
-});
 
+document.addEventListener('DOMContentLoaded', function(){
+    var elems = document.querySelectorAll('.datepicker');
+    var instances = M.Datepicker.init(elems, {
+        format: 'ddd mmm dd, yyyy'
+    });
+});
+ 
 $(document).ready(function(){
     $('.tabs').tabs();
   });

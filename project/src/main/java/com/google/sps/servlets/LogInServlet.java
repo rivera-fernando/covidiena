@@ -35,45 +35,55 @@ public class LogInServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String password = PasswordHash.hashPassword(request.getParameter("password").toCharArray());
-        String email = request.getParameter("email").toLowerCase();
         Gson gson = new Gson();
         response.setContentType("text/html");
+        if(request.getParameter("logout") != null){
+            user = null;
+            response.getWriter().println(gson.toJson(user));
+            response.sendRedirect("/index.html");
+            return;
+        }else{
+            String password = PasswordHash.hashPassword(request.getParameter("password").toCharArray());
+            String email = request.getParameter("email").toLowerCase();
+            Query query = new Query("User");
 
-        Query query = new Query("User");
-
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        PreparedQuery results = datastore.prepare(query);
-        ArrayList<String> users = new ArrayList<String>();
-        for (Entity entity:results.asIterable()){
-            if (entity.getProperty("password").equals(password) && entity.getProperty("email").equals(email)){
-                user = new User(
-                    (long) entity.getKey().getId(),
-                    (String) entity.getProperty("name"),
-                    (String) entity.getProperty("email"),
-                    (String) entity.getProperty("password"),
-                    (String) entity.getProperty("birthdate"),
-                    (long) entity.getProperty("studentId"),
-                    (String) entity.getProperty("sex"),
-                    (String) entity.getProperty("school"),
-                    (String) entity.getProperty("phone"),
-                    (String) entity.getProperty("metric"), 
-                    (Boolean) entity.getProperty("admin")
-                );
-                response.getWriter().println(gson.toJson(user));
-                response.sendRedirect("/dashboard");
-                return;
+            DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+            PreparedQuery results = datastore.prepare(query);
+            ArrayList<String> users = new ArrayList<String>();
+            for (Entity entity:results.asIterable()){
+                if (entity.getProperty("password").equals(password) && entity.getProperty("email").equals(email)){
+                    user = new User(
+                        (long) entity.getKey().getId(),
+                        (String) entity.getProperty("name"),
+                        (String) entity.getProperty("email"),
+                        (String) entity.getProperty("password"),
+                        (String) entity.getProperty("birthdate"),
+                        (long) entity.getProperty("studentId"),
+                        (String) entity.getProperty("sex"),
+                        (String) entity.getProperty("school"),
+                        (String) entity.getProperty("phone"),
+                        (String) entity.getProperty("metric"), 
+                        (Boolean) entity.getProperty("admin")
+                    );
+                    response.getWriter().println(gson.toJson(user));
+                    response.sendRedirect("/dashboard");
+                    return;
+                }
             }
-        }
 
-        response.getWriter().println(gson.toJson(user));
-        response.sendRedirect("/login.html");
+            response.getWriter().println(gson.toJson(user));
+            response.sendRedirect("/login.html");
+        }
     }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
         Gson gson = new Gson();
         response.setContentType("application/json;");
-        response.getWriter().println(gson.toJson(user));
+        if(request.getParameter("logout") != null){
+            response.getWriter().println(gson.toJson(null));
+        }else{
+            response.getWriter().println(gson.toJson(user));
+        }
     }
 }

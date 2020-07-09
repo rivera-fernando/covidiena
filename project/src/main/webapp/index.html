@@ -15,9 +15,7 @@
     });
     </script>
   </head>
-  <body onload ="getUserLogin();loadUpdates();">
-       <nav>
-  <body onload ="getUserLogin();loadUpdates();loadCovidData();">
+  <body onload ="updateLogIn();loadUpdates();loadCovidData();">
       <nav>
     	<div class="nav-wrapper blue-grey lighten-4">
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
@@ -30,8 +28,8 @@
                 <li><a style="color: #42a5f5;" href="/info.html">Information</a></li>
                 <li><a style="color: #42a5f5;" href="/events.html" id= "eventButton">Events</a></li>
                 <li style="width: 50px; height: 60px;">&nbsp;</li>
-                <li><a style="color: #42a5f5;" href="/signup.html" id= "createButton">Sign Up</a></li>
-                <li><a style="color: #42a5f5;" href="/login.html" id= "loginButton">Log In</a></li>
+                <li><a style="color: #42a5f5;" href="/signup.html" class="signupButton">Sign Up</a></li>
+                <li><a style="color: #42a5f5;" class= "loginButton">Log In</a></li>
             </ul>
     	</div>
       </nav>
@@ -39,8 +37,8 @@
         <li><a style="color: #42a5f5;" href="/dashboard" id= "dashboardButton">Dashboard</a></li>
         <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
         <li><a style="color: #42a5f5;" href="/events.html" id= "eventButton">Events</a></li>
-        <li><a style="color: #42a5f5;" href="/signup.html" id= "createButton">Sign Up</a></li>
-        <li><a style="color: #42a5f5;" href="/login.html" id= "loginButton">Log In</a></li>
+        <li><a style="color: #42a5f5;" href="/signup.html" class="signupButton">Sign Up</a></li>
+        <li><a style="color: #42a5f5;" class= "loginButton">Log In</a></li>
       </ul>
     <div class="container">
       <div class="section">
