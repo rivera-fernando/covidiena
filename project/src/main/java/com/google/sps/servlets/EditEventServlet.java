@@ -95,7 +95,9 @@ public class EditEventServlet extends HttpServlet {
       event.setProperty("attendance", attendance);
       event.setProperty("description", description);
       event.setProperty("dateTimestamp", dateTimestamp);
-      event.setProperty("imageKey", imageKey);
+      if (imageKey != null) {
+        event.setProperty("imageKey", imageKey);
+      }
  
       datastore.put(event);
       response.sendRedirect("/events.html");

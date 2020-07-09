@@ -34,10 +34,16 @@ $(document).ready(function(){
 });
  
 function preview_image(event) {
+  let elem = event.target.getAttribute("name");
   var reader = new FileReader();
   reader.onload = function() {
-    var output = document.getElementById('output-image');
-    output.src = reader.result;
+    if (elem === "image") {
+      var output = document.getElementById('output-image');
+      output.src = reader.result;
+    } else if (elem === "edit-image") {
+      var output = document.getElementById('edit-output-image');
+      output.src = reader.result;
+    }
   }
   reader.readAsDataURL(event.target.files[0]);
 }
@@ -188,12 +194,18 @@ function loadEditForm(event) {
   const editDate = document.getElementsByName("edit-date")[0];
   const editTime = document.getElementsByName("edit-time")[0];
   const editDescription = document.getElementsByName("edit-description")[0];
+  const preview = document.getElementById("edit-output-image");
  
   editName.value = event.name;
   editLocation.value = event.location;
   editDate.value = event.date;
   editTime.value = event.time;
   editDescription.value = event.description;
+  if (event.imageKey != undefined) {
+    fetch('/serve-blob?imageKey='+event.imageKey).then((image)=>{
+      preview.src = image.url;
+    });
+  }
  
   document.getElementById(event.type).checked = true;
   document.getElementById(event.attendance).checked = true;

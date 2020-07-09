@@ -95,7 +95,7 @@
                     <div class="file-field input-field">
                       <div class="btn-flat">
                         <span>Upload Image</span>
-                        <input type="file" accept="image/*" onchange="preview_image(event)" style="max-width: 100%" name="image">
+                        <input type="file" accept="image/*" onchange="preview_image(event)" style="max-width: 100%" id="image" name="image">
                       </div>
                       <div class="file-path-wrapper">
                         <input class="file-path validate" type="text">
@@ -148,7 +148,7 @@
       </div>
       <div class="section">
         <div class="row">
-          <form id="edit-events-form" method="POST" style="display: none;">
+          <form id="edit-events-form" method="POST" style="display: none;" enctype="multipart/form-data">
             <div class="card blue-grey lighten-4">
               <div class="card-content" style="overflow-y: scroll">
                 <p class="card-title">Edit your Event</p>

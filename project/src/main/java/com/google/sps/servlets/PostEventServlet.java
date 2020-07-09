@@ -58,10 +58,10 @@ public class PostEventServlet extends HttpServlet {
     HttpSession session = request.getSession(false); 
     String name = (String) session.getAttribute("person"); 
  
-    boolean found = true;
+    boolean found = false;
     
-    if (name.equals("null")) {
-      found = false;
+    if (!name.equals("null")) {
+      found = true;
     }
     
     log.add(found);
