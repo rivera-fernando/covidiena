@@ -56,7 +56,7 @@ public class LoadPendingEventsServlet extends HttpServlet {
       // If the user is an admin, load ALL pending. Otherwise, just the ones that the student posted.
       if (userService.isUserAdmin()) {
         // Should probably find a better way to send this metadata like Lian told me to
-        Event metadata = new Event(0, "Admin", "", "", "", "", "", "", 0, false, "");
+        Event metadata = new Event(0, "Admin", "", "", "", "", "", "", 0, false, "", "");
         pendingEvents.add(metadata);
         for (int i = 0; i < resultsList.size(); i++) {
           Entity entity = resultsList.get(i);
@@ -69,8 +69,10 @@ public class LoadPendingEventsServlet extends HttpServlet {
           String type = (String) entity.getProperty("attendance");
           String attendance = (String) entity.getProperty("type");
           long timestamp = (long) entity.getProperty("timestamp");
+          boolean isMine =  entity.getProperty("email").equals(email);
+          String imageKey = (String) entity.getProperty("imageKey");
  
-          Event event = new Event(id, name, location, date, time, description, type, attendance, timestamp, entity.getProperty("email").equals(email), "unapproved");
+          Event event = new Event(id, name, location, date, time, description, type, attendance, timestamp, isMine, "unapproved", imageKey);
           pendingEvents.add(event);
         }
       } else {
@@ -89,8 +91,10 @@ public class LoadPendingEventsServlet extends HttpServlet {
             String type = (String) entity.getProperty("attendance");
             String attendance = (String) entity.getProperty("type");
             long timestamp = (long) entity.getProperty("timestamp");
+            boolean isMine =  entity.getProperty("email").equals(email);
+            String imageKey = (String) entity.getProperty("imageKey");
  
-            Event event = new Event(id, name, location, date, time, description, type, attendance, timestamp, true, "UnapprovedEvent");
+            Event event = new Event(id, name, location, date, time, description, type, attendance, timestamp, true, "UnapprovedEvent", imageKey);
             pendingEvents.add(event);
           }
         }
