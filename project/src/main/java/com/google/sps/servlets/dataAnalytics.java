@@ -53,8 +53,8 @@ public class dataAnalytics extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      HttpSession session=request.getSession(false); 
-      String n=(String)session.getAttribute("person");
+      HttpSession session = request.getSession(false); 
+      String n = (String) session.getAttribute("person");
       String school = n.substring(n.indexOf("school\":")+9, n.indexOf("\",\"phone"));
       DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
       String day = dateFormat.format(new java.util.Date());
@@ -93,8 +93,8 @@ public class dataAnalytics extends HttpServlet {
   
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      HttpSession session=request.getSession(false); 
-      String n=(String)session.getAttribute("person");
+      HttpSession session = request.getSession(false); 
+      String n = (String) session.getAttribute("person");
       String school = n.substring(n.indexOf("school\":")+9, n.indexOf("\",\"phone"));
       Filter schoolFilter = 
         new FilterPredicate("school", FilterOperator.EQUAL, school);

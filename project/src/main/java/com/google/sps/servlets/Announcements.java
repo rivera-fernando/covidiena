@@ -47,8 +47,8 @@ public class Announcements extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      HttpSession session=request.getSession(false); 
-      String n=(String)session.getAttribute("person");
+      HttpSession session = request.getSession(false); 
+      String n = (String) session.getAttribute("person");
       String admin = n.substring(n.indexOf("admin\":")+7, n.indexOf("}"));
       String name = n.substring(n.indexOf("name\":")+7, n.indexOf("\",\"userId"));
       String school = n.substring(n.indexOf("school\":")+9, n.indexOf("\",\"phone"));
@@ -70,8 +70,8 @@ public class Announcements extends HttpServlet {
   
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      HttpSession session=request.getSession(false); 
-      String n=(String)session.getAttribute("person");
+      HttpSession session = request.getSession(false); 
+      String n = (String) session.getAttribute("person");
       String school = n.substring(n.indexOf("school\":")+9, n.indexOf("\",\"phone"));
       ArrayList<Object> data = new ArrayList<Object>();
       Query query = new Query("Announcements").addSort("when", SortDirection.DESCENDING);
