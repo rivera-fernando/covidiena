@@ -63,7 +63,7 @@ public class Announcements extends HttpServlet {
       commentEntity.setProperty("when", now);
       commentEntity.setProperty("school", school);
       commentEntity.setProperty("importance", importance);
-      if (admin.equals("true")) {
+      if (isAdmin.equals("true")) {
         datastore.put(commentEntity);
       }
   }

@@ -51,14 +51,14 @@ public class Temperature extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
       HttpSession session = request.getSession(false); 
-      String n = (String) session.getAttribute("person");
+      String person = (String) session.getAttribute("person");
       DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
       String day = dateFormat.format(new Date());
       //this part will create the db entries
       String temp = request.getParameter("temp");
       Entity commentEntity = new Entity("user_temp", day);
-      commentEntity.setProperty("email", n.substring(n.indexOf("email\":")+8, n.indexOf("\",\"password")));
-      commentEntity.setProperty("school", n.substring(n.indexOf("school\":")+9, n.indexOf("\",\"phone")));
+      commentEntity.setProperty("email", person.substring(person.indexOf("email\":")+8, person.indexOf("\",\"password")));
+      commentEntity.setProperty("school", person.substring(person.indexOf("school\":")+9, person.indexOf("\",\"phone")));
       commentEntity.setProperty("temp", Double.parseDouble(temp));
       datastore.put(commentEntity);
   }
@@ -66,12 +66,12 @@ public class Temperature extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
       HttpSession session = request.getSession(false); 
-      String n = (String) session.getAttribute("person");
+      String person = (String) session.getAttribute("person");
       Query query = new Query("user_temp").addSort(Entity.KEY_RESERVED_PROPERTY, SortDirection.ASCENDING);
       PreparedQuery results = datastore.prepare(query);
       ArrayList<Object> data = new ArrayList<Object>();
       for(Entity entity:results.asIterable()){
-          if (((String) entity.getProperty("email")).toLowerCase().equals(n.substring(n.indexOf("email\":")+8, n.indexOf("\",\"password")))) {
+          if (((String) entity.getProperty("email")).toLowerCase().equals(person.substring(person.indexOf("email\":")+8, person.indexOf("\",\"password")))) {
               ArrayList<Object> pair = new ArrayList<Object>();
               pair.add(entity.getKey().getName());
               pair.add(entity.getProperty("temp"));
