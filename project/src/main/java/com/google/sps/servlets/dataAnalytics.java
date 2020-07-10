@@ -59,11 +59,9 @@ public class dataAnalytics extends HttpServlet {
       DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
       String day = dateFormat.format(new java.util.Date());
       
-      Filter propertyFilter =
-        new FilterPredicate(Entity.KEY_RESERVED_PROPERTY, FilterOperator.EQUAL, day);
       Filter schoolFilter = 
         new FilterPredicate("school", FilterOperator.EQUAL, school);
-      Query query = new Query("user_temp").setFilter(propertyFilter).setFilter(schoolFilter);
+      Query query = new Query("user_temp").setFilter(schoolFilter);
       PreparedQuery results = datastore.prepare(query);
       double total = 0;
       double num_temps = 0;
