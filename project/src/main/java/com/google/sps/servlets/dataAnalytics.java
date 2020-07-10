@@ -58,7 +58,7 @@ public class dataAnalytics extends HttpServlet {
       String school = n.substring(n.indexOf("school\":")+9, n.indexOf("\",\"phone"));
       DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
       String day = dateFormat.format(new java.util.Date());
-
+      
       Filter propertyFilter =
         new FilterPredicate(Entity.KEY_RESERVED_PROPERTY, FilterOperator.EQUAL, day);
       Filter schoolFilter = 
@@ -69,8 +69,10 @@ public class dataAnalytics extends HttpServlet {
       double num_temps = 0;
       int fevers = 0;
       for (Entity entity:results.asIterable()){
-          num_temps += 1;
-          total += (double) entity.getProperty("temp");
+          if (entity.getKey().getName().equals(day)) {
+            num_temps += 1;
+            total += (double) entity.getProperty("temp");
+          }
           if ((double) entity.getProperty("temp") > 99.0) {
               fevers += 1;
           }
