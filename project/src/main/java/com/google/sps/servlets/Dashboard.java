@@ -51,12 +51,12 @@ public class Dashboard extends HttpServlet {
         Boolean found = false;
         HttpSession session=request.getSession(false); 
         response.setContentType("text/html"); 
-        String n=(String)session.getAttribute("person"); 
-        String admin = n.substring(n.indexOf("admin\":")+7, n.indexOf("}"));
-        if (n.equals("null")) {
+        String person=(String)session.getAttribute("person"); 
+        String isAdmin = person.substring(person.indexOf("admin\":")+7, person.indexOf("}"));
+        if (person.equals("null")) {
             response.sendRedirect("/login.html");
         }
-        else if (admin.equals("true")) {
+        else if (isAdmin.equals("true")) {
             response.sendRedirect("/admin_dash.html");
         }
         else {

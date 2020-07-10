@@ -54,8 +54,8 @@ public class dataAnalytics extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
       HttpSession session = request.getSession(false); 
-      String n = (String) session.getAttribute("person");
-      String school = n.substring(n.indexOf("school\":")+9, n.indexOf("\",\"phone"));
+      String person = (String) session.getAttribute("person");
+      String school = person.substring(person.indexOf("school\":")+9, person.indexOf("\",\"phone"));
       DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
       String day = dateFormat.format(new java.util.Date());
       
@@ -78,13 +78,13 @@ public class dataAnalytics extends HttpServlet {
 
       Entity commentEntity = new Entity("daily_temp", day);
       commentEntity.setProperty("temp", total/num_temps);
-      commentEntity.setProperty("school", n.substring(n.indexOf("school\":")+9, n.indexOf("\",\"phone")));
+      commentEntity.setProperty("school", person.substring(person.indexOf("school\":")+9, person.indexOf("\",\"phone")));
       datastore.put(commentEntity);
       String val = Double.toString(total/num_temps);
       ArrayList<String> data = new ArrayList<String>();
       data.add(val);
       data.add(Integer.toString(fevers));
-      if (n.substring(n.indexOf("admin\":")+7, n.indexOf("}")).equals("true")) {
+      if (person.substring(person.indexOf("admin\":")+7, person.indexOf("}")).equals("true")) {
           response.setContentType("application/json;");
           response.getWriter().println(gson.toJson(data));
       }
@@ -94,8 +94,8 @@ public class dataAnalytics extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
       HttpSession session = request.getSession(false); 
-      String n = (String) session.getAttribute("person");
-      String school = n.substring(n.indexOf("school\":")+9, n.indexOf("\",\"phone"));
+      String person = (String) session.getAttribute("person");
+      String school = person.substring(person.indexOf("school\":")+9, person.indexOf("\",\"phone"));
       Filter schoolFilter = 
         new FilterPredicate("school", FilterOperator.EQUAL, school);
       Query query = new Query("daily_temp").setFilter(schoolFilter).addSort(Entity.KEY_RESERVED_PROPERTY, SortDirection.ASCENDING);
@@ -109,7 +109,7 @@ public class dataAnalytics extends HttpServlet {
             pair.add(99);
             data.add(pair);
       }
-      if (n.substring(n.indexOf("admin\":")+7, n.indexOf("}")).equals("true")) {
+      if (person.substring(person.indexOf("admin\":")+7, person.indexOf("}")).equals("true")) {
           response.setContentType("application/json;");
           response.getWriter().println(gson.toJson(data));
       }

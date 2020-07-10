@@ -48,10 +48,10 @@ public class Announcements extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
       HttpSession session = request.getSession(false); 
-      String n = (String) session.getAttribute("person");
-      String admin = n.substring(n.indexOf("admin\":")+7, n.indexOf("}"));
-      String name = n.substring(n.indexOf("name\":")+7, n.indexOf("\",\"userId"));
-      String school = n.substring(n.indexOf("school\":")+9, n.indexOf("\",\"phone"));
+      String person = (String) session.getAttribute("person");
+      String isAdmin = person.substring(person.indexOf("admin\":")+7, person.indexOf("}"));
+      String name = person.substring(person.indexOf("name\":")+7, person.indexOf("\",\"userId"));
+      String school = person.substring(person.indexOf("school\":")+9, person.indexOf("\",\"phone"));
       String title = request.getParameter("title");
       String content = request.getParameter("content");
       String importance = request.getParameter("importance");
@@ -71,8 +71,8 @@ public class Announcements extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
       HttpSession session = request.getSession(false); 
-      String n = (String) session.getAttribute("person");
-      String school = n.substring(n.indexOf("school\":")+9, n.indexOf("\",\"phone"));
+      String person = (String) session.getAttribute("person");
+      String school = person.substring(person.indexOf("school\":")+9, person.indexOf("\",\"phone"));
       ArrayList<Object> data = new ArrayList<Object>();
       Query query = new Query("Announcements").addSort("when", SortDirection.DESCENDING);
       PreparedQuery results = datastore.prepare(query);
