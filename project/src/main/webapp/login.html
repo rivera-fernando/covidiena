@@ -35,40 +35,50 @@
             <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
             <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
         </ul>
-        <div class="container">
-            <div class="row">
-                <div class="col s12 l8 offset-l2">
-                    <h3>Log In</h3>
-                    <h6>Please remember to use your school email!</h6>
-                </div>
-            </div>
-            <form action="/login" method="POST">
-                <div class="row">
-                    <div class="input-field col s12 l8 offset-l2">
-                        <input type="text" name="email" id="email" placeholder =".edu" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.edu$" class="validate" required>
-                        <label for="schoolEmail">School Email</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12 l8 offset-l2">
-                        <input type="password" name="password" class="validate" id="password" required>
-                        <label for="password">Password</label>
-                    </div>
-                </div>
+        <main>
+            <div class="container">
                 <div class="row">
                     <div class="col s12 l8 offset-l2">
-                        <div class="input-field right">
-                            <button onlick="check()" class="btn white-text" style="background-color: #42a5f5;">Log In</button>
-                        </div>
+                        <h3>Log In</h3>
+                        <h6>Please remember to use your school email!</h6>
                     </div>
                 </div>
-            </form>
-            <div id="error"></div>
-            <div class="row">
-                <div class="col s12 l8 offset-l2">
-                    <h6>Don't have an account? Create an account <a href="/signup.html">here</a></h6> 
+                <form action="/login" method="POST">
+                    <div class="row">
+                        <div class="input-field col s12 l8 offset-l2">
+                            <input type="text" name="email" id="email" placeholder =".edu" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.edu$" class="validate" required>
+                            <label for="schoolEmail">School Email</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12 l8 offset-l2">
+                            <input type="password" name="password" class="validate" id="password" required>
+                            <label for="password">Password</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 l8 offset-l2">
+                            <div class="input-field right">
+                                <button onlick="check()" class="btn white-text" style="background-color: #42a5f5;">Log In</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div id="error"></div>
+                <div class="row">
+                    <div class="col s12 l8 offset-l2">
+                        <h6>Don't have an account? Create an account <a href="/signup.html">here</a></h6> 
+                    </div>
                 </div>
             </div>
-        </div>
+        </main>
+        <footer class="page-footer blue-grey lighten-2 ">
+            <div class="footer-copyright blue-grey lighten-2">
+                <div class="container blue-grey-text text-darken-2 left">
+                © 2020 Covidiena. All Rights Reserved.
+                <a class="blue-text text-darken-1 right" href="mailto: covidiena@gmail.com">Contact Us</a>
+                </div>
+            </div>
+        </footer>
     </body>
 </html>

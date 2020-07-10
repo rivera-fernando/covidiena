@@ -27,8 +27,6 @@
     </script>
   </head>
   <body onload ="updateLogIn();populateLinks();populateAnnouncements();">
-
-
       <nav>
     	<div class="nav-wrapper blue-grey lighten-4">
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
@@ -53,172 +51,156 @@
         <li><a style="color: #42a5f5;" href="/signup.html" class="signupButton">Sign Up</a></li>
         <li><a style="color: #42a5f5;" class= "loginButton">Log In</a></li>
       </ul>
-    <div class="container">
-      <h1>Student Dashboard</h1>
-            <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
-                <div class="row">
-                    <div class="col s12 m8 l6">
-                        <p>Have you been diagnosed with COVID-19?</p>
-                    </div>
-                    <div class="center-align col s6 m2 l3">
-                        <a style="width: 100%;" class="center-align waves-effect waves-light btn blue lighten-1" href="#">Yes</a>
-                    </div>
-                    <div class="center-align col s6 m2 l3">
-                        <a style="width: 100%;" class="waves-effect waves-light btn blue lighten-1" href="#">No</a>
-                    </div>
-                </div>
-            </div>
-            <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
-                <div class="row">
-                    <div class="col s12 m8">
-                        <div style="border-radius: 10px;" class="card white">
-                            <div class="card-content blue-grey-text-darken-2">
-                                <p>Have you been exposed (according to our maps data).</p>
-                            </div>
+      <main>
+        <div class="container">
+        <h1>Student Dashboard</h1>
+                <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
+                    <div class="row">
+                        <div class="col s12 m8 l6">
+                            <p>Have you been diagnosed with COVID-19?</p>
                         </div>
-                    </div>
-                    <div class="center-align col s12 m4">
-                        <div style="border-radius: 10px;" class="card white">
-                            <div class="card-content blue-grey-text-darken-2">
-                                <p>Not that we know of</p>
-                            </div>
+                        <div class="center-align col s6 m2 l3">
+                            <a style="width: 100%;" class="center-align waves-effect waves-light btn blue lighten-1" href="#">Yes</a>
+                        </div>
+                        <div class="center-align col s6 m2 l3">
+                            <a style="width: 100%;" class="waves-effect waves-light btn blue lighten-1" href="#">No</a>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
-                <div class="row">
-                    <div class="col s12 m5">
-                        <div style="border-radius: 10px;" class="card white">
-                            <div class="card-content blue-grey-text-darken-2">
-                                <span class="card-title">Daily Temperature</span>
-                                <div class="input-field">
-                                    <i class="material-icons prefix">whatshot</i>
-                                    <input id="temp" type="number" step="0.1">
-                                    <label for="temp">Temperature</label>
+                <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
+                    <div class="row">
+                        <div class="col s12 m8">
+                            <div style="border-radius: 10px;" class="card white">
+                                <div class="card-content blue-grey-text-darken-2">
+                                    <p>Have you been exposed (according to our maps data).</p>
                                 </div>
-                                <div class="center-align">
-                                    <button class="btn waves-effect waves-light blue lighten-1" onclick="sendTemp();">Submit</button>
+                            </div>
+                        </div>
+                        <div class="center-align col s12 m4">
+                            <div style="border-radius: 10px;" class="card white">
+                                <div class="card-content blue-grey-text-darken-2">
+                                    <p>Not that we know of</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col s12 m7">
-                        <div style="border-radius: 10px;" class="card white">
-                            <div class="card-content blue-grey-text-darken-2">
-                                <span class="card-title">Temperature Trends</span>
-                                <div id="chart" class="goog-chart"></div>
+                </div>
+                <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
+                    <div class="row">
+                        <div class="col s12 m5">
+                            <div style="border-radius: 10px;" class="card white">
+                                <div class="card-content blue-grey-text-darken-2">
+                                    <span class="card-title">Daily Temperature</span>
+                                    <div class="input-field">
+                                        <i class="material-icons prefix">whatshot</i>
+                                        <input id="temp" type="number" step="0.1">
+                                        <label for="temp">Temperature</label>
+                                    </div>
+                                    <div class="center-align">
+                                        <button class="btn waves-effect waves-light blue lighten-1" onclick="sendTemp();">Submit</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
-                <div class="row">
-                    <div class="col s12 m5">
-                        <div style="border-radius: 10px;" class="card white">
-                            <div class="card-content blue-grey-text-darken-2">
-                                <span class="card-title">Possible Symptoms</span>
-                                <div onchange="populateLinks()">
-                                    <p>
-                                        <label>
-                                        <input type="checkbox" id="fever" class="filled-in"/>
-                                        <span>Fever or chills</span>
-                                        </label>
-                                    </p>
-                                    <p>
-                                        <label>
-                                        <input type="checkbox" id="cough" class="filled-in"/>
-                                        <span>Cough</span>
-                                        </label>
-                                    </p>
-                                    <p>
-                                        <label>
-                                        <input type="checkbox" id="sob" class="filled-in"/>
-                                        <span>Shortness of breath</span>
-                                        </label>
-                                    </p>
-                                    <p>
-                                        <label>
-                                        <input type="checkbox" id="fatigue" class="filled-in"/>
-                                        <span>Fatigue</span>
-                                        </label>
-                                    </p>
-                                    <p>
-                                        <label>
-                                        <input type="checkbox" id="aches" class="filled-in"/>
-                                        <span>Muscle or body aches</span>
-                                        </label>
-                                    </p>
-                                    <p>
-                                        <label>
-                                        <input type="checkbox" id="head" class="filled-in"/>
-                                        <span>Headache</span>
-                                        </label>
-                                    </p>
-                                    <p>
-                                        <label>
-                                        <input type="checkbox" id="throat" class="filled-in"/>
-                                        <span>Sore throat</span>
-                                        </label>
-                                    </p>
-                                    <p>
-                                        <label>
-                                        <input type="checkbox" id="nausea" class="filled-in" />
-                                        <span>Nausea or vomiting</span>
-                                        </label>
-                                    </p>
+                        <div class="col s12 m7">
+                            <div style="border-radius: 10px;" class="card white">
+                                <div class="card-content blue-grey-text-darken-2">
+                                    <span class="card-title">Temperature Trends</span>
+                                    <div id="chart" class="goog-chart"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col s12 m7">
-                        <div style="border-radius: 10px;" class="card white">
-                            <div class="card-content blue-grey-text-darken-2">
-                                <span class="card-title">Helpful Links</span>
-                                <ul id="links"> 
-                                    <li style="display:none;"id="fever_info"><a href="https://medlineplus.gov/ency/article/003091.htm#:~:text=Chills%20are%20caused%20by%20rapid,certain%20diseases%20such%20as%20malaria.">Chills</a></li>
-                                    <li style="display:none;"id="cough_info"><a href="https://www.mayoclinic.org/symptoms/cough/basics/definition/sym-20050846#:~:text=A%20cough%20is%20your%20body's,cough%20is%20normal%20and%20healthy.">Cough</a></li>
-                                    <li style="display:none;"id="sob_info"><a href="https://www.healthline.com/health/coronavirus-shortness-of-breath">Shortness of Breath</a></li>
-                                    <li style="display:none;"id="fatigue_info"><a href="https://www.medicalnewstoday.com/articles/248002">Fatigue</a></li>
-                                    <li style="display:none;"id="aches_info"><a href="https://www.solvhealth.com/health-a-z/body-and-muscle-aches">Aches</a></li>
-                                    <li style="display:none;"id="head_info"><a href="https://www.medicalnewstoday.com/articles/73936#types">Headache</a></li>
-                                    <li style="display:none;"id="throat_info"><a href="https://www.mayoclinic.org/diseases-conditions/sore-throat/symptoms-causes/syc-20351635">Sore Throat</a></li>
-                                    <li style="display:none;"id="nausea_info"><a href="https://www.webmd.com/digestive-disorders/digestive-diseases-nausea-vomiting">Nausea</a></li>
-                                </ul>
+                </div>
+                <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
+                    <div class="row">
+                        <div class="col s12 m5">
+                            <div style="border-radius: 10px;" class="card white">
+                                <div class="card-content blue-grey-text-darken-2">
+                                    <span class="card-title">Possible Symptoms</span>
+                                    <div onchange="populateLinks()">
+                                        <p>
+                                            <label>
+                                            <input type="checkbox" id="fever" class="filled-in"/>
+                                            <span>Fever or chills</span>
+                                            </label>
+                                        </p>
+                                        <p>
+                                            <label>
+                                            <input type="checkbox" id="cough" class="filled-in"/>
+                                            <span>Cough</span>
+                                            </label>
+                                        </p>
+                                        <p>
+                                            <label>
+                                            <input type="checkbox" id="sob" class="filled-in"/>
+                                            <span>Shortness of breath</span>
+                                            </label>
+                                        </p>
+                                        <p>
+                                            <label>
+                                            <input type="checkbox" id="fatigue" class="filled-in"/>
+                                            <span>Fatigue</span>
+                                            </label>
+                                        </p>
+                                        <p>
+                                            <label>
+                                            <input type="checkbox" id="aches" class="filled-in"/>
+                                            <span>Muscle or body aches</span>
+                                            </label>
+                                        </p>
+                                        <p>
+                                            <label>
+                                            <input type="checkbox" id="head" class="filled-in"/>
+                                            <span>Headache</span>
+                                            </label>
+                                        </p>
+                                        <p>
+                                            <label>
+                                            <input type="checkbox" id="throat" class="filled-in"/>
+                                            <span>Sore throat</span>
+                                            </label>
+                                        </p>
+                                        <p>
+                                            <label>
+                                            <input type="checkbox" id="nausea" class="filled-in" />
+                                            <span>Nausea or vomiting</span>
+                                            </label>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col s12 m7">
+                            <div style="border-radius: 10px;" class="card white">
+                                <div class="card-content blue-grey-text-darken-2">
+                                    <span class="card-title">Helpful Links</span>
+                                    <ul id="links"> 
+                                        <li style="display:none;"id="fever_info"><a href="https://medlineplus.gov/ency/article/003091.htm#:~:text=Chills%20are%20caused%20by%20rapid,certain%20diseases%20such%20as%20malaria.">Chills</a></li>
+                                        <li style="display:none;"id="cough_info"><a href="https://www.mayoclinic.org/symptoms/cough/basics/definition/sym-20050846#:~:text=A%20cough%20is%20your%20body's,cough%20is%20normal%20and%20healthy.">Cough</a></li>
+                                        <li style="display:none;"id="sob_info"><a href="https://www.healthline.com/health/coronavirus-shortness-of-breath">Shortness of Breath</a></li>
+                                        <li style="display:none;"id="fatigue_info"><a href="https://www.medicalnewstoday.com/articles/248002">Fatigue</a></li>
+                                        <li style="display:none;"id="aches_info"><a href="https://www.solvhealth.com/health-a-z/body-and-muscle-aches">Aches</a></li>
+                                        <li style="display:none;"id="head_info"><a href="https://www.medicalnewstoday.com/articles/73936#types">Headache</a></li>
+                                        <li style="display:none;"id="throat_info"><a href="https://www.mayoclinic.org/diseases-conditions/sore-throat/symptoms-causes/syc-20351635">Sore Throat</a></li>
+                                        <li style="display:none;"id="nausea_info"><a href="https://www.webmd.com/digestive-disorders/digestive-diseases-nausea-vomiting">Nausea</a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-      <h2>Announcements</h2>
-      <ul style="border-radius: 10px;" id="announcements" class="collapsible popout"> </ul>
-    </div>
-    <br>
-    <footer class="page-footer blue-grey lighten-4">
-          <div class="container">
-            <div class="row">
-              <div class="col l6 s12">
-                <h5 class="blue-grey-text text-darken-2">Footer Content</h5>
-                <p class="blue-grey-text text-darken-2">You can use rows and columns here to organize your footer content.</p>
-              </div>
-              <div class="col l4 offset-l2 s12">
-                <h5 class="blue-grey-text text-darken-2">Links</h5>
-                <ul>
-                  <li><a class="blue-grey-text text-darken-2" href="#!">Link 1</a></li>
-                  <li><a class="blue-grey-text text-darken-2" href="#!">Link 2</a></li>
-                  <li><a class="blue-grey-text text-darken-2" href="#!">Link 3</a></li>
-                  <li><a class="blue-grey-text text-darken-2" href="#!">Link 4</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="footer-copyright blue-grey lighten-2">
-            <div class="container blue-grey-text text-darken-2">
+        <h2>Announcements</h2>
+        <ul style="border-radius: 10px;" id="announcements" class="collapsible popout"> </ul>
+        </div>
+    </main>
+    <footer class="page-footer blue-grey lighten-2 ">
+        <div class="footer-copyright blue-grey lighten-2">
+            <div class="container blue-grey-text text-darken-2 left">
             © 2020 Covidiena. All Rights Reserved.
-            <a class="blue-text text-darken-1 right" href="#!">Contact Us</a>
+            <a class="blue-text text-darken-1 right" href="mailto: covidiena@gmail.com">Contact Us</a>
             </div>
-          </div>
-        </footer>
+        </div>
+    </footer>
   </body>
 </html>

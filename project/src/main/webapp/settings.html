@@ -1,116 +1,126 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Settings</title>
-    <link rel="stylesheet" href="icons.css">
-    <link rel="stylesheet" href="materialize.min.css">
-    <script src="materialize.min.js"></script>
-    <script>
-    $(document).ready(function(){
-        $('.sidenav').sidenav();
-    });
-    </script>
-  </head>
-  <body onload ="populateUser();updateLogIn();">
-      <nav>
-    	<div class="nav-wrapper blue-grey lighten-4">
-            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
-            <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
-            <ul id="nav-mobile" class="right">
-                <li><a href="/settings.html" id="settingButton"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
-            </ul>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
-                <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
-                <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
-                <li style="width: 50px; height: 60px;">&nbsp;</li>
-                <li><a style="color: #42a5f5;" class= "loginButton">Log In</a></li>
-            </ul>
-    	</div>
-      </nav>
-      <ul class="sidenav" id="mobile-demo">
-        <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
-        <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
-        <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
-        <li><a style="color: #42a5f5;" class= "loginButton">Log In</a></li>
-      </ul>
-    <div class="container">
-        <h3>Profile</h3>
-        <form action="/edit-user" method="POST" form class="my-form">
-            <input name="userEmail" id="userEmail" value="" type ="hidden">
-            <div class="row">
-                <div class="input-field col s12 l12">
-                    <input type="text" name="name" id= "name" placeholder="name">
-                    <label for="name">Name</label>
-                    <i style="color: #42a5f5;" class="material-icons prefix">edit</i>
-                </div>
+    <head>
+        <meta charset="UTF-8">
+        <title>Settings</title>
+        <link rel="stylesheet" href="icons.css">
+        <link rel="stylesheet" href="materialize.min.css">
+        <script src="materialize.min.js"></script>
+        <script>
+        $(document).ready(function(){
+            $('.sidenav').sidenav();
+        });
+        </script>
+    </head>
+    <body onload ="populateUser();updateLogIn();">
+        <nav>
+            <div class="nav-wrapper blue-grey lighten-4">
+                <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
+                <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
+                <ul id="nav-mobile" class="right">
+                    <li><a href="/settings.html" id="settingButton"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
+                </ul>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
+                    <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
+                    <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+                    <li style="width: 50px; height: 60px;">&nbsp;</li>
+                    <li><a style="color: #42a5f5;" class= "loginButton">Log In</a></li>
+                </ul>
             </div>
-            <div class="row">
-                <div class="input-field col s12 l12">
-                    <input type="password" name="password" class="validate" id="password">
-                    <label for="password">Password</label>
-                    <i style="color: #42a5f5;" class="material-icons prefix">edit</i>
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col s12 l12">
-                    <input type="text" name="birthdate" id="birthdate" placeholder ="birthday" disabled >
-                    <label for="birthdate">Birthdate</label>
-                </div>
-            </div>
-            <div class ="row">
-                <div class="input-field col s12 l12">
-                    <input type="text" name="sex" id="sex" placeholder="sex" disabled>
-                    <label for="sex">Sex</label>
-                </div>
-            </div>
-            <div class= "row">
-                <div class="input-field col s12 l12">
-                    <input type="text" name="school" id="school" placeholder= "school" disabled>
-                    <label for="school">School</label>
-                </div>
-            </div>
-            <div clas="row">
-                <label>Metric Preference</label>
-                <div class="input-field col s12 l2">
-                    <div class="switch">
-                        <label>
-                        °C
-                        <input type="checkbox" id="metric" name="metric">
-                        <span class="lever"></span>
-                        °F
-                        </label>
+        </nav>
+        <ul class="sidenav" id="mobile-demo">
+            <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
+            <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
+            <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+            <li><a style="color: #42a5f5;" class= "loginButton">Log In</a></li>
+        </ul>
+        <main>
+            <div class="container">
+                <h3>Profile</h3>
+                <form action="/edit-user" method="POST" form class="my-form">
+                    <input name="userEmail" id="userEmail" value="" type ="hidden">
+                    <div class="row">
+                        <div class="input-field col s12 l12">
+                            <input type="text" name="name" id= "name" placeholder="name">
+                            <label for="name">Name</label>
+                            <i style="color: #42a5f5;" class="material-icons prefix">edit</i>
+                        </div>
                     </div>
-                    <i style="color: #42a5f5;" class="material-icons right">edit</i>
+                    <div class="row">
+                        <div class="input-field col s12 l12">
+                            <input type="password" name="password" class="validate" id="password">
+                            <label for="password">Password</label>
+                            <i style="color: #42a5f5;" class="material-icons prefix">edit</i>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12 l12">
+                            <input type="text" name="birthdate" id="birthdate" placeholder ="birthday" disabled >
+                            <label for="birthdate">Birthdate</label>
+                        </div>
+                    </div>
+                    <div class ="row">
+                        <div class="input-field col s12 l12">
+                            <input type="text" name="sex" id="sex" placeholder="sex" disabled>
+                            <label for="sex">Sex</label>
+                        </div>
+                    </div>
+                    <div class= "row">
+                        <div class="input-field col s12 l12">
+                            <input type="text" name="school" id="school" placeholder= "school" disabled>
+                            <label for="school">School</label>
+                        </div>
+                    </div>
+                    <div clas="row">
+                        <label>Metric Preference</label>
+                        <div class="input-field col s12 l2">
+                            <div class="switch">
+                                <label>
+                                °C
+                                <input type="checkbox" id="metric" name="metric">
+                                <span class="lever"></span>
+                                °F
+                                </label>
+                            </div>
+                            <i style="color: #42a5f5;" class="material-icons right">edit</i>
+                        </div>
+                    </div>
+                    <h3>Contact Information</h3>
+                    <div class="row">
+                        <div class="input-field col s12 l12">
+                            <input type="text" name="email" id="email" placeholder="email.edu" disabled>
+                            <label for="email">Email</label>
+                        </div>
+                    </div>
+                    <div class= "row">
+                        <div class="input-field col s12 l12">
+                            <input type="tel" name="phone" id="phone" placeholder= "000-000-0000" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
+                            <label for="phone">Cell Phone #</label>
+                            <i style="color: #42a5f5;" class="material-icons prefix">edit</i>
+                        </div>
+                    </div>
+                    <div class ="row">
+                        <div class="input-field col s12 right-align">
+                            <button type ="submit" class="btn white-text" style="background-color: #42a5f5;" value="submit">Save Changes</button>
+                        </div>
+                        <div class="input-field col s12 right-align">
+                            <button onclick= "requestAdmin()" class="btn white-text" style="background-color: #42a5f5;">Request Admin Access</button>
+                        </div>
+                        <div class = "input-field col s12 right-align">
+                            <button onclick= "deleteUser()" class="btn red white-text">Delete My Accont</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+        <footer class="page-footer blue-grey lighten-2 ">
+            <div class="footer-copyright blue-grey lighten-2">
+                <div class="container blue-grey-text text-darken-2 left">
+                © 2020 Covidiena. All Rights Reserved.
+                <a class="blue-text text-darken-1 right" href="mailto: covidiena@gmail.com">Contact Us</a>
                 </div>
             </div>
-            <h3>Contact Information</h3>
-            <div class="row">
-                <div class="input-field col s12 l12">
-                    <input type="text" name="email" id="email" placeholder="email.edu" disabled>
-                    <label for="email">Email</label>
-                </div>
-            </div>
-            <div class= "row">
-                <div class="input-field col s12 l12">
-                    <input type="tel" name="phone" id="phone" placeholder= "000-000-0000" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
-                    <label for="phone">Cell Phone #</label>
-                    <i style="color: #42a5f5;" class="material-icons prefix">edit</i>
-                </div>
-            </div>
-            <div class ="row">
-                <div class="input-field col s12 right-align">
-                    <button type ="submit" class="btn white-text" style="background-color: #42a5f5;" value="submit">Save Changes</button>
-                </div>
-                <div class="input-field col s12 right-align">
-                    <button onclick= "requestAdmin()" class="btn white-text" style="background-color: #42a5f5;">Request Admin Access</button>
-                </div>
-                <div class = "input-field col s12 right-align">
-                    <button onclick= "deleteUser()" class="btn red white-text">Delete My Accont</button>
-                </div>
-            </div>
-        </form>
-    </div>
+        </footer>
   </body>
 </html>
