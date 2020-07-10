@@ -12,6 +12,7 @@
     <script>
     $(document).ready(function(){
         $('.sidenav').sidenav();
+        $('select').formSelect();
     });
     $(window).resize(function(){
         drawAvg();
@@ -83,6 +84,15 @@
                       <input id="title" type="text">
                       <label for="title">Title</label>
                   </div>
+              </div>
+              <div class="input-field col s12 m6">
+                  <select id="imp" class="icons">
+                      <option value="" disabled selected>Choose an importance</option>
+                      <option value="Critical" data-icon="static/announcement.png">Critical</option>
+                      <option value="High" data-icon="static/info.png">High</option>
+                      <option value="Normal" data-icon="static/pending.png">Normal</option>
+                  </select>
+                  <label>Importance Level</label>
               </div>
           </div>
           <div class="row">

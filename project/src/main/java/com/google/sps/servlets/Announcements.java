@@ -54,6 +54,7 @@ public class Announcements extends HttpServlet {
       String school = n.substring(n.indexOf("school\":")+9, n.indexOf("\",\"phone"));
       String title = request.getParameter("title");
       String content = request.getParameter("content");
+      String importance = request.getParameter("importance");
       Entity commentEntity = new Entity("Announcements");
       java.util.Date now=new java.util.Date();
       commentEntity.setProperty("from", name);
@@ -61,6 +62,7 @@ public class Announcements extends HttpServlet {
       commentEntity.setProperty("content", content);
       commentEntity.setProperty("when", now);
       commentEntity.setProperty("school", school);
+      commentEntity.setProperty("importance", importance);
       if (admin.equals("true")) {
         datastore.put(commentEntity);
       }
@@ -79,6 +81,7 @@ public class Announcements extends HttpServlet {
               ArrayList<Object> pair = new ArrayList<Object>();
               pair.add((String) entity.getProperty("from"));
               pair.add((String) entity.getProperty("title"));
+              pair.add((String) entity.getProperty("importance"));
               pair.add((String) entity.getProperty("content"));
               data.add(pair);
           }
