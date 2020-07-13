@@ -72,6 +72,7 @@ public class Announcements extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
       HttpSession session = request.getSession(false); 
       String person = (String) session.getAttribute("person");
+      //example school: "University of Florida", phone: 111-111-1111
       String school = person.substring(person.indexOf("school\":")+9, person.indexOf("\",\"phone"));
       ArrayList<Object> data = new ArrayList<Object>();
       Query query = new Query("Announcements").addSort("when", SortDirection.DESCENDING);
