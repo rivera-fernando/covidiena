@@ -30,6 +30,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Date;
  
@@ -46,18 +47,14 @@ public class Announcements extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      String name = "";
-      String school = "";
-      Query query = new Query("User");
-      PreparedQuery results = datastore.prepare(query);
-      for(Entity entity:results.asIterable()){
-          if (((String) entity.getProperty("email")).toLowerCase().equals(userService.getCurrentUser().getEmail().toLowerCase())) {
-              name = (String) entity.getProperty("name");
-              school = (String) entity.getProperty("school");
-          }
-      }
+      HttpSession session = request.getSession(false); 
+      String person = (String) session.getAttribute("person");
+      String isAdmin = person.substring(person.indexOf("admin\":")+7, person.indexOf("}"));
+      String name = person.substring(person.indexOf("name\":")+7, person.indexOf("\",\"userId"));
+      String school = person.substring(person.indexOf("school\":")+9, person.indexOf("\",\"phone"));
       String title = request.getParameter("title");
       String content = request.getParameter("content");
+      String importance = request.getParameter("importance");
       Entity commentEntity = new Entity("Announcements");
       java.util.Date now=new java.util.Date();
       commentEntity.setProperty("from", name);
@@ -65,33 +62,32 @@ public class Announcements extends HttpServlet {
       commentEntity.setProperty("content", content);
       commentEntity.setProperty("when", now);
       commentEntity.setProperty("school", school);
-      datastore.put(commentEntity);
+      commentEntity.setProperty("importance", importance);
+      if (isAdmin.equals("true")) {
+        datastore.put(commentEntity);
+      }
   }
   
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      HttpSession session = request.getSession(false); 
+      String person = (String) session.getAttribute("person");
+      //example school: "University of Florida", phone: 111-111-1111
+      String school = person.substring(person.indexOf("school\":")+9, person.indexOf("\",\"phone"));
       ArrayList<Object> data = new ArrayList<Object>();
-      String school = "";
-      Query query = new Query("User");
+      Query query = new Query("Announcements").addSort("when", SortDirection.DESCENDING);
       PreparedQuery results = datastore.prepare(query);
-      for(Entity entity:results.asIterable()){
-          if (((String) entity.getProperty("email")).toLowerCase().equals(userService.getCurrentUser().getEmail().toLowerCase())) {
-              school = (String) entity.getProperty("school");
-          }
-      }
-      query = new Query("Announcements").addSort("when", SortDirection.DESCENDING);
-      results = datastore.prepare(query);
       for(Entity entity:results.asIterable()){
           if (((String) entity.getProperty("school")).toLowerCase().equals(school.toLowerCase())) {
               ArrayList<Object> pair = new ArrayList<Object>();
               pair.add((String) entity.getProperty("from"));
               pair.add((String) entity.getProperty("title"));
+              pair.add((String) entity.getProperty("importance"));
               pair.add((String) entity.getProperty("content"));
               data.add(pair);
           }
       }
       response.setContentType("application/json;");
       response.getWriter().println(gson.toJson(data));
-      //this will get all announcements entities, with school = current user school
   }
 }

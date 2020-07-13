@@ -25,6 +25,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 /*user logs in with school email and their information from the datatstore is printed through json for easy access*/
@@ -35,6 +36,9 @@ public class LogInServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session=request.getSession();  
+        String password = PasswordHash.hashPassword(request.getParameter("password").toCharArray());
+        String email = request.getParameter("email").toLowerCase();
         Gson gson = new Gson();
         response.setContentType("text/html");
         if(request.getParameter("logout") != null){
@@ -47,33 +51,35 @@ public class LogInServlet extends HttpServlet {
             String email = request.getParameter("email").toLowerCase();
             Query query = new Query("User");
 
-            DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-            PreparedQuery results = datastore.prepare(query);
-            ArrayList<String> users = new ArrayList<String>();
-            for (Entity entity:results.asIterable()){
-                if (entity.getProperty("password").equals(password) && entity.getProperty("email").equals(email)){
-                    user = new User(
-                        (long) entity.getKey().getId(),
-                        (String) entity.getProperty("name"),
-                        (String) entity.getProperty("email"),
-                        (String) entity.getProperty("password"),
-                        (String) entity.getProperty("birthdate"),
-                        (long) entity.getProperty("studentId"),
-                        (String) entity.getProperty("sex"),
-                        (String) entity.getProperty("school"),
-                        (String) entity.getProperty("phone"),
-                        (String) entity.getProperty("metric"), 
-                        (Boolean) entity.getProperty("admin")
-                    );
-                    response.getWriter().println(gson.toJson(user));
-                    response.sendRedirect("/dashboard");
-                    return;
-                }
-            }
+        Query query = new Query("User");
 
-            response.getWriter().println(gson.toJson(user));
-            response.sendRedirect("/login.html");
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        PreparedQuery results = datastore.prepare(query);
+        ArrayList<String> users = new ArrayList<String>();
+        for (Entity entity:results.asIterable()){
+            if (entity.getProperty("password").equals(password) && entity.getProperty("email").equals(email)){
+                user = new User(
+                    (long) entity.getKey().getId(),
+                    (String) entity.getProperty("name"),
+                    (String) entity.getProperty("email"),
+                    (String) entity.getProperty("password"),
+                    (String) entity.getProperty("birthdate"),
+                    (long) entity.getProperty("studentId"),
+                    (String) entity.getProperty("sex"),
+                    (String) entity.getProperty("school"),
+                    (String) entity.getProperty("phone"),
+                    (String) entity.getProperty("metric"), 
+                    (Boolean) entity.getProperty("admin")
+                );
+                session.setAttribute("person",gson.toJson(user));  
+                response.getWriter().println(gson.toJson(user));
+                response.sendRedirect("../dashboard");
+                return;
+            }
         }
+        session.setAttribute("person",gson.toJson(user));  
+        response.getWriter().println(gson.toJson(user));
+        response.sendRedirect("/login.html");
     }
 
     @Override

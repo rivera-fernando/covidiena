@@ -12,9 +12,10 @@
     <script>
     $(document).ready(function(){
         $('.sidenav').sidenav();
+        $('select').formSelect();
     });
     $(window).resize(function(){
-        //drawBasic();
+        drawAvg();
     });
     </script>
     <script>
@@ -22,7 +23,7 @@
       google.charts.load('current', {'packages':['corechart', 'line']});
 
       // Set a callback to run when the Google Visualization API is loaded.
-      google.charts.setOnLoadCallback();
+      google.charts.setOnLoadCallback(drawAvg);
     </script>
   </head>
   <body onload ="updateLogIn();">
@@ -51,16 +52,19 @@
         <li><a style="color: #42a5f5;" class="loginButton">Log In</a></li>
       </ul>
       <main>
+
         <div class="container">
-        <h1>Admin Dashboard</h1>
-        <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
+          <h1>Admin Dashboard</h1>
+          <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
                 <div class="row">
                     <div class="col s12 m5">
                         <div style="border-radius: 10px;" class="card white">
                             <div class="card-content blue-grey-text-darken-2">
-                                <span class="card-title">Daily Temperature</span>
-                                <p>This should hold avg temp today</p>
-                            </div>
+                                <span class="card-title">Avg. Daily Temperature</span>
+                                <h5 class="center-align" id="avg-temp">__</h5>
+                                <span class="card-title">Daily Fevers</span>
+                                <h5 class="center-align" id="fevers">__</h5>
+                                <a onclick="calcAvgTemp()" class="waves-effect waves-light btn">Get Stats</a>
                         </div>
                     </div>
                     <div class="col s12 m7">
@@ -96,8 +100,41 @@
             </div>
         </div>
         </div>
+      </div>
+      <div class="card-panel blue-grey lighten-4">
+          <h3>Make an Announcement</h3>
+          <div class="row">
+              <div class="col m3 s12">
+                  <div class="input-field">
+                      <input id="title" type="text">
+                      <label for="title">Title</label>
+                  </div>
+              </div>
+              <div class="input-field col s12 m6">
+                  <select id="imp" class="icons">
+                      <option value="" disabled selected>Choose an importance</option>
+                      <option value="Critical">Critical</option>
+                      <option value="High" >High</option>
+                      <option value="Normal">Normal</option>
+                  </select>
+                  <label>Importance Level</label>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col s12">
+                  <textarea id="content" class="materialize-textarea"></textarea>
+                  <label for="content">Write your announcement here!</label>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col m2 s1 push-s9 push-m10">
+                    <button class="btn waves-effect waves-light blue lighten-1" onclick="createAnnouncement();">Submit</button>
+              </div>
+          </div>
+      </div>
+    </div>
     </main>
-    <footer class="page-footer blue-grey lighten-2 ">
+     <footer class="page-footer blue-grey lighten-2 ">
         <div class="footer-copyright blue-grey lighten-2">
             <div class="container blue-grey-text text-darken-2 left">
             © 2020 Covidiena. All Rights Reserved.
