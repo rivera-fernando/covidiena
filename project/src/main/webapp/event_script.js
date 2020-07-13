@@ -38,7 +38,7 @@ function preview_image(event) {
   }
   reader.readAsDataURL(event.target.files[0]);
 }
- 
+
 function cancelEdit() {
   
 }
@@ -132,23 +132,7 @@ function loadPast() {
     }
   });
 }
- 
-function loadExplore() {
-  const url = "/load-explore";
-  fetch(url, {
-    method: 'GET'
-  }).then(response => response.json()).then((events) => {
-    const exploreEvents = document.getElementById('explore-events');
-    exploreEvents.innerHTML = '';
-    events.forEach((event) => {
-      var eventElement = createEventElement(event);
-      eventElement = addRSVPBtn(eventElement);
-      exploreEvents.appendChild(eventElement);
-      loadDropdowns();
-    })
-  });
-}
- 
+
 function loadEventInfo() {
  
 }
@@ -176,7 +160,6 @@ function loadEditForm(event) {
   const entityId = document.getElementsByName("event-id")[0];
   entityId.value = event.id;
 }
- 
 /*
  * ################# EVENT ELEMS #################
  */
@@ -411,3 +394,4 @@ function validateEvent() {
   }
   return true;
 }
+ 
