@@ -32,8 +32,11 @@ public final class Event {
   private final boolean isMine;
   private final String entityType;
   private final String imageKey;
+  private final int day;
+  private final int numAttendees;
+  private final int maxCapacity;
  
-  public Event(long id, String name, String location, String date, String time, String description, String attendance, String type, long timeStamp, boolean isMine, String entityType, String imageKey) {
+  public Event(long id, String name, String location, String date, String time, String description, String attendance, String type, long timeStamp, boolean isMine, String entityType, String imageKey, int day, int numAttendees, int maxCapacity) {
     this.id = id;
     this.name = name;
     this.location = location;
@@ -46,5 +49,8 @@ public final class Event {
     this.isMine = isMine;
     this.entityType = entityType;
     this.imageKey = imageKey;
+    this.day = day;
+    this.numAttendees = numAttendees;
+    this.maxCapacity = maxCapacity;
   }
 }

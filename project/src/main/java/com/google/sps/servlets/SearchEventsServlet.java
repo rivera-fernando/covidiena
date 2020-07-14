@@ -23,6 +23,7 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.gson.Gson;
 import com.google.sps.classes.Event;
+import com.google.sps.classes.Day;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,16 +38,20 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.sps.classes.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import java.util.Calendar;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
  
-/** Servlet that loads upcoming events*/
-@WebServlet("/load-upcoming")
-public class LoadUpcomingEventsServlet extends HttpServlet {
+/** Servlet that loads pending events*/
+@WebServlet("/load-search")
+public class SearchEventsServlet extends HttpServlet {
  
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query query = new Query("ApprovedEvent");
     query.addSort("dateTimestamp", SortDirection.ASCENDING);
- 
+
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
       String email = userService.getCurrentUser().getEmail().toLowerCase();
@@ -54,7 +59,7 @@ public class LoadUpcomingEventsServlet extends HttpServlet {
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       PreparedQuery results = datastore.prepare(query);
       List<Entity> resultsList = results.asList(FetchOptions.Builder.withDefaults());
-      List<Event> upcomingEvents = new ArrayList<>();
+      List<Event> events = new ArrayList<>();
  
       for (int i = 0; i < resultsList.size(); i++) {
  
@@ -63,7 +68,7 @@ public class LoadUpcomingEventsServlet extends HttpServlet {
         @SuppressWarnings("unchecked") // Cast can't verify generic type.
         Collection<String> attendees = (Collection<String>) entity.getProperty("attendees");
         if (!attendees.isEmpty()) {
-          if (attendees.contains(email)) {
+          if (!attendees.contains(email)) {
             long id = entity.getKey().getId();
             String name = (String) entity.getProperty("name");
             String location = (String) entity.getProperty("location");
@@ -74,9 +79,14 @@ public class LoadUpcomingEventsServlet extends HttpServlet {
             String attendance = (String) entity.getProperty("type");
             long timestamp = (long) entity.getProperty("timestamp");
             String imageKey = (String) entity.getProperty("imageKey");
- 
-            Event event = new Event(id, name, location, date, time, description, type, attendance, timestamp, entity.getProperty("email").equals(email), "ApprovedEvent", imageKey, -1, attendees.size(), 0);
-            upcomingEvents.add(event);
+            long dateTimestamp = (long) entity.getProperty("dateTimestamp");
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.clear();
+            calendar.setTimeInMillis(dateTimestamp);
+            int day = calendar.get(Calendar.DAY_OF_WEEK);
+            Event event = new Event(id, name, location, date, time, description, type, attendance, timestamp, entity.getProperty("email").equals(email), "ApprovedEvent", imageKey, day, attendees.size(), 0);
+            events.add(event);
           }
         }
       }
@@ -84,9 +94,8 @@ public class LoadUpcomingEventsServlet extends HttpServlet {
       Gson gson = new Gson();
  
       response.setContentType("application/json;");
-      response.getWriter().println(gson.toJson(upcomingEvents));
-    }
-    else {
+      response.getWriter().println(gson.toJson(events));
+    } else {
       response.sendRedirect("/login.html");
     }
   }
