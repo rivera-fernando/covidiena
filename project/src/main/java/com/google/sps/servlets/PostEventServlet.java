@@ -52,28 +52,6 @@ import javax.servlet.http.HttpSession;
 public class PostEventServlet extends HttpServlet {
  
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
-    List<Boolean> log = new ArrayList<>();
- 
-    HttpSession session = request.getSession(false); 
-    String name = (String) session.getAttribute("person"); 
- 
-    boolean found = false;
-    
-    if (!name.equals("null")) {
-      found = true;
-    }
-    
-    log.add(found);
-    
-    Gson gson = new Gson();
- 
-    response.setContentType("application/json;");
-    response.getWriter().println(gson.toJson(log));
-  }
- 
-  @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
  
     // Get the input from the form.
@@ -84,7 +62,7 @@ public class PostEventServlet extends HttpServlet {
     // Format: hh:mm XM
     String hours = time.substring(0, 2);
     String minutes = time.substring(3, 5);
-    SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd, yyyy");
+    SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
     long dateTimestamp = 0;
     try {
       Date formattedDate = formatter.parse(date);

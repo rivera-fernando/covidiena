@@ -23,7 +23,7 @@ var attendanceInput = [];
 document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.datepicker');
     // Can't select date before today
-    var options = {minDate : new Date(), format: 'ddd mmm dd, yyyy'};
+    var options = {minDate : new Date(), format: 'mmm dd, yyyy'};
     var instances = M.Datepicker.init(elems, options);
 });
  
@@ -71,18 +71,6 @@ function fetchBlobstoreUrlAndShowForm() {
     editEventsForm.action = imageUploadUrls[1];
   });
 }
-
-/*
-// Redirect the user to log in page if they are here without logging in
-function isLoggedIn() {
-  fetch('/post-event').then((response) => response.json())
-  .then((log) => {
-    if (!log[0]) {
-      window.location.replace("/login.html");
-    }
-  });
-}
-*/
 
 function showPostForm() {
   const postForm = document.getElementById("events-form");
@@ -139,7 +127,6 @@ function loadPending() {
     } else {
       events.forEach((event) => {
         var eventElement = createEventElement(event);
-        addApprovalBtn(eventElement);
         pendingEvents.appendChild(eventElement);
         loadDropdowns();
       })

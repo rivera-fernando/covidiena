@@ -35,9 +35,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.google.sps.classes.User;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
+import javax.servlet.http.HttpSession;
 import java.util.Calendar;
 import java.util.Date;
 import java.text.DateFormat;
@@ -52,9 +50,14 @@ public class SearchEventsServlet extends HttpServlet {
     Query query = new Query("ApprovedEvent");
     query.addSort("dateTimestamp", SortDirection.ASCENDING);
 
-    UserService userService = UserServiceFactory.getUserService();
-    if (userService.isUserLoggedIn()) {
-      String email = userService.getCurrentUser().getEmail().toLowerCase();
+    HttpSession session = request.getSession(false);
+    boolean found = false;
+    if (session.getAttribute("name") != null) {
+      found = true;
+    }
+
+    if (found) {
+      String email = ((String) session.getAttribute("email")).toLowerCase();
  
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       PreparedQuery results = datastore.prepare(query);

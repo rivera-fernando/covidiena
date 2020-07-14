@@ -35,13 +35,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.google.sps.classes.User;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 import java.util.Calendar;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import javax.servlet.http.HttpSession;
  
 /** Servlet that loads pending events*/
 @WebServlet("/load-explore")
@@ -56,9 +54,14 @@ public class LoadExploreServlet extends HttpServlet {
     long firstDayOfWeek = getFirstDayOfWeek();
     firstDayOfWeek += 604800000*(numWeeks);
 
-    UserService userService = UserServiceFactory.getUserService();
-    if (userService.isUserLoggedIn()) {
-      String email = userService.getCurrentUser().getEmail().toLowerCase();
+    HttpSession session = request.getSession(false);
+    boolean found = false;
+    if (session.getAttribute("name") != null) {
+        found = true;
+    }
+
+    if (found) {
+      String email = ((String) session.getAttribute("email")).toLowerCase();
  
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       PreparedQuery results = datastore.prepare(query);

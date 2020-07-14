@@ -30,10 +30,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.google.sps.classes.User;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 import java.text.SimpleDateFormat;
+import javax.servlet.http.HttpSession;
  
 /** Servlet that loads pending events*/
 @WebServlet("/load-pending")
@@ -44,9 +42,13 @@ public class LoadPendingEventsServlet extends HttpServlet {
     Query query = new Query("UnapprovedEvent");
     query.addSort("dateTimestamp", SortDirection.ASCENDING);
  
-    UserService userService = UserServiceFactory.getUserService();
-    if (userService.isUserLoggedIn()) {
-      String email = userService.getCurrentUser().getEmail().toLowerCase();
+    HttpSession session = request.getSession(false);
+    boolean found = false;
+    if (session.getAttribute("name") != null) {
+      found = true;
+    }
+    if (found) {
+      String email = ((String) session.getAttribute("email")).toLowerCase();
  
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       PreparedQuery results = datastore.prepare(query);
@@ -54,7 +56,8 @@ public class LoadPendingEventsServlet extends HttpServlet {
       List<Event> pendingEvents = new ArrayList<>();
  
       // If the user is an admin, load ALL pending. Otherwise, just the ones that the student posted.
-      if (userService.isUserAdmin()) {
+      boolean isAdmin = (boolean) session.getAttribute("admin");
+      if (isAdmin) {
         // Should probably find a better way to send this metadata like Lian told me to
         Event metadata = new Event(0, "Admin", "", "", "", "", "", "", 0, false, "", "", -1, 0, 0);
         pendingEvents.add(metadata);

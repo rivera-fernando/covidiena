@@ -39,11 +39,21 @@ public class LogInServlet extends HttpServlet {
         HttpSession session=request.getSession();  
         Gson gson = new Gson();
         response.setContentType("application/json");
-        if (request.getParameter("logout") != null){
-            user = null;
-            response.getWriter().println(gson.toJson(user));
-            response.sendRedirect("/index.html");
-            return;
+        // First if handles log out
+        if (request.getParameter("logout") != null ) {
+          session.removeAttribute("name");  
+          session.removeAttribute("email");  
+          session.removeAttribute("password");  
+          session.removeAttribute("birthdate");  
+          session.removeAttribute("studentId");  
+          session.removeAttribute("sex");
+          session.removeAttribute("school");
+          session.removeAttribute("phone");
+          session.removeAttribute("metric"); 
+          session.removeAttribute("admin");    
+
+          response.sendRedirect("/index.html");
+          return;
         } else {
             String password = PasswordHash.hashPassword(request.getParameter("password").toCharArray());
             String email = request.getParameter("email").toLowerCase();
@@ -78,8 +88,7 @@ public class LogInServlet extends HttpServlet {
                     session.setAttribute("metric", user.getMetric()); 
                     session.setAttribute("admin", user.getAdmin());        
 
-                    response.getWriter().println(session.getAttribute("person") instanceof User);
-                    response.sendRedirect("../dashboard");
+                    response.sendRedirect("/dashboard");
                     return;
                 }
             }   
@@ -90,8 +99,15 @@ public class LogInServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
         Gson gson = new Gson();
-        HttpSession session = request.getSession();
-        response.setContentType("html/text");
-        response.getWriter().println(session.getAttribute("person") instanceof User);
+        HttpSession session = request.getSession(false);
+        boolean found = false;
+        if (session.getAttribute("name") != null) {
+          found = true;
+        }
+        List<Boolean> log = new ArrayList<Boolean>();
+        log.add(found);
+
+        response.setContentType("application/loggedIn");
+        response.getWriter().println(log);
     }
 }

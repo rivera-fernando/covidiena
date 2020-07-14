@@ -55,12 +55,12 @@ public class Dashboard extends HttpServlet {
     }
     response.setContentType("text/html"); 
     if (!found) {
-        response.sendRedirect("/login.html");
+      response.sendRedirect("/login.html");
     } else {
-        boolean isAdmin = (boolean) session.getAttribute("admin");
-        if (isAdmin) {
-            response.sendRedirect("/admin_dash.html");
-        } else {
+      boolean isAdmin = (boolean) session.getAttribute("admin");
+      if (isAdmin) {
+        response.sendRedirect("/admin_dash.html");
+      } else {
             response.sendRedirect("/dashboard.html");
         }
     }
