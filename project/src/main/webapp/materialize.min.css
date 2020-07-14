@@ -15,6 +15,17 @@
 #map {
   height: 300px;
 }
+
+#events-table-container {
+  height: 500px; 
+  overflow: scroll;
+  border: 1px solid black;
+}
+
+td, th {
+  border: 1px solid black;
+}
+
 #right-panel {
   font-family: 'Roboto','sans-serif';
   line-height: 30px;

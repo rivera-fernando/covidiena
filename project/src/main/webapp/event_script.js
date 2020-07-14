@@ -11,12 +11,19 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+ 
+/*
+ * ################# INITIALIZERS #################
+ */
 
-
+var currWeek = 0;
+var typeInput = [];
+var attendanceInput = [];
+ 
 document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.datepicker');
     // Can't select date before today
-    var options = {minDate : new Date(), format: 'ddd mmm dd, yyyy'};
+    var options = {minDate : new Date(), format: 'mmm dd, yyyy'};
     var instances = M.Datepicker.init(elems, options);
 });
  
@@ -25,6 +32,11 @@ document.addEventListener('DOMContentLoaded', function() {
     var options = {twelveHour: false};
     var instances = M.Timepicker.init(elems, options);
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems, {});
+  });
  
 $(document).ready(function(){
   $('.tabs').tabs();
@@ -55,22 +67,18 @@ function fetchBlobstoreUrlAndShowForm() {
   .then((imageUploadUrls) => {
     const eventsForm = document.getElementById('events-form');
     eventsForm.action = imageUploadUrls[0];
-    eventsForm.style.display = 'block';
     const editEventsForm = document.getElementById('edit-events-form');
     editEventsForm.action = imageUploadUrls[1];
   });
 }
- 
- 
-// Redirect the user to log in page if they are here without logging in
-function isLoggedIn() {
-  fetch('/post-event').then((response) => response.json())
-  .then((log) => {
-    console.log(log[0]);
-    if (!log[0]) {
-      window.location.replace("/login.html");
-    }
-  });
+
+function showPostForm() {
+  const postForm = document.getElementById("events-form");
+  if (postForm.style.display == "none") {
+    postForm.style.display = "block";
+  } else {
+    postForm.style.display = "none";
+  }
 }
  
 /*
@@ -78,7 +86,6 @@ function isLoggedIn() {
  */
  
 async function loadPage() {
-  isLoggedIn();
   await loadEvents();
 }
  
@@ -93,6 +100,7 @@ async function loadEvents() {
   loadPending();
   loadPast();
   loadExplore();
+  loadSearchExplore();
 }
  
 function loadPending() {
@@ -119,7 +127,6 @@ function loadPending() {
     } else {
       events.forEach((event) => {
         var eventElement = createEventElement(event);
-        addApprovalBtn(eventElement);
         pendingEvents.appendChild(eventElement);
         loadDropdowns();
       })
@@ -165,24 +172,66 @@ function loadPast() {
   });
 }
  
-function loadExplore() {
-  const url = "/load-explore";
+function loadExplore(week, filter, type, attendance) {
+  week = week || "0";
+  filter = filter || false;
+  type = type || [];
+  attendance = attendance || [];
+  const url = "/load-explore?week="+week;
   fetch(url, {
     method: 'GET'
-  }).then(response => response.json()).then((events) => {
-    const exploreEvents = document.getElementById('explore-events');
-    exploreEvents.innerHTML = '';
-    events.forEach((event) => {
-      var eventElement = createEventElement(event);
-      addRSVPBtn(eventElement);
-      exploreEvents.appendChild(eventElement);
-      loadDropdowns();
-    })
+  }).then(response => response.json()).then((week) => {
+    const tableBody = document.getElementById("explore-body");
+    tableBody.innerHTML = '';
+    var isFull = 0;
+    // Load dates
+    week.forEach((day) => {
+      const date = document.getElementById(day.name+"-date");
+      const theDay = day.date.slice(0,2);
+      const rest = day.date.slice(2, day.date.length);
+      date.innerHTML = "<span style=\"font-size: 20px;\">"+theDay+"</span>"+"<br>"+"<span>"+rest+"</span>";
+    });
+    // While the week is not empty
+    while (week[0].events.length != 0 || week[1].events.length != 0 || week[2].events.length != 0
+        || week[3].events.length != 0 || week[4].events.length != 0 || week[5].events.length != 0
+        || week[6].events.length != 0) {
+      // Create a new row
+      const row = document.createElement('tr');
+      week.forEach((day) => {
+        // For each day create a new table data cell
+        const cell = document.createElement('td');
+        if (day.events === undefined || day.events.length != 0) {
+          // If there are still events this day, create an event elem and append it
+          const event = day.events[0];
+          const eventElement = createEventPreview(event);
+          if (filter) {
+            if (type.includes(event.type) || type.length == 0) {
+              if (attendance.includes(event.attendance) || attendance.length == 0) {
+                isFull++;
+                cell.appendChild(eventElement);
+              }
+            }
+          } else {
+            isFull++;
+            cell.appendChild(eventElement);
+          }
+          day.events.shift();
+        }
+        row.appendChild(cell);
+      });
+      tableBody.appendChild(row);
+    }
+    if (isFull == 0) {
+      tableBody.innerHTML = '';
+      const row = document.createElement('tr');
+      const cell = document.createElement('td');
+      cell.style.textAlign = "center";
+      cell.innerText = 'There are no events';
+      cell.colSpan = "7";
+      row.appendChild(cell);
+      tableBody.appendChild(row);
+    }
   });
-}
-
-function loadEventInfo() {
- 
 }
  
 function loadEditForm(event) {
@@ -212,6 +261,117 @@ function loadEditForm(event) {
   const entityId = document.getElementsByName("event-id")[0];
   entityId.value = event.id;
 }
+
+/*
+ * ################# CAL ELEMS #################
+ */
+
+function nextWeek() {
+  currWeek++;
+  loadExplore(currWeek, true, typeInput, attendanceInput);
+}
+
+function previousWeek() {
+  currWeek--;
+  loadExplore(currWeek, true, typeInput, attendanceInput);
+}
+ 
+function originalWeek() {
+  currWeek = 0;
+  loadExplore(currWeek, true, typeInput, attendanceInput);
+}
+
+function filterExploreEvents() {
+  typeInput = [];
+  attendanceInput = [];
+  if(document.getElementById("academic").checked){
+    typeInput.push("Academic");
+  }
+  if(document.getElementById("social").checked){
+    typeInput.push("Social");
+  }
+  if(document.getElementById("optional").checked){
+    attendanceInput.push("Optional");
+  }
+  if(document.getElementById("mandatory").checked){
+    attendanceInput.push("Mandatory");
+  }
+  loadExplore(currWeek, true, typeInput, attendanceInput);
+}
+
+function showSearch() {
+  const search = document.getElementById("search");
+  if (search.style.display == "none") {
+    search.style.display = "block";
+  } else {
+    search.style.display = "none";
+  }
+}
+
+function loadSearchExplore() {
+  const url = "/load-search";
+  fetch(url, {
+    method: 'GET'
+  }).then(response => response.json()).then((events) => {
+    const searchBody = document.getElementById("explore-search-body");
+    events.forEach((event) => {
+      searchBody.appendChild(createSearchEvent(event));
+    });
+  });
+}
+
+function createSearchEvent(event) {
+  const eventElement = document.createElement('tr');
+
+  const eventTitle = document.createElement('td');
+  eventTitle.innerText = event.name;
+
+  const eventDate = document.createElement('td');
+  eventDate.innerText = event.date + " at " + event.time;
+
+  const seeMore = document.createElement('a');
+  seeMore.classList.add('modal-trigger');
+  seeMore.href = "#modal-container";
+  seeMore.onclick = function() {
+    const preview = document.getElementById("preview-event-info");
+    preview.innerHTML = '';
+    const previewElem = createEventElement(event);
+    addRSVPBtn(previewElem);
+    preview.appendChild(previewElem);
+    loadDropdowns();
+  }
+  seeMore.style.color = "#ffa726";
+  var triggers = document.querySelectorAll('.modal');
+  var instances = M.Modal.init(triggers, {});
+  seeMore.innerText = 'See More';
+
+  eventElement.appendChild(eventTitle);
+  eventElement.appendChild(eventDate);
+  eventElement.appendChild(seeMore);
+
+  return eventElement;
+}
+
+
+function searchExploreEvents() {
+  var input, filter, table, tr, td, eventIndex, txtValue;
+  input = document.getElementById("searchInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("searchTable");
+  tr = table.getElementsByTagName("tr");
+  for (eventIndex = 0; eventIndex < tr.length; eventIndex++) {
+    td = tr[eventIndex].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[eventIndex].style.display = "";
+      } else {
+        tr[eventIndex].style.display = "none";
+      }
+    }       
+  }
+}
+
 /*
  * ################# EVENT ELEMS #################
  */
@@ -221,6 +381,7 @@ function createEventElement(event) {
   var eventElement = document.createElement('div');
   eventElement.classList.add('card', 'white');
   eventElement.style.borderRadius = '5px';
+  eventElement.style.overflow = "scroll";
   eventElement.id = event.id;
  
   const container = document.createElement('div');
@@ -293,11 +454,65 @@ function createEventElement(event) {
  
   return eventElement;
 }
+
+function createEventPreview(event) {
+  // Containers, rows, and columns
+  var eventElement = document.createElement('div');
+  eventElement.classList.add('card', 'white', 'left-align');
+  eventElement.style.borderRadius = '3px';
+  eventElement.id = event.id;
+ 
+  const container = document.createElement('div');
+  container.classList.add('card-content');
+ 
+  // Text elements
+  const name = document.createElement('p');
+  name.style.fontSize = "14px";
+  const date = document.createElement('p');
+  const time = document.createElement('p');
+  const attendance = document.createElement('p');
+  attendance.style.color = "#42a5f5";
+  const type = document.createElement('p');
+  type.style.color = "#42a5f5";
+  const seeMore = document.createElement('a');
+  seeMore.classList.add('modal-trigger');
+  seeMore.href = "#modal-container";
+  seeMore.onclick = function() {
+    const preview = document.getElementById("preview-event-info");
+    preview.innerHTML = '';
+    const previewElem = createEventElement(event);
+    addRSVPBtn(previewElem);
+    preview.appendChild(previewElem);
+    loadDropdowns();
+  }
+  seeMore.style.color = "#ffa726";
+  var triggers = document.querySelectorAll('.modal');
+  var instances = M.Modal.init(triggers, {});
+ 
+  name.innerHTML = "<b>" + event.name + "</b>";
+  date.innerText = event.date;
+  date.classList.add('grey-text', 'text-darken-2');
+  time.innerText = "At " + event.time;
+  time.classList.add('grey-text', 'text-darken-2');
+  attendance.innerHTML = "<b>" + event.attendance + "</b>";
+  type.innerHTML = "<b>" + event.type + "</b>";
+  seeMore.innerText = "See more";
+ 
+  container.appendChild(name);
+  container.appendChild(date);
+  container.appendChild(time);
+  container.appendChild(type);
+  container.appendChild(attendance);
+  container.appendChild(seeMore);
+  container.style.fontSize = "12px";
+  eventElement.appendChild(container);
+
+  return eventElement;
+}
  
 function addDropdownMenu(dropdownColumn, event, eventElement) {
   const dropdown = document.createElement('a');
   dropdown.classList.add('dropdown-trigger', 'flat-btn', 'right', 'right-align');
-  dropdown.href = '#';
   dropdown.dataset.target = 'dropdown-' + event.id;
   dropdown.innerHTML = '<i class="material-icons">more_vert</i>';
   
@@ -377,7 +592,7 @@ function addRemovalBtn(eventElement) {
 function addRSVPBtn(eventElement) {
   const RSVPBtn = document.createElement('li');
  
-  RSVPBtn.classList.add('waves-light', 'btn-small', 'btn-flat');
+  RSVPBtn.classList.add('waves-light', 'btn-small', 'btn-flat', 'modal-close');
   RSVPBtn.innerText = "RSVP";
  
   RSVPBtn.addEventListener('click', async () => {
@@ -398,14 +613,15 @@ function addRSVPBtn(eventElement) {
  
 function addEditBtn(eventElement, event) {
   const editBtn = document.createElement('li');
- 
-  editBtn.classList.add('waves-light', 'btn-small', 'btn-flat');
-  editBtn.innerText = "EDIT";
+
+  editBtn.classList.add('waves-light', 'btn-small', 'btn-flat', 'modal-close');
+  editBtn.innerHTML = "EDIT";
  
   editBtn.addEventListener('click', async () => {
     const editForm = document.getElementById("edit-events-form");
     editForm.style.display = "block";
     loadEditForm(event);
+    location.hash = "edit-events-form";
   });
  
   var dropdownList = eventElement.getElementsByTagName('ul')[0];
@@ -415,7 +631,7 @@ function addEditBtn(eventElement, event) {
 function addDeleteBtn(eventElement, entityType) {
   const deleteBtn = document.createElement('li');
  
-  deleteBtn.classList.add('waves-light', 'btn-small', 'btn-flat', 'red-text');
+  deleteBtn.classList.add('waves-light', 'btn-small', 'btn-flat', 'red-text', 'modal-close');
   deleteBtn.innerText = "DELETE";
  
   deleteBtn.addEventListener('click', async () => {

@@ -23,6 +23,7 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.gson.Gson;
 import com.google.sps.classes.Event;
+import com.google.sps.classes.Day;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +35,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.google.sps.classes.User;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
+import java.util.Calendar;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import javax.servlet.http.HttpSession;
  
 /** Servlet that loads pending events*/
 @WebServlet("/load-explore")
@@ -45,16 +48,32 @@ public class LoadExploreServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query query = new Query("ApprovedEvent");
-    query.addSort("dateTimestamp", SortDirection.DESCENDING);
- 
-    UserService userService = UserServiceFactory.getUserService();
-    if (userService.isUserLoggedIn()) {
-      String email = userService.getCurrentUser().getEmail().toLowerCase();
+    query.addSort("dateTimestamp", SortDirection.ASCENDING);
+
+    int numWeeks = Integer.parseInt(request.getParameter("week"));
+    long firstDayOfWeek = getFirstDayOfWeek();
+    firstDayOfWeek += 604800000*(numWeeks);
+
+    HttpSession session = request.getSession(false);
+    boolean found = false;
+    if (session.getAttribute("name") != null) {
+        found = true;
+    }
+
+    if (found) {
+      String email = ((String) session.getAttribute("email")).toLowerCase();
  
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       PreparedQuery results = datastore.prepare(query);
       List<Entity> resultsList = results.asList(FetchOptions.Builder.withDefaults());
-      List<Event> exploreEvents = new ArrayList<>();
+      List<Day> week = new ArrayList<>();
+      List<Event> sundayEvents = new ArrayList<>();
+      List<Event> mondayEvents = new ArrayList<>();
+      List<Event> tuesdayEvents = new ArrayList<>();
+      List<Event> wednesdayEvents = new ArrayList<>();
+      List<Event> thursdayEvents = new ArrayList<>();
+      List<Event> fridayEvents = new ArrayList<>();
+      List<Event> saturdayEvents = new ArrayList<>();
  
       for (int i = 0; i < resultsList.size(); i++) {
  
@@ -74,19 +93,92 @@ public class LoadExploreServlet extends HttpServlet {
             String attendance = (String) entity.getProperty("type");
             long timestamp = (long) entity.getProperty("timestamp");
             String imageKey = (String) entity.getProperty("imageKey");
- 
-            Event event = new Event(id, name, location, date, time, description, type, attendance, timestamp, entity.getProperty("email").equals(email), "ApprovedEvent", imageKey);
-            exploreEvents.add(event);
+            long dateTimestamp = (long) entity.getProperty("dateTimestamp");
+            if (dateTimestamp < firstDayOfWeek - 60000) {
+              continue;
+            } else if (dateTimestamp >= firstDayOfWeek + 604740000) {
+              break;
+            }
+            Calendar calendar = Calendar.getInstance();
+            calendar.clear();
+            calendar.setTimeInMillis(dateTimestamp);
+            int day = calendar.get(Calendar.DAY_OF_WEEK);
+            Event event = new Event(id, name, location, date, time, description, type, attendance, timestamp, entity.getProperty("email").equals(email), "ApprovedEvent", imageKey, day, attendees.size(), 0);
+            if (day == 1) {
+                sundayEvents.add(event);
+            } else if (day == 2) {
+                mondayEvents.add(event);
+            } else if (day == 3) {
+                tuesdayEvents.add(event);
+            } else if (day == 4) {
+                wednesdayEvents.add(event);
+            } else if (day == 5) {
+                thursdayEvents.add(event);
+            } else if (day == 6) {
+                fridayEvents.add(event);
+            } else if (day == 7) {
+                saturdayEvents.add(event);
+            }
           }
         }
       }
+
+      Date saturdayDate = new Date(firstDayOfWeek + 86400000*6);
+      Date fridayDate = new Date(firstDayOfWeek + 86400000*5);
+      Date thursdayDate = new Date(firstDayOfWeek + 86400000*4);
+      Date wednesdayDate = new Date(firstDayOfWeek + 86400000*3);
+      Date tuesdayDate = new Date(firstDayOfWeek + 86400000*2);
+      Date mondayDate = new Date(firstDayOfWeek + 86400000);
+      Date sundayDate = new Date(firstDayOfWeek);
+
+      SimpleDateFormat formatted = new SimpleDateFormat("dd MMM YYYY");
+
+      String saturdayDateString = formatted.format(saturdayDate);
+      String fridayDateString = formatted.format(fridayDate);
+      String thursdayDateString = formatted.format(thursdayDate);
+      String wednesdayDateString = formatted.format(wednesdayDate);
+      String tuesdayDateString = formatted.format(tuesdayDate);
+      String mondayDateString = formatted.format(mondayDate);
+      String sundayDateString = formatted.format(sundayDate);
+
+      Day sunday = new Day("sunday", sundayDateString, sundayEvents);
+      Day monday = new Day("monday", mondayDateString, mondayEvents);
+      Day tuesday = new Day("tuesday", tuesdayDateString, tuesdayEvents);
+      Day wednesday = new Day("wednesday", wednesdayDateString, wednesdayEvents);
+      Day thursday = new Day("thursday", thursdayDateString, thursdayEvents);
+      Day friday = new Day("friday", fridayDateString, fridayEvents);
+      Day saturday = new Day("saturday", saturdayDateString, saturdayEvents);
+
+      week.add(sunday);
+      week.add(monday);
+      week.add(tuesday);
+      week.add(wednesday);
+      week.add(thursday);
+      week.add(friday);
+      week.add(saturday);
  
       Gson gson = new Gson();
  
       response.setContentType("application/json;");
-      response.getWriter().println(gson.toJson(exploreEvents));
+      response.getWriter().println(gson.toJson(week));
     } else {
       response.sendRedirect("/login.html");
     }
+  }
+
+  private long getFirstDayOfWeek() {
+    long today = System.currentTimeMillis();
+    Calendar calendar = Calendar.getInstance();
+    calendar.clear();
+    calendar.setTimeInMillis(today);
+    while (calendar.get(Calendar.DAY_OF_WEEK) > calendar.getFirstDayOfWeek()) {
+        calendar.add(Calendar.DATE, -1); // Substract 1 day until first day of week.
+    }
+    calendar.set(Calendar.HOUR_OF_DAY, 0);
+    calendar.set(Calendar.MINUTE, 0);
+    calendar.set(Calendar.SECOND, 0);
+    long firstDayOfWeekTimestamp = calendar.getTimeInMillis();
+
+    return firstDayOfWeekTimestamp;
   }
 }

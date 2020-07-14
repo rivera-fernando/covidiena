@@ -38,12 +38,22 @@ public class LogInServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session=request.getSession();  
         Gson gson = new Gson();
-        response.setContentType("text/html");
-        if (request.getParameter("logout") != null){
-            user = null;
-            response.getWriter().println(gson.toJson(user));
-            response.sendRedirect("/index.html");
-            return;
+        response.setContentType("application/json");
+        // First if handles log out
+        if (request.getParameter("logout") != null ) {
+          session.removeAttribute("name");  
+          session.removeAttribute("email");  
+          session.removeAttribute("password");  
+          session.removeAttribute("birthdate");  
+          session.removeAttribute("studentId");  
+          session.removeAttribute("sex");
+          session.removeAttribute("school");
+          session.removeAttribute("phone");
+          session.removeAttribute("metric"); 
+          session.removeAttribute("admin");    
+
+          response.sendRedirect("/index.html");
+          return;
         } else {
             String password = PasswordHash.hashPassword(request.getParameter("password").toCharArray());
             String email = request.getParameter("email").toLowerCase();
@@ -67,22 +77,38 @@ public class LogInServlet extends HttpServlet {
                         (String) entity.getProperty("metric"), 
                         (Boolean) entity.getProperty("admin")
                     );
-                    session.setAttribute("person",gson.toJson(user));  
-                    response.getWriter().println(gson.toJson(user));
-                    response.sendRedirect("../dashboard");
+                    session.setAttribute("userId", user.getUserId());
+                    session.setAttribute("name", user.getName());  
+                    session.setAttribute("email", user.getEmail());  
+                    session.setAttribute("password", user.getPassword());  
+                    session.setAttribute("birthdate", user.getBirthdate());  
+                    session.setAttribute("studentId", user.getStudentId());  
+                    session.setAttribute("sex", user.getSex());
+                    session.setAttribute("school", user.getSchool());
+                    session.setAttribute("phone", user.getPhone());
+                    session.setAttribute("metric", user.getMetric()); 
+                    session.setAttribute("admin", user.getAdmin());        
+
+                    response.sendRedirect("/dashboard");
                     return;
                 }
-            }
+            }   
+            response.sendRedirect("/login.html");
         }
-        session.setAttribute("person",gson.toJson(user));  
-        response.getWriter().println(gson.toJson(user));
-        response.sendRedirect("/login.html");
     }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
         Gson gson = new Gson();
-        response.setContentType("application/json;");
-        response.getWriter().println(gson.toJson(user));
+        HttpSession session = request.getSession(false);
+        boolean found = false;
+        if (session.getAttribute("name") != null) {
+          found = true;
+        }
+        List<Boolean> log = new ArrayList<Boolean>();
+        log.add(found);
+
+        response.setContentType("application/loggedIn");
+        response.getWriter().println(log);
     }
 }

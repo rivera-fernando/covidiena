@@ -35,10 +35,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import com.google.sps.classes.User;
 
 @WebServlet("/dashboard")
 public class Dashboard extends HttpServlet {
-  UserService userService = UserServiceFactory.getUserService();
   DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
   @Override
@@ -48,19 +48,21 @@ public class Dashboard extends HttpServlet {
   
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Boolean found = false;
-        HttpSession session=request.getSession(false); 
-        response.setContentType("text/html"); 
-        String person=(String)session.getAttribute("person"); 
-        String isAdmin = person.substring(person.indexOf("admin\":")+7, person.indexOf("}"));
-        if (person.equals("null")) {
-            response.sendRedirect("/login.html");
-        }
-        else if (isAdmin.equals("true")) {
-            response.sendRedirect("/admin_dash.html");
-        }
-        else {
+    boolean found = false;
+    HttpSession session = request.getSession(false); 
+    if (session.getAttribute("name") != null ) {
+        found = true;
+    }
+    response.setContentType("text/html"); 
+    if (!found) {
+      response.sendRedirect("/login.html");
+    } else {
+      boolean isAdmin = (boolean) session.getAttribute("admin");
+      if (isAdmin) {
+        response.sendRedirect("/admin_dash.html");
+      } else {
             response.sendRedirect("/dashboard.html");
         }
+    }
   }
 }

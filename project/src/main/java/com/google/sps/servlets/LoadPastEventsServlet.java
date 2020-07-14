@@ -34,9 +34,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.google.sps.classes.User;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
+import javax.servlet.http.HttpSession;
 
 /** Servlet that loads past events*/
 @WebServlet("/load-past")
@@ -47,9 +45,14 @@ public class LoadPastEventsServlet extends HttpServlet {
     Query query = new Query("PastEvent");
     query.addSort("dateTimestamp", SortDirection.DESCENDING);
 
-    UserService userService = UserServiceFactory.getUserService();
-    if (userService.isUserLoggedIn()) {
-      String email = userService.getCurrentUser().getEmail().toLowerCase();
+    HttpSession session = request.getSession(false);
+    boolean found = false;
+    if (session.getAttribute("name") != null) {
+        found = true;
+    }
+
+    if (found) {
+      String email = ((String) session.getAttribute("email")).toLowerCase();
 
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       PreparedQuery results = datastore.prepare(query);
@@ -75,7 +78,10 @@ public class LoadPastEventsServlet extends HttpServlet {
             long timestamp = (long) entity.getProperty("timestamp");
             String imageKey = (String) entity.getProperty("imageKey");
 
-            Event event = new Event(id, name, location, date, time, description, type, attendance, timestamp, true, "PastEvent", imageKey);
+            Event event = new Event(id, name, location, date, time, description, 
+              type, attendance, timestamp, true, "PastEvent", imageKey, -1, 
+              attendees.size(), 0);
+            
             pastEvents.add(event);
           }
         }
