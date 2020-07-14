@@ -11,15 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
- 
-/*
- * ################# INITIALIZERS #################
- */
- 
+
+
 document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.datepicker');
     // Can't select date before today
-    var options = {minDate : new Date()};
+    var options = {minDate : new Date(), format: 'ddd mmm dd, yyyy'};
     var instances = M.Datepicker.init(elems, options);
 });
  
@@ -47,7 +44,7 @@ function preview_image(event) {
   }
   reader.readAsDataURL(event.target.files[0]);
 }
- 
+
 function cancelEdit() {
   const editForm = document.getElementById("edit-events-form");
   editForm.style.display = "none";
@@ -183,7 +180,7 @@ function loadExplore() {
     })
   });
 }
- 
+
 function loadEventInfo() {
  
 }
@@ -215,7 +212,6 @@ function loadEditForm(event) {
   const entityId = document.getElementsByName("event-id")[0];
   entityId.value = event.id;
 }
- 
 /*
  * ################# EVENT ELEMS #################
  */
@@ -486,3 +482,4 @@ function validateEvent() {
   }
   return true;
 }
+ 
