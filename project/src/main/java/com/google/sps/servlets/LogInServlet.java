@@ -83,10 +83,6 @@ public class LogInServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
         Gson gson = new Gson();
         response.setContentType("application/json;");
-        if(request.getParameter("logout") != null){
-            response.getWriter().println(gson.toJson(null));
-        }else{
-            response.getWriter().println(gson.toJson(user));
-        }
+        response.getWriter().println(gson.toJson(user));
     }
 }
