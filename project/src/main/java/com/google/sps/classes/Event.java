@@ -36,7 +36,11 @@ public final class Event {
   private final int numAttendees;
   private final int maxCapacity;
  
-  public Event(long id, String name, String location, String date, String time, String description, String attendance, String type, long timeStamp, boolean isMine, String entityType, String imageKey, int day, int numAttendees, int maxCapacity) {
+  public Event(long id, String name, String location, String date, 
+    String time, String description, String attendance, String type, 
+    long timeStamp, boolean isMine, String entityType, String imageKey, 
+    int day, int numAttendees, int maxCapacity) {
+
     this.id = id;
     this.name = name;
     this.location = location;

@@ -48,7 +48,7 @@ public class Dashboard extends HttpServlet {
   
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Boolean found = false;
+    boolean found = false;
     HttpSession session = request.getSession(false); 
     if (session.getAttribute("name") != null ) {
         found = true;

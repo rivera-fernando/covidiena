@@ -21,7 +21,6 @@ import java.util.List;
  
 /**
  * Class representing an individual day with its constituent events.
- *
  */
 public final class Day {
  
