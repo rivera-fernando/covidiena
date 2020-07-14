@@ -53,7 +53,7 @@ public class PostEventServlet extends HttpServlet {
     // Format: hh:mm XM
     String hours = time.substring(0, 2);
     String minutes = time.substring(3, 5);
-    SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
+    SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd, yyyy");
     long dateTimestamp = 0;
     try {
       Date formattedDate = formatter.parse(date);
