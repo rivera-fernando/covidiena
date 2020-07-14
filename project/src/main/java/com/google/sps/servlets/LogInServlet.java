@@ -77,6 +77,7 @@ public class LogInServlet extends HttpServlet {
                         (String) entity.getProperty("metric"), 
                         (Boolean) entity.getProperty("admin")
                     );
+                    session.setAttribute("userId", user.getUserId());
                     session.setAttribute("name", user.getName());  
                     session.setAttribute("email", user.getEmail());  
                     session.setAttribute("password", user.getPassword());  

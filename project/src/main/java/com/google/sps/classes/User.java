@@ -29,6 +29,10 @@ public final class User {
     this.admin = admin;
   }
 
+  public long getUserId() {
+    return userId;
+  }
+
   public String getPhone(){
       return phone;
   }
