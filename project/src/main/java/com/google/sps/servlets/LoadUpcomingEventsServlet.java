@@ -73,8 +73,9 @@ public class LoadUpcomingEventsServlet extends HttpServlet {
             String type = (String) entity.getProperty("attendance");
             String attendance = (String) entity.getProperty("type");
             long timestamp = (long) entity.getProperty("timestamp");
+            String imageKey = (String) entity.getProperty("imageKey");
  
-            Event event = new Event(id, name, location, date, time, description, type, attendance, timestamp, entity.getProperty("email").equals(email), "ApprovedEvent");
+            Event event = new Event(id, name, location, date, time, description, type, attendance, timestamp, entity.getProperty("email").equals(email), "ApprovedEvent", imageKey);
             upcomingEvents.add(event);
           }
         }

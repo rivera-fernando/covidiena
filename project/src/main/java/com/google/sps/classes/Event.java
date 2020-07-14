@@ -31,8 +31,9 @@ public final class Event {
   private final long timeStamp;
   private final boolean isMine;
   private final String entityType;
+  private final String imageKey;
  
-  public Event(long id, String name, String location, String date, String time, String description, String attendance, String type, long timeStamp, boolean isMine, String entityType) {
+  public Event(long id, String name, String location, String date, String time, String description, String attendance, String type, long timeStamp, boolean isMine, String entityType, String imageKey) {
     this.id = id;
     this.name = name;
     this.location = location;
@@ -44,5 +45,6 @@ public final class Event {
     this.timeStamp = timeStamp;
     this.isMine = isMine;
     this.entityType = entityType;
+    this.imageKey = imageKey;
   }
 }

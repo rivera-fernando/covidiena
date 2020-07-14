@@ -73,6 +73,7 @@ public class ApproveEventServlet extends HttpServlet {
       approvedEventEntity.setProperty("dateTimestamp", unapprovedEvent.getProperty("dateTimestamp"));
       approvedEventEntity.setProperty("email", unapprovedEvent.getProperty("email"));
       approvedEventEntity.setProperty("admin-email", userService.getCurrentUser().getEmail().toLowerCase());
+      approvedEventEntity.setProperty("imageKey", unapprovedEvent.getProperty("imageKey"));
       Collection<String> attendees = new HashSet<String>();
       String email = (String) unapprovedEvent.getProperty("email");
       // Add the central/mock user to all the events for cohesion

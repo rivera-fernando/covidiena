@@ -38,6 +38,12 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.sps.classes.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.blobstore.BlobInfo;
+import com.google.appengine.api.blobstore.BlobInfoFactory;
+import java.util.Map;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
  
@@ -68,6 +74,7 @@ public class EditEventServlet extends HttpServlet {
     String type = request.getParameter("edit-event-type");
     String attendance = request.getParameter("edit-event-attendance");
     String description = request.getParameter("edit-description");
+    String imageKey = getUploadedFileUrl(request, "edit-image");
  
     UserService userService = UserServiceFactory.getUserService();
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -88,11 +95,34 @@ public class EditEventServlet extends HttpServlet {
       event.setProperty("attendance", attendance);
       event.setProperty("description", description);
       event.setProperty("dateTimestamp", dateTimestamp);
+      if (imageKey != null) {
+        event.setProperty("imageKey", imageKey);
+      }
  
       datastore.put(event);
       response.sendRedirect("/events.html");
     } catch(EntityNotFoundException e) {
       return;
+    }
+  }
+
+  private String getUploadedFileUrl(HttpServletRequest request, String formInputElementName) {
+    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+    Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
+    List<BlobKey> blobKeys = blobs.get(formInputElementName);
+ 
+    if (blobKeys == null || blobKeys.isEmpty()) {
+      return null;
+    }
+ 
+    BlobKey blobKey = blobKeys.get(0);
+ 
+    BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
+    if (blobInfo.getSize() == 0) {
+      blobstoreService.delete(blobKey);
+      return null;
+    } else {
+      return blobKey.getKeyString();
     }
   }
 }

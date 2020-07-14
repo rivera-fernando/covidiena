@@ -73,8 +73,9 @@ public class LoadPastEventsServlet extends HttpServlet {
             String type = (String) entity.getProperty("attendance");
             String attendance = (String) entity.getProperty("type");
             long timestamp = (long) entity.getProperty("timestamp");
+            String imageKey = (String) entity.getProperty("imageKey");
 
-            Event event = new Event(id, name, location, date, time, description, type, attendance, timestamp, true, "PastEvent");
+            Event event = new Event(id, name, location, date, time, description, type, attendance, timestamp, true, "PastEvent", imageKey);
             pastEvents.add(event);
           }
         }
