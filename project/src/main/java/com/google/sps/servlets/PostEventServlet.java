@@ -45,6 +45,7 @@ import com.google.appengine.api.blobstore.BlobInfo;
 import com.google.appengine.api.blobstore.BlobInfoFactory;
 import java.util.Map;
 import com.google.gson.Gson;
+import javax.servlet.http.HttpSession;
  
 /** Servlet that posts an event*/
 @WebServlet("/post-event")
@@ -98,12 +99,19 @@ public class PostEventServlet extends HttpServlet {
     String imageKey = getUploadedFileUrl(request, "image");
     long timestamp = System.currentTimeMillis();
  
-    UserService userService = UserServiceFactory.getUserService();
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
  
-    if (userService.isUserLoggedIn()) {
-      String email = userService.getCurrentUser().getEmail().toLowerCase();
-      if (userService.isUserAdmin()) {
+    HttpSession session = request.getSession(false);
+    boolean found = false;
+    if (session.getAttribute("name") != null) {
+        found = true;
+    }
+
+    if (found) {
+      String email = ((String) session.getAttribute("email")).toLowerCase();
+      boolean isAdmin = (boolean) session.getAttribute("admin");
+
+      if (isAdmin) {
         Entity approvedEventEntity = new Entity("ApprovedEvent");
         approvedEventEntity.setProperty("name", name);
         approvedEventEntity.setProperty("location", location);

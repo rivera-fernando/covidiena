@@ -71,7 +71,8 @@ function fetchBlobstoreUrlAndShowForm() {
     editEventsForm.action = imageUploadUrls[1];
   });
 }
- 
+
+/*
 // Redirect the user to log in page if they are here without logging in
 function isLoggedIn() {
   fetch('/post-event').then((response) => response.json())
@@ -81,6 +82,7 @@ function isLoggedIn() {
     }
   });
 }
+*/
 
 function showPostForm() {
   const postForm = document.getElementById("events-form");
@@ -96,7 +98,6 @@ function showPostForm() {
  */
  
 async function loadPage() {
-  isLoggedIn();
   await loadEvents();
 }
  

@@ -38,7 +38,7 @@ public class LogInServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session=request.getSession();  
         Gson gson = new Gson();
-        response.setContentType("text/html");
+        response.setContentType("application/json");
         if (request.getParameter("logout") != null){
             user = null;
             response.getWriter().println(gson.toJson(user));
@@ -67,22 +67,31 @@ public class LogInServlet extends HttpServlet {
                         (String) entity.getProperty("metric"), 
                         (Boolean) entity.getProperty("admin")
                     );
-                    session.setAttribute("person",gson.toJson(user));  
-                    response.getWriter().println(gson.toJson(user));
+                    session.setAttribute("name", user.getName());  
+                    session.setAttribute("email", user.getEmail());  
+                    session.setAttribute("password", user.getPassword());  
+                    session.setAttribute("birthdate", user.getBirthdate());  
+                    session.setAttribute("studentId", user.getStudentId());  
+                    session.setAttribute("sex", user.getSex());
+                    session.setAttribute("school", user.getSchool());
+                    session.setAttribute("phone", user.getPhone());
+                    session.setAttribute("metric", user.getMetric()); 
+                    session.setAttribute("admin", user.getAdmin());        
+
+                    response.getWriter().println(session.getAttribute("person") instanceof User);
                     response.sendRedirect("../dashboard");
                     return;
                 }
-            }
+            }   
+            response.sendRedirect("/login.html");
         }
-        session.setAttribute("person",gson.toJson(user));  
-        response.getWriter().println(gson.toJson(user));
-        response.sendRedirect("/login.html");
     }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
         Gson gson = new Gson();
-        response.setContentType("application/json;");
-        response.getWriter().println(gson.toJson(user));
+        HttpSession session = request.getSession();
+        response.setContentType("html/text");
+        response.getWriter().println(session.getAttribute("person") instanceof User);
     }
 }
