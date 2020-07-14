@@ -30,8 +30,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import java.util.ArrayList;
 import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
  
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -46,25 +50,30 @@ public class Temperature extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      HttpSession session = request.getSession(false); 
+      String person = (String) session.getAttribute("person");
+      DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+      String day = dateFormat.format(new Date());
       //this part will create the db entries
       String temp = request.getParameter("temp");
-      Entity commentEntity = new Entity("user_temp");
-      java.util.Date now=new java.util.Date();  
-      commentEntity.setProperty("email", userService.getCurrentUser().getEmail().toLowerCase());
+      Entity commentEntity = new Entity("user_temp", day);
+      commentEntity.setProperty("email", person.substring(person.indexOf("email\":")+8, person.indexOf("\",\"password")));
+      commentEntity.setProperty("school", person.substring(person.indexOf("school\":")+9, person.indexOf("\",\"phone")));
       commentEntity.setProperty("temp", Double.parseDouble(temp));
-      commentEntity.setProperty("when", now);
       datastore.put(commentEntity);
   }
   
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      Query query = new Query("user_temp").addSort("when", SortDirection.ASCENDING);
+      HttpSession session = request.getSession(false); 
+      String person = (String) session.getAttribute("person");
+      Query query = new Query("user_temp").addSort(Entity.KEY_RESERVED_PROPERTY, SortDirection.ASCENDING);
       PreparedQuery results = datastore.prepare(query);
       ArrayList<Object> data = new ArrayList<Object>();
       for(Entity entity:results.asIterable()){
-          if (((String) entity.getProperty("email")).toLowerCase().equals(userService.getCurrentUser().getEmail().toLowerCase())) {
+          if (((String) entity.getProperty("email")).toLowerCase().equals(person.substring(person.indexOf("email\":")+8, person.indexOf("\",\"password")))) {
               ArrayList<Object> pair = new ArrayList<Object>();
-              pair.add(entity.getProperty("when"));
+              pair.add(entity.getKey().getName());
               pair.add(entity.getProperty("temp"));
               pair.add(96);
               pair.add(99);

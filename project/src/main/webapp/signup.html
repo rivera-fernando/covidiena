@@ -13,88 +13,98 @@
         });
         </script>
     </head>
-    <body onload = "">
+    <body onload="updateLogIn();">
         <nav>
-    	<div class="nav-wrapper blue-grey lighten-4">
-            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
-            <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
-            <ul id="nav-mobile" class="right">
-                <li><a href="/settings.html" id="settingButton"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
-            </ul>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
-                <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
-                <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
-                <li style="width: 50px; height: 60px;">&nbsp;</li>
-                <li><a style="color: #42a5f5;" href="/login.html" id= "loginButton">Log In</a></li>
-            </ul>
-    	</div>
-      </nav>
-      <ul class="sidenav" id="mobile-demo">
-        <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
-        <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
-        <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
-        <li><a style="color: #42a5f5;" href="/login.html" id= "loginButton">Log In</a></li>
-      </ul>
-        <div class="container">
-            <h3> Create Account</h3>
-            <h6> Use your school email to access your school's events, important announcements, and much more!</h6>
-            <form action="/user" method="POST" form class="my-form">
-                <div class="row">
-                    <div class="input-field col s12 l6">
-                        <input type="text" name="fname" id = "fname" required>
-                        <label for="fname">First Name</label>
+            <div class="nav-wrapper blue-grey lighten-4">
+                <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
+                <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
+                <ul id="nav-mobile" class="right">
+                    <li><a href="/settings.html" id="settingButton"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
+                </ul>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
+                    <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
+                    <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+                    <li style="width: 50px; height: 60px;">&nbsp;</li>
+                    <li><a style="color: #42a5f5;" class= "loginButton">Log In</a></li>
+                </ul>
+            </div>
+        </nav>
+        <ul class="sidenav" id="mobile-demo">
+            <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
+            <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
+            <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+            <li><a style="color: #42a5f5;" class= "loginButton">Log In</a></li>
+        </ul>
+        <main>
+            <div class="container">
+                <h3> Create Account</h3>
+                <h6> Use your school email to access your school's events, important announcements, and much more!</h6>
+                <form action="/user" method="POST" form class="my-form">
+                    <div class="row">
+                        <div class="input-field col s12 l6">
+                            <input type="text" name="fname" id = "fname" required>
+                            <label for="fname">First Name</label>
+                        </div>
+                        <div class="input-field col s12 l6">
+                            <input type="text" name="lname" id= "lname" required>
+                            <label for="lname">Last Name</label>
+                        </div>
                     </div>
-                    <div class="input-field col s12 l6">
-                        <input type="text" name="lname" id= "lname" required>
-                        <label for="lname">Last Name</label>
+                    <div class="row">
+                        <div class="input-field col s12 l8">
+                            <input type="text" name="email" id="email" placeholder =".edu" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.edu$" class="validate" required>
+                            <label for="schoolEmail">School Email</label>
+                        </div>
+                        <div class="input-field col s12 l4">
+                            <input type="text" name="studentID" id="studentID" required>
+                            <label for="studentID">Student ID</label>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12 l8">
-                        <input type="text" name="email" id="email" placeholder =".edu" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.edu$" class="validate" required>
-                        <label for="schoolEmail">School Email</label>
+                    <div class="row">
+                        <div class="input-field col s12 l8">
+                            <input type="text" name="school" id="school" required>
+                            <label for="school">School Name</label>
+                        </div>
+                        <div class="input-field col s12 l4">
+                            <select name="sex" id= "sex" required>
+                                <option value="" disabled selected>Select Your Sex</option>
+                                <option value="Female">Female</option>
+                                <option value="Male">Male</option>
+                            </select>
+                            <label for="sex">Sex</label>
+                        </div>
                     </div>
-                    <div class="input-field col s12 l4">
-                        <input type="text" name="studentID" id="studentID" required>
-                        <label for="studentID">Student ID</label>
+                    <div class ="row">
+                        <div class="input-field col s12 l6">
+                            <input type="text" placeholder="MM/DD/YYYY" name="birthdate" id="birthdate" class= "datepicker" required>
+                            <label for="birthdate">Birthdate</label>
+                        </div>
+                        <div class="input-field col s12 l6">
+                            <input type="tel" name="phone" id="phone" placeholder= "000-000-0000" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+                            <label for="phone">Cell Phone</label>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12 l8">
-                        <input type="text" name="school" id="school" required>
-                        <label for="school">School Name</label>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="password" name="password" class="validate" id="password" pattern=".{8,}" title="Eight or more characters"required>
+                            <label for="password">Password</label>
+                        </div>
                     </div>
-                    <div class="input-field col s12 l4">
-                        <select name="sex" id= "sex" required>
-                            <option value="" disabled selected>Select Your Sex</option>
-                            <option value="Female">Female</option>
-                            <option value="Male">Male</option>
-                        </select>
-                        <label for="sex">Sex</label>
+                    <div class="input-field center">
+                        <button type ="submit" class="btn white-text" style="background-color: #42a5f5;" value="submit">Create My Profile</button>
+                        <input type="reset" class="btn red white-text " value="Reset">
                     </div>
-                </div>
-                <div class ="row">
-                    <div class="input-field col s12 l6">
-                        <input type="text" placeholder="MM/DD/YYYY" name="birthdate" id="birthdate" class= "datepicker" required>
-                        <label for="birthdate">Birthdate</label>
-                    </div>
-                    <div class="input-field col s12 l6">
-                        <input type="tel" name="phone" id="phone" placeholder= "000-000-0000" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
-                        <label for="phone">Cell Phone</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input type="password" name="password" class="validate" id="password" pattern=".{8,}" title="Eight or more characters"required>
-                        <label for="password">Password</label>
-                    </div>
-                </div>
-                <div class="input-field center">
-                    <button type ="submit" class="btn white-text" style="background-color: #42a5f5;" value="submit">Create My Profile</button>
-                    <input type="reset" class="btn red white-text " value="Reset">
-                </div>
-            </form>
+                </form>
+            </div>
+        </main>
+        <footer class="page-footer blue-grey lighten-2 ">
+        <div class="footer-copyright blue-grey lighten-2">
+            <div class="container blue-grey-text text-darken-2 left">
+            © 2020 Covidiena. All Rights Reserved.
+            <a class="blue-text text-darken-1 right" href="mailto: covidiena@gmail.com">Contact Us</a>
+            </div>
         </div>
+        </footer>
     </body>
 </html>

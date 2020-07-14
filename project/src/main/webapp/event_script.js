@@ -23,7 +23,7 @@ var attendanceInput = [];
 document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.datepicker');
     // Can't select date before today
-    var options = {minDate : new Date()};
+    var options = {minDate : new Date(), format: 'ddd mmm dd, yyyy'};
     var instances = M.Datepicker.init(elems, options);
 });
  
@@ -56,7 +56,7 @@ function preview_image(event) {
   }
   reader.readAsDataURL(event.target.files[0]);
 }
- 
+
 function cancelEdit() {
   const editForm = document.getElementById("edit-events-form");
   editForm.style.display = "none";
@@ -710,3 +710,4 @@ function validateEvent() {
   }
   return true;
 }
+ 
