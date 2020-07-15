@@ -53,11 +53,19 @@
                   <input placeholder="Event Name" name="name" type="text" class="validate" autocomplete="off" spellcheck="false" maxlength="15"> 
                   <input type="text" name="location" placeholder="Enter a Location" class="validate" autocomplete="off" spellcheck="false">
                   <div class="row">
-                    <div class="col s6">
-                      <input type="text" placeholder="Event Date" class="datepicker" name="date" id="datepicker" style="font-color: white">
+                    <div class="col s5">
+                      <input type="text" placeholder="Date" class="datepicker" name="date" id="datepicker" style="font-color: white">
                     </div>
-                    <div class="col s6">
-                      <input type="text" placeholder="Event Time" class="timepicker" name="time" id="timepicker" style="font-color: white">
+                    <div class="col s3">
+                      <input type="text" placeholder="Time" class="timepicker" name="time" id="timepicker" style="font-color: white">
+                    </div>
+                    <div class="col s4">
+                      <select name="capacity" id="capacity" class="validate">
+                        <option value="" disabled selected>Capacity</option>
+                        <option value="15">15</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                      </select>
                     </div>
                   </div>
                   <div class="row left">
@@ -109,7 +117,7 @@
           </div>
           <div class="row right">
             <div class="col">
-              <input class="btn waves-effect waves-light red lighten-1" type="reset" value="CANCEL">
+              <input class="btn waves-effect waves-light red lighten-1" type="reset" value="CANCEL" onclick="closeForm()">
             </div>
             <div class="col">
               <button class="btn waves-effect waves-light" type="submit" name="action" onclick="loadPending()">POST
@@ -119,10 +127,13 @@
           </div>
         </form>
         <div class="row">
-          <p id="name-error" style="display: none;">Please enter a name for your event.</p>
-          <p id="date-error" style="display: none;">Please enter a date for your event.</p>
-          <p id="description-error" style="display: none;">Please enter a description for your event.</p>
-          <p id="injection-error" style="display: none;">Please don't inject html or javascript into our database.</p>
+          <p id="name-error" style="display: none; color: red;">Please enter a name for your event.</p>
+          <p id="location-error" style="display: none; color: red;">Please enter a location for your event.</p>
+          <p id="date-error" style="display: none; color: red;">Please enter a date for your event.</p>
+          <p id="time-error" style="display: none; color: red;">Please enter a time for your event.</p>
+          <p id="capacity-error" style="display: none; color: red;">Please enter a capacity for your event.</p>
+          <p id="description-error" style="display: none; color: red;">Please enter a description for your event.</p>
+          <p id="injection-error" style="display: none; color: red;">Please don't inject html or javascript into our database.</p>
         </div>
       </div>
       <div class="section">
@@ -145,6 +156,24 @@
               <div id="past-events"></div>
             </div>
           </div>
+        </div>
+      </div>
+      <div id="view-requested-changes" class="modal">
+        <div id="requested-changes" class="modal-content"></div>
+      </div>
+      <div id="request-changes-container" class="modal">
+        <div id="request-changes" class="modal-content">
+          <div class="row">
+            <div class="col s12">
+              <h5>Request Changes</h5>
+              <form action="/approve-event" method="POST">
+                <input id="approved" name="approved" type="text" style="display: none" disable>
+                <input id="event-changes-id" name="event-changes-id" type="text" style="display: none" disable>
+                <textarea class="materialize-textarea" id="changes-input" name="changes" placeholder="Changes" autocomplete="off" spellcheck="false" maxlength="500"></textarea>
+                <button class="btn waves-effect waves-light right" type="submit">Request Changes</button>
+              </form>
+            </div>
+          </div>  
         </div>
       </div>
       <form id="edit-events-form" method="POST" style="display: none;" enctype="multipart/form-data">
@@ -260,7 +289,7 @@
         </ul>
         </form>
         <div id="modal-container-search" style="display:none;" class="modal">
-        <div id="search" style="display: none;" class="modal-content">
+          <div id="search" style="display: none;" class="modal-content">
             <input type="text" id="searchInput" onkeyup="searchExploreEvents()" placeholder="Search Event Titles">
             <table id="searchTable" class ="responsive-table" style="display: block; width: 100%; overflow: scroll">
             <thead>
@@ -271,7 +300,7 @@
             </thead>
             <tbody id="explore-search-body" style="overflow-x: scroll"></tbody>
             </table>
-        </div>
+          </div>
         </div>
         <br><br>
         <div id="events-table-container" class="section">

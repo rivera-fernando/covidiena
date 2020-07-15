@@ -59,7 +59,7 @@ public class LoadPendingEventsServlet extends HttpServlet {
       boolean isAdmin = (boolean) session.getAttribute("admin");
       if (isAdmin) {
         // Should probably find a better way to send this metadata like Lian told me to
-        Event metadata = new Event(0, "Admin", "", "", "", "", "", "", 0, false, "", "", -1, 0, 0);
+        Event metadata = new Event(0, "Admin", "", "", "", "", "", "", 0, false, "", "", -1, 0, 0, false, "", "", false);
         pendingEvents.add(metadata);
         for (int i = 0; i < resultsList.size(); i++) {
           Entity entity = resultsList.get(i);
@@ -74,9 +74,17 @@ public class LoadPendingEventsServlet extends HttpServlet {
           long timestamp = (long) entity.getProperty("timestamp");
           boolean isMine =  entity.getProperty("email").equals(email);
           String imageKey = (String) entity.getProperty("imageKey");
- 
-          Event event = new Event(id, name, location, date, time, description, type, attendance, timestamp, isMine, "unapproved", imageKey, -1, 0, 0);
-          pendingEvents.add(event);
+          long capacity = (long) entity.getProperty("capacity");
+          boolean rejected = (boolean) entity.getProperty("rejected");
+          boolean edited = (boolean) entity.getProperty("edited");
+          String changes = (String) entity.getProperty("changes");
+          String adminEmail = (String) entity.getProperty("admin-email");
+
+          if (!rejected || edited) {
+            Event event = new Event(id, name, location, date, time, description, type, attendance,
+              timestamp, isMine, "unapproved", imageKey, -1, 0, 0, rejected, changes, adminEmail, edited);
+            pendingEvents.add(event);
+          }
         }
       } else {
         for (int i = 0; i < resultsList.size(); i++) {
@@ -96,8 +104,15 @@ public class LoadPendingEventsServlet extends HttpServlet {
             long timestamp = (long) entity.getProperty("timestamp");
             boolean isMine =  entity.getProperty("email").equals(email);
             String imageKey = (String) entity.getProperty("imageKey");
+            long capacity = (long) entity.getProperty("capacity");
+            boolean rejected = (boolean) entity.getProperty("rejected");
+            String changes = (String) entity.getProperty("changes");
+            String adminEmail = (String) entity.getProperty("admin-email");
+            boolean edited = (boolean) entity.getProperty("edited");
  
-            Event event = new Event(id, name, location, date, time, description, type, attendance, timestamp, true, "UnapprovedEvent", imageKey, -1, 0, 0);
+            Event event = new Event(id, name, location, date, time, description, type, attendance, 
+                timestamp, true, "UnapprovedEvent", imageKey, -1, 0, capacity, rejected, changes, adminEmail, edited);
+                
             pendingEvents.add(event);
           }
         }

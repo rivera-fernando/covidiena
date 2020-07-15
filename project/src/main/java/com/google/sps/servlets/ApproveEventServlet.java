@@ -51,12 +51,14 @@ public class ApproveEventServlet extends HttpServlet {
  
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
  
-    long requestId = Long.parseLong(request.getParameter("id"));
+    long requestId = Long.parseLong(request.getParameter("event-changes-id"));
+    boolean approved = (boolean) Boolean.parseBoolean(request.getParameter("approved"));
     Key eventKey = KeyFactory.createKey("UnapprovedEvent", requestId);
 
     HttpSession session = request.getSession(false);
     
-    try { 
+    if (approved) {
+      try { 
       Entity unapprovedEvent = datastore.get(eventKey);
       datastore.delete(eventKey);
  
@@ -73,6 +75,8 @@ public class ApproveEventServlet extends HttpServlet {
       approvedEventEntity.setProperty("email", unapprovedEvent.getProperty("email"));
       approvedEventEntity.setProperty("admin-email", ((String) session.getAttribute("email")).toLowerCase());
       approvedEventEntity.setProperty("imageKey", unapprovedEvent.getProperty("imageKey"));
+      approvedEventEntity.setProperty("capacity", unapprovedEvent.getProperty("capacity"));
+      approvedEventEntity.setProperty("edited", unapprovedEvent.getProperty("edited"));
       Collection<String> attendees = new HashSet<String>();
       String email = (String) unapprovedEvent.getProperty("email");
       // Add the central/mock user to all the events for cohesion
@@ -81,8 +85,24 @@ public class ApproveEventServlet extends HttpServlet {
  
       datastore.put(approvedEventEntity);
       response.sendRedirect("/events.html");
-    } catch(EntityNotFoundException e) {
-      return;
+      } catch(EntityNotFoundException e) {
+        return;
+      }
+    } else {
+      try {
+
+        String changes = request.getParameter("changes");
+
+        Entity unapprovedEvent = datastore.get(eventKey);
+        unapprovedEvent.setProperty("rejected", true);
+        unapprovedEvent.setProperty("changes", changes);
+        unapprovedEvent.setProperty("edited", false);
+        unapprovedEvent.setProperty("admin-email", ((String) session.getAttribute("email")).toLowerCase());
+        datastore.put(unapprovedEvent);  
+        response.sendRedirect("/events.html"); 
+      } catch(EntityNotFoundException e) {
+        return;
+      }
     }
   }
 }

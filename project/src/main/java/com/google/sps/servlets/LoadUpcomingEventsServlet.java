@@ -77,10 +77,13 @@ public class LoadUpcomingEventsServlet extends HttpServlet {
             String attendance = (String) entity.getProperty("type");
             long timestamp = (long) entity.getProperty("timestamp");
             String imageKey = (String) entity.getProperty("imageKey");
+            long capacity = (long) entity.getProperty("capacity");
+            boolean rejected = (boolean) entity.getProperty("rejected");
+            boolean edited = (boolean) entity.getProperty("edited");
  
             Event event = new Event(id, name, location, date, time, description, 
               type, attendance, timestamp, entity.getProperty("email").equals(email), 
-              "ApprovedEvent", imageKey, -1, attendees.size(), 0);
+              "ApprovedEvent", imageKey, -1, attendees.size(), capacity, rejected, "", "", edited);
 
             upcomingEvents.add(event);
           }

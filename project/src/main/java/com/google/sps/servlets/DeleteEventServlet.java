@@ -38,8 +38,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.sps.classes.User;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
  
 /** Servlet that loads upcoming events*/
 @WebServlet("/delete-event")
@@ -49,7 +47,6 @@ public class DeleteEventServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
  
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    UserService userService = UserServiceFactory.getUserService();
  
     long requestId = Long.parseLong(request.getParameter("id"));
     String entityType = request.getParameter("entityType");

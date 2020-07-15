@@ -34,12 +34,17 @@ public final class Event {
   private final String imageKey;
   private final int day;
   private final int numAttendees;
-  private final int maxCapacity;
+  private final long maxCapacity;
+  private final boolean rejected;
+  private final String changes;
+  private final String adminEmail;
+  private final boolean edited;
  
   public Event(long id, String name, String location, String date, 
     String time, String description, String attendance, String type, 
     long timeStamp, boolean isMine, String entityType, String imageKey, 
-    int day, int numAttendees, int maxCapacity) {
+    int day, int numAttendees, long maxCapacity, boolean rejected, 
+    String changes, String adminEmail, boolean edited) {
 
     this.id = id;
     this.name = name;
@@ -56,5 +61,9 @@ public final class Event {
     this.day = day;
     this.numAttendees = numAttendees;
     this.maxCapacity = maxCapacity;
+    this.rejected = rejected;
+    this.changes = changes;
+    this.adminEmail = adminEmail;
+    this.edited = edited;
   }
 }

@@ -93,6 +93,9 @@ public class LoadExploreServlet extends HttpServlet {
             String attendance = (String) entity.getProperty("type");
             long timestamp = (long) entity.getProperty("timestamp");
             String imageKey = (String) entity.getProperty("imageKey");
+            long capacity = (long) entity.getProperty("capacity");
+            boolean rejected = (boolean) entity.getProperty("rejected");
+            boolean edited = (boolean) entity.getProperty("edited");
             long dateTimestamp = (long) entity.getProperty("dateTimestamp");
             if (dateTimestamp < firstDayOfWeek - 60000) {
               continue;
@@ -103,7 +106,10 @@ public class LoadExploreServlet extends HttpServlet {
             calendar.clear();
             calendar.setTimeInMillis(dateTimestamp);
             int day = calendar.get(Calendar.DAY_OF_WEEK);
-            Event event = new Event(id, name, location, date, time, description, type, attendance, timestamp, entity.getProperty("email").equals(email), "ApprovedEvent", imageKey, day, attendees.size(), 0);
+            Event event = new Event(id, name, location, date, time, description, type, attendance, 
+              timestamp, entity.getProperty("email").equals(email), "ApprovedEvent", imageKey, 
+              day, attendees.size(), capacity, rejected, "", "", edited);
+            
             if (day == 1) {
                 sundayEvents.add(event);
             } else if (day == 2) {

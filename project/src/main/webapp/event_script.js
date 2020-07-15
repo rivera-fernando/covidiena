@@ -61,6 +61,11 @@ function cancelEdit() {
   const editForm = document.getElementById("edit-events-form");
   editForm.style.display = "none";
 }
+
+function closeForm() {
+  const postForm = document.getElementById("events-form");
+  postForm.style.display = "none";
+}
  
 function fetchBlobstoreUrlAndShowForm() {
   fetch('/blobstore-upload-url').then((response) => response.json())
@@ -121,6 +126,7 @@ function loadPending() {
       events.forEach((event) => {
         var eventElement = createEventElement(event);
         addApprovalBtn(eventElement);
+        addRejectionBtn(eventElement);
         pendingEvents.appendChild(eventElement);
         loadDropdowns();
       })
@@ -433,6 +439,33 @@ function createEventElement(event) {
   location.innerHTML = "<b>At: </b>" + event.location;
  
   headerColumn.appendChild(name);
+
+  if (event.rejected) {
+    const rejected = document.createElement('p');
+    const changes = document.createElement('a');
+    changes.classList.add("modal-trigger");
+    changes.href = "#view-requested-changes";
+    changes.innerText = "View Requested Changes";
+    changes.onclick = function() {
+      const viewChanges = document.getElementById("requested-changes");
+      viewChanges.innerHTML = '<h5>' + event.name + '</h5><p>Changes requested by: ' 
+        + event.adminEmail + '</p><p>' + event.changes + '</p>';
+    }
+    rejected.innerHTML = "Rejected - ";
+    rejected.appendChild(changes);
+    var triggers = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(triggers, {});
+    rejected.style.color = "red";
+    headerColumn.appendChild(rejected);
+  }
+
+  if (event.edited) {
+    const edited = document.createElement('p');
+    edited.innerText = 'Edited';
+    edited.style.color = "red";
+    headerColumn.appendChild(edited);
+  }
+
   headerRow.appendChild(headerColumn);
   container.appendChild(headerRow);
   textColumn.appendChild(when);
@@ -555,6 +588,7 @@ function addApprovalBtn(eventElement) {
     const eventID = eventElement.id;
     const params = new URLSearchParams();
     params.append('id', eventID);
+    params.append('approved', true);
     await fetch('/approve-event', {
       method: 'POST',
       body: params
@@ -565,6 +599,29 @@ function addApprovalBtn(eventElement) {
  
   var dropdownList = eventElement.getElementsByTagName('ul')[0];
   dropdownList.appendChild(approvalBtn);
+}
+
+function addRejectionBtn(eventElement) {
+  const rejectionBtn = document.createElement('li');
+ 
+  rejectionBtn.classList.add('waves-light', 'btn-flat', 'btn-small', 'modal-trigger');
+  rejectionBtn.innerText = "Reject";
+  rejectionBtn.dataset.target = "request-changes-container";
+ 
+  rejectionBtn.addEventListener('click', async () => {
+    var changesContainerInput = document.getElementById('changes-input');
+    changesContainerInput.value = '';
+    var approved = document.getElementById('approved');
+    approved.value = false;
+    var eventId = document.getElementById('event-changes-id');
+    eventId.value = eventElement.id;
+  });
+
+  var triggers = document.querySelectorAll('.modal');
+  var instances = M.Modal.init(triggers, {});
+ 
+  var dropdownList = eventElement.getElementsByTagName('ul')[0];
+  dropdownList.appendChild(rejectionBtn);
 }
  
 function addRemovalBtn(eventElement) {
@@ -615,7 +672,9 @@ function addEditBtn(eventElement, event) {
   const editBtn = document.createElement('li');
 
   editBtn.classList.add('waves-light', 'btn-small', 'btn-flat', 'modal-close');
-  editBtn.innerHTML = "EDIT";
+  if (event.rejected) {
+    editBtn.innerHTML = "EDIT & RESUBMIT";
+  }
  
   editBtn.addEventListener('click', async () => {
     const editForm = document.getElementById("edit-events-form");
@@ -656,16 +715,24 @@ function addDeleteBtn(eventElement, entityType) {
  
 function validateEvent() {
   var name = document.getElementsByName('name')[0].value;
+  var location = document.getElementsByName('location')[0].value;
   var date = document.getElementsByName('date')[0].value;
+  var time = document.getElementsByName('time')[0].value;
+  var capacity = document.getElementsByName('capacity')[0].value;
   var description = document.getElementsByName('description')[0].value;
  
   const nameError = document.getElementById('name-error');
+  const locationError = document.getElementById('location-error');
   const dateError = document.getElementById('date-error');
+  const timeError = document.getElementById('time-error');
+  const capacityError = document.getElementById('capacity-error');
   const descriptionError = document.getElementById('description-error');
   const injectionError = document.getElementById('injection-error');
  
   // If comment contains any html of javascript don't submit the form
-  if ((description.includes("<html>")) || (description.includes("<script>")) || (name.includes("<html>")) || (name.includes("<script>"))) {
+  if ((description.includes("<html>")) || (description.includes("<script>")) || (name.includes("<html>")) 
+    || (name.includes("<script>"))) {
+
       injectionError.style.display = "block";
       return false;
   } else {
@@ -673,27 +740,47 @@ function validateEvent() {
  
   }
   // If name, description, or both are empty don't submit the form
-  if ((description === "") || (name === "") || (date === "")) {
+  if ((description === "") || (name === "") || (date === "") || (time === "") || (capacity === "") 
+    || (location === "")) {
+
       if (description === "") {
-          descriptionError.style.display = "block";
+        descriptionError.style.display = "block";
       } else {
-          descriptionError.style.display = "none";
+        descriptionError.style.display = "none";
       }
       if (name === "") {
-          nameError.style.display = "block";
+        nameError.style.display = "block";
       } else {
-          nameError.style.display = "none";
+        nameError.style.display = "none";
       }
       if (date === "") {
-          dateError.style.display = "block";
+        dateError.style.display = "block";
       } else {
-          dateError.style.display = "none";
+        dateError.style.display = "none";
+      }
+      if (time === "") {
+        timeError.style.display = "block";
+      } else {
+        timeError.style.display = "none";
+      }
+      if (capacity === "") {
+        capacityError.style.display = "block";
+      } else {
+        capacityError.style.display = "none";
+      }
+      if (location === "") {
+        locationError.style.display = "block";
+      } else {
+        locationError.style.display = "none";
       }
       return false;
   } else {
       descriptionError.style.display = "none";
       nameError.style.display = "none";
       dateError.style.display = "none";
+      timeError.style.display = "none";
+      capacityError.style.display = "none";
+      locationError.style.display = "none";
       injectionError.style.display = "none";
   }
   return true;
