@@ -264,7 +264,7 @@ function createEventPreview(event) {
   eventElement.classList.add('card', 'left-align', 'white-text');
   eventElement.style.padding = 0;
   if (event.category === "Past") {
-    eventElement.classList.add('yellow', 'lighten-1');
+    eventElement.classList.add('yellow', 'darken-3');
   } else if (event.category === "Explore") {
     eventElement.classList.add('deep-purple');
   } else if (event.category === "Upcoming") {
