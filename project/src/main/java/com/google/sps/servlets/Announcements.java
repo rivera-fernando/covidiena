@@ -48,10 +48,9 @@ public class Announcements extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
       HttpSession session = request.getSession(false); 
-      String person = (String) session.getAttribute("person");
-      String isAdmin = person.substring(person.indexOf("admin\":")+7, person.indexOf("}"));
-      String name = person.substring(person.indexOf("name\":")+7, person.indexOf("\",\"userId"));
-      String school = person.substring(person.indexOf("school\":")+9, person.indexOf("\",\"phone"));
+      boolean isAdmin = (boolean) session.getAttribute("admin");
+      String name = (String) session.getAttribute("name"); 
+      String school = (String) session.getAttribute("school");
       String title = request.getParameter("title");
       String content = request.getParameter("content");
       String importance = request.getParameter("importance");
@@ -63,7 +62,7 @@ public class Announcements extends HttpServlet {
       commentEntity.setProperty("when", now);
       commentEntity.setProperty("school", school);
       commentEntity.setProperty("importance", importance);
-      if (isAdmin.equals("true")) {
+      if (isAdmin) {
         datastore.put(commentEntity);
       }
   }
@@ -71,9 +70,8 @@ public class Announcements extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
       HttpSession session = request.getSession(false); 
-      String person = (String) session.getAttribute("person");
       //example school: "University of Florida", phone: 111-111-1111
-      String school = person.substring(person.indexOf("school\":")+9, person.indexOf("\",\"phone"));
+      String school = (String) session.getAttribute("school");
       ArrayList<Object> data = new ArrayList<Object>();
       Query query = new Query("Announcements").addSort("when", SortDirection.DESCENDING);
       PreparedQuery results = datastore.prepare(query);
