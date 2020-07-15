@@ -36,7 +36,12 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.modal');
     var instances = M.Modal.init(elems, {});
-  });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  var elems = document.querySelectorAll('.dropdown-trigger');
+  var instances = M.Dropdown.init(elems, {alignment: 'right', coverTrigger: false, hover: true, closeOnClick: false})
+});
  
 $(document).ready(function(){
   $('.tabs').tabs();
@@ -49,41 +54,14 @@ function preview_image(event) {
     if (elem === "image") {
       var output = document.getElementById('output-image');
       output.src = reader.result;
-    } else if (elem === "edit-image") {
-      var output = document.getElementById('edit-output-image');
-      output.src = reader.result;
     }
   }
   reader.readAsDataURL(event.target.files[0]);
 }
 
-function cancelEdit() {
-  const editForm = document.getElementById("edit-events-form");
-  editForm.style.display = "none";
-}
-
 function closeForm() {
   const postForm = document.getElementById("events-form");
   postForm.style.display = "none";
-}
- 
-function fetchBlobstoreUrlAndShowForm() {
-  fetch('/blobstore-upload-url').then((response) => response.json())
-  .then((imageUploadUrls) => {
-    const eventsForm = document.getElementById('events-form');
-    eventsForm.action = imageUploadUrls[0];
-    const editEventsForm = document.getElementById('edit-events-form');
-    editEventsForm.action = imageUploadUrls[1];
-  });
-}
-
-function showPostForm() {
-  const postForm = document.getElementById("events-form");
-  if (postForm.style.display == "none") {
-    postForm.style.display = "block";
-  } else {
-    postForm.style.display = "none";
-  }
 }
  
 /*
@@ -94,88 +72,10 @@ async function loadPage() {
   await loadEvents();
 }
  
-async function loadDropdowns() {
-  var elems = document.querySelectorAll('.dropdown-trigger');
-  var instances = M.Dropdown.init(elems, {alignment: 'right'})
-}
- 
 async function loadEvents() {
   fetchBlobstoreUrlAndShowForm();
-  loadUpcoming();
-  loadPending();
-  loadPast();
   loadExplore();
   loadSearchExplore();
-}
- 
-function loadPending() {
-  const url = "/load-pending";
-  fetch(url, {
-    method: 'GET'
-  }).then(response => response.json()).then((events) => {
-    const pendingEvents = document.getElementById('pending-events');
-    pendingEvents.innerHTML = '';
-    // Right now this if statement won't work for admins
-    if (Object.keys(events).length == 0) {
-      pendingEvents.innerText = "You have no pending events";
-    } else if (events[0].name === "Admin") {
-      delete events[0];
-      if (Object.keys(events).length == 0) {
-        pendingEvents.innerText = "You have no pending events";
-      }
-      events.forEach((event) => {
-        var eventElement = createEventElement(event);
-        addApprovalBtn(eventElement);
-        addRejectionBtn(eventElement);
-        pendingEvents.appendChild(eventElement);
-        loadDropdowns();
-      })
-    } else {
-      events.forEach((event) => {
-        var eventElement = createEventElement(event);
-        pendingEvents.appendChild(eventElement);
-        loadDropdowns();
-      })
-    }
-  });
-}
- 
-function loadUpcoming() {
-  const url ="/load-upcoming";
-  fetch(url, {
-    method: 'GET'
-  }).then(response => response.json()).then((events) => {
-    const upcomingEvents = document.getElementById('upcoming-events');
-    upcomingEvents.innerHTML = '';
-    if (Object.keys(events).length == 0) {
-      upcomingEvents.innerText = "You have no upcoming events";
-    } else {
-      events.forEach((event) => {
-        var eventElement = createEventElement(event);
-        addRemovalBtn(eventElement);
-        upcomingEvents.appendChild(eventElement);
-        loadDropdowns();
-      })
-    }
-  });
-}
- 
-function loadPast() {
-  const url="/load-past";
-  fetch(url, {
-    method: 'GET'
-  }).then((response) => response.json()).then((events) => {
-    const pastEvents = document.getElementById('past-events');
-    if (Object.keys(events).length == 0) {
-      pastEvents.innerText = "You have no past events";
-    } else {
-      events.forEach((event) => {
-        var eventElement = createEventElement(event);
-        pastEvents.appendChild(eventElement);
-        loadDropdowns();
-      })
-    }
-  });
 }
  
 function loadExplore(week, filter, type, attendance) {
@@ -206,6 +106,7 @@ function loadExplore(week, filter, type, attendance) {
       week.forEach((day) => {
         // For each day create a new table data cell
         const cell = document.createElement('td');
+        cell.classList.add("vgrid");
         if (day.events === undefined || day.events.length != 0) {
           // If there are still events this day, create an event elem and append it
           const event = day.events[0];
@@ -238,34 +139,6 @@ function loadExplore(week, filter, type, attendance) {
       tableBody.appendChild(row);
     }
   });
-}
- 
-function loadEditForm(event) {
-  const editName = document.getElementsByName("edit-name")[0];
-  const editLocation = document.getElementsByName("edit-location")[0];
-  const editDate = document.getElementsByName("edit-date")[0];
-  const editTime = document.getElementsByName("edit-time")[0];
-  const editDescription = document.getElementsByName("edit-description")[0];
-  const preview = document.getElementById("edit-output-image");
- 
-  editName.value = event.name;
-  editLocation.value = event.location;
-  editDate.value = event.date;
-  editTime.value = event.time;
-  editDescription.value = event.description;
-  if (event.imageKey != undefined) {
-    fetch('/serve-blob?imageKey='+event.imageKey).then((image)=>{
-      preview.src = image.url;
-    });
-  }
- 
-  document.getElementById(event.type).checked = true;
-  document.getElementById(event.attendance).checked = true;
- 
-  const entityType = document.getElementsByName("event-status")[0];
-  entityType.value = event.entityType;
-  const entityId = document.getElementsByName("event-id")[0];
-  entityId.value = event.id;
 }
 
 /*
@@ -342,11 +215,15 @@ function createSearchEvent(event) {
     const preview = document.getElementById("preview-event-info");
     preview.innerHTML = '';
     const previewElem = createEventElement(event);
-    addRSVPBtn(previewElem);
+    if (event.category === "Explore") {
+      addRSVPBtn(previewElem);
+    } else if (event.category === "Upcoming") {
+      addRemovalBtn(previewElem);
+    }
     preview.appendChild(previewElem);
     loadDropdowns();
   }
-  seeMore.style.color = "#ffa726";
+  seeMore.classList.add('cyan-text', 'text-accent-1')
   var triggers = document.querySelectorAll('.modal');
   var instances = M.Modal.init(triggers, {});
   seeMore.innerText = 'See More';
@@ -357,7 +234,6 @@ function createSearchEvent(event) {
 
   return eventElement;
 }
-
 
 function searchExploreEvents() {
   var input, filter, table, tr, td, eventIndex, txtValue;
@@ -381,17 +257,80 @@ function searchExploreEvents() {
 /*
  * ################# EVENT ELEMS #################
  */
+
+function createEventPreview(event) {
+  // Containers, rows, and columns
+  var eventElement = document.createElement('div');
+  eventElement.classList.add('card', 'left-align', 'white-text');
+  eventElement.style.padding = 0;
+  if (event.category === "Past") {
+    eventElement.classList.add('yellow', 'lighten-1');
+  } else if (event.category === "Explore") {
+    eventElement.classList.add('deep-purple');
+  } else if (event.category === "Upcoming") {
+    eventElement.classList.add('green', 'darken-2');
+  }
+  eventElement.style.borderRadius = '3px';
+  eventElement.style.boxShadow = 'none';
+  eventElement.id = event.id;
  
+  const container = document.createElement('div');
+  container.classList.add('card-content');
+  container.style.padding = "10px 10px 10px 10px";
+ 
+  // Text elements
+  const name = document.createElement('p');
+  name.style.fontSize = "14px";
+  const date = document.createElement('p');
+  const time = document.createElement('p');
+  const attendance = document.createElement('p');
+  const type = document.createElement('p');
+  const seeMore = document.createElement('a');
+  seeMore.classList.add('modal-trigger');
+  seeMore.href = "#modal-container";
+  seeMore.onclick = function() {
+    const preview = document.getElementById("preview-event-info");
+    preview.innerHTML = '';
+    const previewElem = createEventElement(event);
+    if (event.category === "Explore") {
+      addRSVPBtn(previewElem);
+    } else if (event.category === "Upcoming") {
+      addRemovalBtn(previewElem);
+    }
+    preview.appendChild(previewElem);
+    loadDropdowns();
+  }
+  var triggers = document.querySelectorAll('.modal');
+  var instances = M.Modal.init(triggers, {});
+ 
+  name.innerHTML = "<b>" + event.name + "</b>";
+  date.innerText = event.date;
+  time.innerText = "At " + event.time;
+  attendance.innerHTML = "<b>" + event.attendance + "</b>";
+  type.innerHTML = "<b>" + event.type + "</b>";
+  seeMore.innerHTML = "<b>See More</b>";
+  seeMore.classList.add('cyan-text', 'text-accent-1')
+ 
+  container.appendChild(name);
+  container.appendChild(date);
+  container.appendChild(time);
+  container.appendChild(type);
+  container.appendChild(attendance);
+  container.appendChild(seeMore);
+  container.style.fontSize = "12px";
+  eventElement.appendChild(container);
+
+  return eventElement;
+}
+
 function createEventElement(event) {
   // Containers, rows, and columns
   var eventElement = document.createElement('div');
-  eventElement.classList.add('card', 'white');
   eventElement.style.borderRadius = '5px';
   eventElement.style.overflow = "scroll";
   eventElement.id = event.id;
  
   const container = document.createElement('div');
-  container.classList.add('card-content');
  
   const headerRow = document.createElement('div');
   headerRow.classList.add('row');
@@ -412,8 +351,7 @@ function createEventElement(event) {
   dropdownColumn.classList.add('col', 's1');
  
   // Text elements
-  const name = document.createElement('span');
-  name.classList.add('card-title', 'activator');
+  const name = document.createElement('h5');
   const when = document.createElement('span');
   const description = document.createElement('p');
   const attendance = document.createElement('span');
@@ -488,61 +426,10 @@ function createEventElement(event) {
   return eventElement;
 }
 
-function createEventPreview(event) {
-  // Containers, rows, and columns
-  var eventElement = document.createElement('div');
-  eventElement.classList.add('card', 'white', 'left-align');
-  eventElement.style.borderRadius = '3px';
-  eventElement.id = event.id;
- 
-  const container = document.createElement('div');
-  container.classList.add('card-content');
- 
-  // Text elements
-  const name = document.createElement('p');
-  name.style.fontSize = "14px";
-  const date = document.createElement('p');
-  const time = document.createElement('p');
-  const attendance = document.createElement('p');
-  attendance.style.color = "#42a5f5";
-  const type = document.createElement('p');
-  type.style.color = "#42a5f5";
-  const seeMore = document.createElement('a');
-  seeMore.classList.add('modal-trigger');
-  seeMore.href = "#modal-container";
-  seeMore.onclick = function() {
-    const preview = document.getElementById("preview-event-info");
-    preview.innerHTML = '';
-    const previewElem = createEventElement(event);
-    addRSVPBtn(previewElem);
-    preview.appendChild(previewElem);
-    loadDropdowns();
-  }
-  seeMore.style.color = "#ffa726";
-  var triggers = document.querySelectorAll('.modal');
-  var instances = M.Modal.init(triggers, {});
- 
-  name.innerHTML = "<b>" + event.name + "</b>";
-  date.innerText = event.date;
-  date.classList.add('grey-text', 'text-darken-2');
-  time.innerText = "At " + event.time;
-  time.classList.add('grey-text', 'text-darken-2');
-  attendance.innerHTML = "<b>" + event.attendance + "</b>";
-  type.innerHTML = "<b>" + event.type + "</b>";
-  seeMore.innerText = "See more";
- 
-  container.appendChild(name);
-  container.appendChild(date);
-  container.appendChild(time);
-  container.appendChild(type);
-  container.appendChild(attendance);
-  container.appendChild(seeMore);
-  container.style.fontSize = "12px";
-  eventElement.appendChild(container);
+/*
+ * ################# DROPDOWN METHODS #################
+ */
 
-  return eventElement;
-}
- 
 function addDropdownMenu(dropdownColumn, event, eventElement) {
   const dropdown = document.createElement('a');
   dropdown.classList.add('dropdown-trigger', 'flat-btn', 'right', 'right-align');
@@ -555,74 +442,16 @@ function addDropdownMenu(dropdownColumn, event, eventElement) {
  
   dropdownColumn.appendChild(dropdown);
   dropdownColumn.appendChild(dropdownList);
- 
-  if (event.isMine) {
-    addEditBtn(eventElement, event);
-    addDeleteBtn(eventElement, event.entityType);
-  }
 }
- 
-function serveBlob(event, eventElement) {
-  if(event.imageKey != null){
-    const imageElement = document.createElement('img');
-    fetch('/serve-blob?imageKey='+event.imageKey).then((image)=>{
-      imageElement.src = image.url;
-    });
-    imageElement.style.maxHeight = '200px';
-    imageElement.style.maxWidth = '200px';
-    eventElement.appendChild(imageElement);
-  }
+
+async function loadDropdowns() {
+  var elems = document.querySelectorAll('.dropdown-trigger');
+  var instances = M.Dropdown.init(elems, {alignment: 'right'})
 }
  
 /*
  * ################# BUTTONS #################
  */
- 
-function addApprovalBtn(eventElement) {
-  const approvalBtn = document.createElement('li');
- 
-  approvalBtn.classList.add('waves-light', 'btn-flat', 'btn-small');
-  approvalBtn.innerText = "Approve";
- 
-  approvalBtn.addEventListener('click', async () => {
-    const eventID = eventElement.id;
-    const params = new URLSearchParams();
-    params.append('id', eventID);
-    params.append('approved', true);
-    await fetch('/approve-event', {
-      method: 'POST',
-      body: params
-    });
-    location.reload();
-    loadPage();
-  });
- 
-  var dropdownList = eventElement.getElementsByTagName('ul')[0];
-  dropdownList.appendChild(approvalBtn);
-}
-
-function addRejectionBtn(eventElement) {
-  const rejectionBtn = document.createElement('li');
- 
-  rejectionBtn.classList.add('waves-light', 'btn-flat', 'btn-small', 'modal-trigger');
-  rejectionBtn.innerText = "Reject";
-  rejectionBtn.dataset.target = "request-changes-container";
- 
-  rejectionBtn.addEventListener('click', async () => {
-    var changesContainerInput = document.getElementById('changes-input');
-    changesContainerInput.value = '';
-    var approved = document.getElementById('approved');
-    approved.value = false;
-    var eventId = document.getElementById('event-changes-id');
-    eventId.value = eventElement.id;
-  });
-
-  var triggers = document.querySelectorAll('.modal');
-  var instances = M.Modal.init(triggers, {});
- 
-  var dropdownList = eventElement.getElementsByTagName('ul')[0];
-  dropdownList.appendChild(rejectionBtn);
-}
  
 function addRemovalBtn(eventElement) {
   const removalBtn = document.createElement('li');
@@ -667,48 +496,31 @@ function addRSVPBtn(eventElement) {
   var dropdownList = eventElement.getElementsByTagName('ul')[0];
   dropdownList.appendChild(RSVPBtn);
 }
- 
-function addEditBtn(eventElement, event) {
-  const editBtn = document.createElement('li');
 
-  editBtn.classList.add('waves-light', 'btn-small', 'btn-flat', 'modal-close');
-  if (event.rejected) {
-    editBtn.innerHTML = "EDIT & RESUBMIT";
-  }
- 
-  editBtn.addEventListener('click', async () => {
-    const editForm = document.getElementById("edit-events-form");
-    editForm.style.display = "block";
-    loadEditForm(event);
-    location.hash = "edit-events-form";
-  });
- 
-  var dropdownList = eventElement.getElementsByTagName('ul')[0];
-  dropdownList.appendChild(editBtn);
-}
- 
-function addDeleteBtn(eventElement, entityType) {
-  const deleteBtn = document.createElement('li');
- 
-  deleteBtn.classList.add('waves-light', 'btn-small', 'btn-flat', 'red-text', 'modal-close');
-  deleteBtn.innerText = "DELETE";
- 
-  deleteBtn.addEventListener('click', async () => {
-    const params = new URLSearchParams();
-    params.append('id', eventElement.id);
-    params.append('entityType', entityType);
-    await fetch('/delete-event', {
-      method: 'POST',
-      body: params
+/*
+ * ################# BLOB METHODS #################
+ */
+
+function serveBlob(event, eventElement) {
+  if(event.imageKey != null){
+    const imageElement = document.createElement('img');
+    fetch('/serve-blob?imageKey='+event.imageKey).then((image)=>{
+      imageElement.src = image.url;
     });
-    location.reload();
-    loadPage();
-  });
- 
-  var dropdownList = eventElement.getElementsByTagName('ul')[0];
-  dropdownList.appendChild(deleteBtn);
+    imageElement.style.maxHeight = '200px';
+    imageElement.style.maxWidth = '200px';
+    eventElement.appendChild(imageElement);
+  }
 }
- 
+
+function fetchBlobstoreUrlAndShowForm() {
+  fetch('/blobstore-upload-url').then((response) => response.json())
+  .then((imageUploadUrls) => {
+    const eventsForm = document.getElementById('events-form');
+    eventsForm.action = imageUploadUrls[0];
+  });
+}
+
 /*
  * ################# VALIDATORS #################
  */

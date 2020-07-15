@@ -71,33 +71,37 @@ public class SearchEventsServlet extends HttpServlet {
         @SuppressWarnings("unchecked") // Cast can't verify generic type.
         Collection<String> attendees = (Collection<String>) entity.getProperty("attendees");
         if (!attendees.isEmpty()) {
-          if (!attendees.contains(email)) {
-            long id = entity.getKey().getId();
-            String name = (String) entity.getProperty("name");
-            String location = (String) entity.getProperty("location");
-            String date = (String) entity.getProperty("date");
-            String time = (String) entity.getProperty("time");
-            String description = (String) entity.getProperty("description");
-            String type = (String) entity.getProperty("attendance");
-            String attendance = (String) entity.getProperty("type");
-            long timestamp = (long) entity.getProperty("timestamp");
-            String imageKey = (String) entity.getProperty("imageKey");
-            long dateTimestamp = (long) entity.getProperty("dateTimestamp");
-            long capacity = (long) entity.getProperty("capacity");
-            boolean rejected = (boolean) entity.getProperty("rejected");
-            boolean edited = (boolean) entity.getProperty("edited");
+          long id = entity.getKey().getId();
+          String name = (String) entity.getProperty("name");
+          String location = (String) entity.getProperty("location");
+          String date = (String) entity.getProperty("date");
+          String time = (String) entity.getProperty("time");
+          String description = (String) entity.getProperty("description");
+          String type = (String) entity.getProperty("attendance");
+          String attendance = (String) entity.getProperty("type");
+          long timestamp = (long) entity.getProperty("timestamp");
+          String imageKey = (String) entity.getProperty("imageKey");
+          long dateTimestamp = (long) entity.getProperty("dateTimestamp");
+          long capacity = (long) entity.getProperty("capacity");
+          boolean edited = (boolean) entity.getProperty("edited");
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.clear();
-            calendar.setTimeInMillis(dateTimestamp);
-            int day = calendar.get(Calendar.DAY_OF_WEEK);
-            
-            Event event = new Event(id, name, location, date, time, description, type, 
-              attendance, timestamp, entity.getProperty("email").equals(email), "ApprovedEvent", 
-              imageKey, day, attendees.size(), capacity, rejected, "", "", edited);
-
-            events.add(event);
+          Calendar calendar = Calendar.getInstance();
+          calendar.clear();
+          calendar.setTimeInMillis(dateTimestamp);
+          int day = calendar.get(Calendar.DAY_OF_WEEK);
+        
+          String category = "";
+          if (attendees.contains(email)) {
+            category = "Upcoming";
+          } else {
+            category = "Explore";
           }
+          
+          Event event = new Event(id, name, location, date, time, description, type, 
+            attendance, timestamp, entity.getProperty("email").equals(email), "ApprovedEvent", 
+            imageKey, day, attendees.size(), capacity, false, "", "", edited, category);
+
+          events.add(event);
         }
       }
  

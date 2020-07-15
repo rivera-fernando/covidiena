@@ -59,7 +59,7 @@ public class LoadPendingEventsServlet extends HttpServlet {
       boolean isAdmin = (boolean) session.getAttribute("admin");
       if (isAdmin) {
         // Should probably find a better way to send this metadata like Lian told me to
-        Event metadata = new Event(0, "Admin", "", "", "", "", "", "", 0, false, "", "", -1, 0, 0, false, "", "", false);
+        Event metadata = new Event(0, "Admin", "", "", "", "", "", "", 0, false, "", "", -1, 0, 0, false, "", "", false, "");
         pendingEvents.add(metadata);
         for (int i = 0; i < resultsList.size(); i++) {
           Entity entity = resultsList.get(i);
@@ -82,7 +82,8 @@ public class LoadPendingEventsServlet extends HttpServlet {
 
           if (!rejected || edited) {
             Event event = new Event(id, name, location, date, time, description, type, attendance,
-              timestamp, isMine, "unapproved", imageKey, -1, 0, 0, rejected, changes, adminEmail, edited);
+              timestamp, isMine, "unapproved", imageKey, -1, 0, 0, rejected, changes, adminEmail, 
+              edited, "Pending");
             pendingEvents.add(event);
           }
         }
@@ -111,7 +112,8 @@ public class LoadPendingEventsServlet extends HttpServlet {
             boolean edited = (boolean) entity.getProperty("edited");
  
             Event event = new Event(id, name, location, date, time, description, type, attendance, 
-                timestamp, true, "UnapprovedEvent", imageKey, -1, 0, capacity, rejected, changes, adminEmail, edited);
+              timestamp, true, "UnapprovedEvent", imageKey, -1, 0, capacity, rejected, changes, 
+              adminEmail, edited, "Pending");
                 
             pendingEvents.add(event);
           }

@@ -39,12 +39,13 @@ public final class Event {
   private final String changes;
   private final String adminEmail;
   private final boolean edited;
+  private final String category;
  
   public Event(long id, String name, String location, String date, 
     String time, String description, String attendance, String type, 
     long timeStamp, boolean isMine, String entityType, String imageKey, 
     int day, int numAttendees, long maxCapacity, boolean rejected, 
-    String changes, String adminEmail, boolean edited) {
+    String changes, String adminEmail, boolean edited, String category) {
 
     this.id = id;
     this.name = name;
@@ -65,5 +66,6 @@ public final class Event {
     this.changes = changes;
     this.adminEmail = adminEmail;
     this.edited = edited;
+    this.category = category;
   }
 }

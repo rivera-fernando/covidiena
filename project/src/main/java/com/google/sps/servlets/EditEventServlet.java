@@ -101,7 +101,7 @@ public class EditEventServlet extends HttpServlet {
       }
  
       datastore.put(event);
-      response.sendRedirect("/events.html");
+      response.sendRedirect("/my-events.html");
     } catch(EntityNotFoundException e) {
       return;
     }

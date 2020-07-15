@@ -41,314 +41,222 @@
         <li><a style="color: #42a5f5;" href="/signup.html" class="signupButton">Sign Up</a></li>
         <li><a style="color: #42a5f5;" class ="loginButton">Log In</a></li>
       </ul>
-    <div class="container">
-      <div class="section">
-        <button class="btn" onclick="showPostForm()">Post Event</button>
-        <form method="POST" id="events-form" style="display: none;" onsubmit="return validateEvent()" enctype="multipart/form-data">
-          <div class="card blue-grey lighten-4">
-            <div class="card-content" style="overflow-y: scroll">
-              <p class="card-title">Post an Event</p>
-              <div class="row" style="margin-bottom: 0">
-                <div class="col s4">
-                  <input placeholder="Event Name" name="name" type="text" class="validate" autocomplete="off" spellcheck="false" maxlength="15"> 
-                  <input type="text" name="location" placeholder="Enter a Location" class="validate" autocomplete="off" spellcheck="false">
-                  <div class="row">
-                    <div class="col s5">
-                      <input type="text" placeholder="Date" class="datepicker" name="date" id="datepicker" style="font-color: white">
-                    </div>
-                    <div class="col s3">
-                      <input type="text" placeholder="Time" class="timepicker" name="time" id="timepicker" style="font-color: white">
-                    </div>
-                    <div class="col s4">
-                      <select name="capacity" id="capacity" class="validate">
-                        <option value="" disabled selected>Capacity</option>
-                        <option value="15">15</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="row left">
-                    <div class="col s6">
-                      <p><b>Type</b></p>
-                      <label>
-                        <input name="event-type" type="radio" value="Academic" checked/>
-                        <span class="black-text">Academic</span>
-                      </label>
-                      <label>
-                        <input name="event-type" type="radio" value="Social"/>
-                        <span class="black-text">Social</span>
-                      </label>
-                    </div>
-                    <div class="col s6">
-                      <p><b>Attendance</b></p>
-                      <label>
-                        <input name="event-attendance" type="radio" value="Optional" checked/>
-                        <span class="black-text">Optional</span>
-                      </label>
-                      <label>
-                        <input name="event-attendance" type="radio" value="Mandatory"/>
-                        <span class="black-text">Mandatory</span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <div class="col s5">
-                  <textarea class="materialize-textarea" name="description" placeholder="Event Description" autocomplete="off" spellcheck="false" maxlength="500"></textarea>
-                </div>
-                <div class="col s3">
-                  <div class="center">
-                    <div style="height: 80px; padding: 10px;">
-                      <img id="output-image" style="max-height: 100%; max-width: 100%; overflow: scroll;" src="/images/meme.png">
-                    </div>
-                    <div class="file-field input-field">
-                      <div class="btn-flat">
-                        <span>Upload Image</span>
-                        <input type="file" accept="image/*" onchange="preview_image(event)" style="max-width: 100%" id="image" name="image">
-                      </div>
-                      <div class="file-path-wrapper">
-                        <input class="file-path validate" type="text">
-                      </div>
-                    </div>
-                  </div>
-                </div>
+    <main>
+      <div class="container">
+        <div id="view-requested-changes" class="modal">
+          <div id="requested-changes" class="modal-content"></div>
+        </div>
+        <div id="request-changes-container" class="modal">
+          <div id="request-changes" class="modal-content">
+            <div class="row">
+              <div class="col s12">
+                <h5>Request Changes</h5>
+                <form action="/approve-event" method="POST">
+                  <input id="approved" name="approved" type="text" style="display: none" disable>
+                  <input id="event-changes-id" name="event-changes-id" type="text" style="display: none" disable>
+                  <textarea class="materialize-textarea" id="changes-input" name="changes" placeholder="Changes" autocomplete="off" spellcheck="false" maxlength="500"></textarea>
+                  <button class="btn waves-effect waves-light right" type="submit">Request Changes</button>
+                </form>
               </div>
-            </div>
-          </div>
-          <div class="row right">
-            <div class="col">
-              <input class="btn waves-effect waves-light red lighten-1" type="reset" value="CANCEL" onclick="closeForm()">
-            </div>
-            <div class="col">
-              <button class="btn waves-effect waves-light" type="submit" name="action" onclick="loadPending()">POST
-                <i class="material-icons right">send</i>
-              </button>
-            </div>
-          </div>
-        </form>
-        <div class="row">
-          <p id="name-error" style="display: none; color: red;">Please enter a name for your event.</p>
-          <p id="location-error" style="display: none; color: red;">Please enter a location for your event.</p>
-          <p id="date-error" style="display: none; color: red;">Please enter a date for your event.</p>
-          <p id="time-error" style="display: none; color: red;">Please enter a time for your event.</p>
-          <p id="capacity-error" style="display: none; color: red;">Please enter a capacity for your event.</p>
-          <p id="description-error" style="display: none; color: red;">Please enter a description for your event.</p>
-          <p id="injection-error" style="display: none; color: red;">Please don't inject html or javascript into our database.</p>
-        </div>
-      </div>
-      <div class="section">
-        <div class="row">
-          <div class="card large blue-grey lighten-4" style="overflow-y: hidden">
-            <div class="card-content">
-              <h4 class="card-title">My Events</h4>
-              <p>Remember to RSVP to all events you plan on going to!</p>
-            </div>
-            <div class="card-tabs">
-              <ul class="tabs tabs-fixed-width">
-                <li class="tab"><a class="active" href="#upcoming-events">Upcoming Events</a></li>
-                <li class="tab"><a href="#pending-events">Pending Events</a></li>
-                <li class="tab"><a href="#past-events">Past Events</a></li>
-              </ul>
-            </div>
-            <div class="card-content" style="overflow-y: scroll; max-height: 70%;">
-              <div id="pending-events"></div>
-              <div id="upcoming-events"></div>
-              <div id="past-events"></div>
-            </div>
+            </div>  
           </div>
         </div>
-      </div>
-      <div id="view-requested-changes" class="modal">
-        <div id="requested-changes" class="modal-content"></div>
-      </div>
-      <div id="request-changes-container" class="modal">
-        <div id="request-changes" class="modal-content">
-          <div class="row">
-            <div class="col s12">
-              <h5>Request Changes</h5>
-              <form action="/approve-event" method="POST">
-                <input id="approved" name="approved" type="text" style="display: none" disable>
-                <input id="event-changes-id" name="event-changes-id" type="text" style="display: none" disable>
-                <textarea class="materialize-textarea" id="changes-input" name="changes" placeholder="Changes" autocomplete="off" spellcheck="false" maxlength="500"></textarea>
-                <button class="btn waves-effect waves-light right" type="submit">Request Changes</button>
-              </form>
-            </div>
-          </div>  
-        </div>
-      </div>
-      <form id="edit-events-form" method="POST" style="display: none;" enctype="multipart/form-data">
-        <div class="card blue-grey lighten-4">
-          <div class="card-content" style="overflow-y: scroll">
-            <p class="card-title">Edit your Event</p>
-            <input name="event-status" type="text" style="display: none">
-            <input name="event-id" type="text" style="display: none">
-            <div class="row" style="margin-bottom: 0">
-              <div class="col s4">
-                <input placeholder="Event Name" name="edit-name" type="text" class="validate" autocomplete="off" spellcheck="false" maxlength="15"> 
-                <input type="text" name="edit-location" placeholder="Enter a Location" class="validate" autocomplete="off" spellcheck="false">
-                <div class="row">
-                  <div class="col s6">
-                    <input type="text" placeholder="Event Date" class="datepicker" name="edit-date" id="edit-datepicker" style="font-color: white">
-                  </div>
-                  <div class="col s6">
-                    <input type="text" placeholder="Event Time" class="timepicker" name="edit-time" id="edit-timepicker" style="font-color: white">
-                  </div>
-                </div>
-                <div class="row left">
-                  <div class="col s6">
-                    <p><b>Type</b></p>
-                    <label>
-                      <input name="edit-event-type" type="radio" id="Academic" value="Academic"/>
-                      <span class="black-text">Academic</span>
-                    </label>
-                    <label>
-                      <input name="edit-event-type" type="radio" id="Social" value="Social"/>
-                      <span class="black-text">Social</span>
-                    </label>
-                  </div>
-                  <div class="col s6">
-                    <p><b>Attendance</b></p>
-                    <label>
-                      <input name="edit-event-attendance" type="radio" id="Optional" value="Optional"/>
-                      <span class="black-text">Optional</span>
-                    </label>
-                    <label>
-                      <input name="edit-event-attendance" type="radio" id="Mandatory" value="Mandatory"/>
-                      <span class="black-text">Mandatory</span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="col s5">
-                <textarea class="materialize-textarea" name="edit-description" placeholder="Event Description" autocomplete="off" spellcheck="false" maxlength="500"></textarea>
-              </div>
-              <div class="col s3">
-                <div class="center">
-                  <div style="height: 80px; padding: 10px;">
-                    <img id="edit-output-image" style="max-height: 100%; max-width: 100%; overflow: scroll;" src="/images/meme.png">
-                  </div>
-                  <div class="file-field input-field">
-                    <div class="btn-flat">
-                      <span>Upload Image</span>
-                      <input type="file" accept="image/*" onchange="preview_image(event)" style="max-width: 100%" id="edit-image" name="edit-image">
-                    </div>
-                    <div class="file-path-wrapper">
-                      <input class="file-path validate" type="text">
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row right">
-          <div class="col">
-            <input class="btn waves-effect waves-light red lighten-1" type="reset" value="CANCEL" onclick="cancelEdit()">
-          </div>
-          <div class="col">
-            <button class="btn waves-effect waves-light" type="submit" name="action" onclick="loadPending()">POST
-              <i class="material-icons right">send</i>
-            </button>
-          </div>
-        </div>
-      </form>
-      <div class="section">
-        <h4>Explore Events</h4>
-        <button class="btn" onclick="originalWeek()">Today</button>
-        <button class="btn-flat" onclick="previousWeek()"><i class="material-icons">navigate_before</i></button>
-        <button class="btn-flat" onclick="nextWeek()"><i class="material-icons">navigate_next</i></button>
-        <button class="btn-flat modal-trigger" data-target="modal-container-search" onclick="showSearch()"><i class="material-icons">search</i></button>
-        <form onchange = "filterExploreEvents()">
-        <a class="dropdown-trigger btn right" data-target="dropdown1">Filter Tags</a>
-        <ul id="dropdown1" class="dropdown-content">
-            <li>
-            <label>
-                <input type="checkbox" class= "filled-in" id="academic"/>
+        <div class="section">
+          <h4>Explore Events</h4>
+          <button class="btn" onclick="originalWeek()">Today</button>
+          <button class="btn-flat" onclick="previousWeek()"><i class="material-icons">navigate_before</i></button>
+          <button class="btn-flat" onclick="nextWeek()"><i class="material-icons">navigate_next</i></button>
+          <button class="btn-flat modal-trigger" data-target="modal-container-search" onclick="showSearch()"><i class="material-icons">search</i></button>
+          <form onchange = "filterExploreEvents()">
+            <a class="dropdown-trigger btn right" data-target="dropdown1">Filter Tags</a>
+            <ul id="dropdown1" class="dropdown-content">
+              <li>
+              <label>
+                <input type="checkbox" id="academic"/>
                 <span>Academic</span>
-            </label>
-            </li>
-            <li>
-            <label>
-                <input type="checkbox" class= "filled-in" id="social"/>
+              </label>
+              </li>
+              <li>
+              <label>
+                <input type="checkbox" id="social"/>
                 <span>Social</span>
-            </label>
-            </li>
-            <li class="divider" tabindex="-1"></li>
-            <li>
-            <label>
-                <input type="checkbox" class= "filled-in" id="optional"/>
+              </label>
+              </li>
+              <li class="divider" tabindex="-1"></li>
+              <li>
+              <label>
+                <input type="checkbox" id="optional"/>
                 <span>Optional</span>
-            </label>
-            </li>
-            <li>
-            <label>
-                <input type="checkbox" class= "filled-in" id="mandatory"/>
+              </label>
+              </li>
+              <li>
+              <label>
+                <input type="checkbox" id="mandatory"/>
                 <span>Mandatory</span>
-            </label>
-            </li>
-        </ul>
-        </form>
-        <div id="modal-container-search" style="display:none;" class="modal">
-          <div id="search" style="display: none;" class="modal-content">
-            <input type="text" id="searchInput" onkeyup="searchExploreEvents()" placeholder="Search Event Titles">
-            <table id="searchTable" class ="responsive-table" style="display: block; width: 100%; overflow: scroll">
-            <thead>
-                <tr>
-                <th style="width:60%">Title</th>
-                <th style="width:40%">Date</th>
-                </tr>
-            </thead>
-            <tbody id="explore-search-body" style="overflow-x: scroll"></tbody>
-            </table>
-          </div>
-        </div>
-        <br><br>
-        <div id="events-table-container" class="section">
-          <div class="row">
-            <div class="col s12">
-              <table class="responsive-table centered" style="table-layout: fixed;">
-                <thead>
+              </label>
+              </li>
+            </ul>
+          </form>
+          <div id="modal-container-search" style="display:none;" class="modal">
+            <div id="search" style="display: none;" class="modal-content">
+              <input type="text" id="searchInput" onkeyup="searchExploreEvents()" placeholder="Search Event Titles">
+              <table id="searchTable" class ="responsive-table" style="width: 100%; overflow: scroll">
+                <thead style="width: 100%">
                   <tr>
-                  <td style="text-align: center">
-                    <b>Sunday</b>
-                    <div id="sunday-date"></div>
-                  </td>
-                  <td style="text-align: center">
-                    <b>Monday</b>
-                    <div id="monday-date"></div>
-                  </td>
-                  <td style="text-align: center">
-                    <b>Tuesday</b>
-                    <div id="tuesday-date"></div>
-                  </td>
-                  <td style="text-align: center">
-                    <b>Wednesday</b>
-                    <div id="wednesday-date"></div>
-                  </td>
-                  <td style="text-align: center">
-                    <b>Thursday</b>
-                    <div id="thursday-date"></div>
-                  </td>
-                  <td style="text-align: center">
-                    <b>Friday</b>
-                    <div id="friday-date"></div>
-                  </td>
-                  <td style="text-align: center">
-                    <b>Saturday</b>
-                    <div id="saturday-date"></div>
-                  </td>
+                    <th style="width:50%">Title</th>
+                    <th style="width:40%">Date</th>
+                    <th style="width:10%">Link</th>
                   </tr>
                 </thead>
-                <tbody id="explore-body" style="overflow: scroll;"></tbody>
+                <tbody id="explore-search-body" style="width: 100%; overflow-x: scroll"></tbody>
               </table>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div id="modal-container" class="modal">
-            <div id="preview-event-info" class="modal-content"></div>
+          <br><br>
+          <div id="events-table-container" class="section">
+            <div class="row">
+              <div class="col s12">
+                <table class="responsive-table centered" style="table-layout: fixed;">
+                  <thead>
+                    <tr>
+                    <td class="vgrid" style="text-align: center">
+                      <b>Sunday</b>
+                      <div id="sunday-date"></div>
+                    </td>
+                    <td class="vgrid" style="text-align: center">
+                      <b>Monday</b>
+                      <div id="monday-date"></div>
+                    </td>
+                    <td class="vgrid" style="text-align: center">
+                      <b>Tuesday</b>
+                      <div id="tuesday-date"></div>
+                    </td>
+                    <td class="vgrid" style="text-align: center">
+                      <b>Wednesday</b>
+                      <div id="wednesday-date"></div>
+                    </td>
+                    <td class="vgrid" style="text-align: center">
+                      <b>Thursday</b>
+                      <div id="thursday-date"></div>
+                    </td>
+                    <td class="vgrid" style="text-align: center">
+                      <b>Friday</b>
+                      <div id="friday-date"></div>
+                    </td>
+                    <td class="vgrid" style="text-align: center">
+                      <b>Saturday</b>
+                      <div id="saturday-date"></div>
+                    </td>
+                    </tr>
+                  </thead>
+                  <tbody id="explore-body" style="overflow: scroll;"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div id="modal-container" class="modal">
+              <div id="preview-event-info" class="modal-content"></div>
+            </div>
           </div>
         </div>
+        <div class="section">
+          <a class="btn modal-trigger" href="#form-modal-container">Post Event</a>
+          <div id="form-modal-container" class="modal">
+            <form method="POST" id="events-form" class="modal-content" onsubmit="return validateEvent()" enctype="multipart/form-data">
+              <div class="row">
+                <div class="col s12" style="overflow: scroll">
+                  <h5>Post an Event</h5>
+                  <div class="row" style="margin-bottom: 0">
+                    <div class="col s4">
+                      <input placeholder="Event Name" name="name" type="text" class="validate" autocomplete="off" spellcheck="false" maxlength="15"> 
+                      <input type="text" name="location" placeholder="Enter a Location" class="validate" autocomplete="off" spellcheck="false">
+                      <div class="row">
+                        <div class="col s5">
+                          <input type="text" placeholder="Date" class="datepicker" name="date" id="datepicker" style="font-color: white">
+                        </div>
+                        <div class="col s3">
+                          <input type="text" placeholder="Time" class="timepicker" name="time" id="timepicker" style="font-color: white">
+                        </div>
+                        <div class="col s4">
+                          <select name="capacity" id="capacity" class="validate">
+                            <option value="" disabled selected>Capacity</option>
+                            <option value="15">15</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="row left">
+                        <div class="col s6">
+                          <p><b>Type</b></p>
+                          <label>
+                            <input name="event-type" type="radio" value="Academic" checked/>
+                            <span class="black-text">Academic</span>
+                          </label>
+                          <label>
+                            <input name="event-type" type="radio" value="Social"/>
+                            <span class="black-text">Social</span>
+                          </label>
+                        </div>
+                        <div class="col s6">
+                          <p><b>Attendance</b></p>
+                          <label>
+                            <input name="event-attendance" type="radio" value="Optional" checked/>
+                            <span class="black-text">Optional</span>
+                          </label>
+                          <label>
+                            <input name="event-attendance" type="radio" value="Mandatory"/>
+                            <span class="black-text">Mandatory</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col s5">
+                      <textarea class="materialize-textarea" name="description" placeholder="Event Description" autocomplete="off" spellcheck="false" maxlength="500"></textarea>
+                    </div>
+                    <div class="col s3">
+                      <div class="center">
+                        <div style="height: 80px; padding: 10px;">
+                          <img id="output-image" style="max-height: 100%; max-width: 100%; overflow: scroll;" src="/images/meme.png">
+                        </div>
+                        <div class="file-field input-field">
+                          <div class="btn-flat">
+                            <span>Upload Image</span>
+                            <input type="file" accept="image/*" onchange="preview_image(event)" style="max-width: 100%" id="image" name="image">
+                          </div>
+                          <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row right">
+                <div class="col">
+                  <input class="btn waves-effect waves-light red lighten-1" type="reset" value="CANCEL" onclick="closeForm()">
+                </div>
+                <div class="col">
+                  <button class="btn waves-effect waves-light" type="submit" name="action" onclick="loadPending()">POST
+                    <i class="material-icons right">send</i>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="row">
+            <p id="name-error" style="display: none; color: red;">Please enter a name for your event.</p>
+            <p id="location-error" style="display: none; color: red;">Please enter a location for your event.</p>
+            <p id="date-error" style="display: none; color: red;">Please enter a date for your event.</p>
+            <p id="time-error" style="display: none; color: red;">Please enter a time for your event.</p>
+            <p id="capacity-error" style="display: none; color: red;">Please enter a capacity for your event.</p>
+            <p id="description-error" style="display: none; color: red;">Please enter a description for your event.</p>
+            <p id="injection-error" style="display: none; color: red;">Please don't inject html or javascript into our database.</p>
+          </div>
+        </div>
+        <p>View <a href="/my-events.html">my events</a></p>
       </div>
     </main>
     <footer class="page-footer blue-grey lighten-2 ">

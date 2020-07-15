@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Events</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="icons.css">
+    <link rel="stylesheet" href="materialize.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="materialize.min.js"></script>
+    <script>
+    $(document).ready(function(){
+        $('.sidenav').sidenav();
+    });
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="materialize.min.js"></script>
+    <script src="event_script.js"></script>
+    <script src="my_events.js"></script>
+  </head>
+  <body onload="loadMyEvents(); updateLogIn()">
+      <nav>
+        <div class="nav-wrapper blue-grey lighten-4">
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
+            <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
+            <ul id="nav-mobile" class="right">
+                <li><a href="/settings.html" id="settingButton"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
+            </ul>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
+                <li><a style="color: #42a5f5;" href="/info.html">Information</a></li>
+                <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+                <li style="width: 50px; height: 60px;">&nbsp;</li>
+                <li><a style="color: #42a5f5;" href="/signup.html" class="signupButton">Sign Up</a></li>
+                <li><a style="color: #42a5f5;" class= "loginButton">Log In</a></li>
+            </ul>
+        </div>
+      </nav>
+      <ul class="sidenav" id="mobile-demo">
+        <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
+        <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+        <li><a style="color: #42a5f5;" href="/signup.html" class="signupButton">Sign Up</a></li>
+        <li><a style="color: #42a5f5;" class ="loginButton">Log In</a></li>
+      </ul>
+    <main>
+      <div class="container">
+        <div class="section">
+          <div class="row">
+            <div class="card blue-grey lighten-4" style="min-height: 500px">
+              <div class="card-content">
+                <h4 class="card-title">My Events</h4>
+                <p>Remember to RSVP to all events you plan on going to!</p>
+              </div>
+              <div class="card-tabs">
+                <ul class="tabs tabs-fixed-width">
+                  <li class="tab"><a class="active" href="#approved-events">Approved</a></li>
+                  <li class="tab"><a href="#pending-events">Pending</a></li>
+                </ul>
+              </div>
+              <div class="card-content" style="overflow-y: scroll; max-height: 70%;">
+                <div id="approved-events"></div>
+                <div id="pending-events"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="section">
+          <div id="view-requested-changes" class="modal">
+            <div id="requested-changes" class="modal-content"></div>
+          </div>
+          <div id="request-changes-container" class="modal">
+            <div id="request-changes" class="modal-content">
+              <div class="row">
+                <div class="col s12">
+                  <h5>Request Changes</h5>
+                  <form action="/approve-event" method="POST">
+                    <input id="approved" name="approved" type="text" style="display: none" disable>
+                    <input id="event-changes-id" name="event-changes-id" type="text" style="display: none" disable>
+                    <textarea class="materialize-textarea" id="changes-input" name="changes" placeholder="Changes" autocomplete="off" spellcheck="false" maxlength="500"></textarea>
+                    <button class="btn waves-effect waves-light right" type="submit">Request Changes</button>
+                  </form>
+                </div>
+              </div>  
+            </div>
+          </div>
+        </div>
+        <div class="section">
+          <div id="edit-events-form-container" class="modal">
+            <form id="edit-events-form" method="POST" class="modal-content" enctype="multipart/form-data">
+              <div class="row">
+                <div class="col s12" style="overflow-y: scroll">
+                  <h5>Edit your Event</h5>
+                  <input name="event-status" type="text" style="display: none">
+                  <input name="event-id" type="text" style="display: none">
+                  <div class="row" style="margin-bottom: 0">
+                    <div class="col s4">
+                      <input placeholder="Event Name" name="edit-name" type="text" class="validate" autocomplete="off" spellcheck="false" maxlength="15"> 
+                      <input type="text" name="edit-location" placeholder="Enter a Location" class="validate" autocomplete="off" spellcheck="false">
+                      <div class="row">
+                        <div class="col s6">
+                          <input type="text" placeholder="Event Date" class="datepicker" name="edit-date" id="edit-datepicker" style="font-color: white">
+                        </div>
+                        <div class="col s6">
+                          <input type="text" placeholder="Event Time" class="timepicker" name="edit-time" id="edit-timepicker" style="font-color: white">
+                        </div>
+                      </div>
+                      <div class="row left">
+                        <div class="col s6">
+                          <p><b>Type</b></p>
+                          <label>
+                            <input name="edit-event-type" type="radio" id="Academic" value="Academic"/>
+                            <span class="black-text">Academic</span>
+                          </label>
+                          <label>
+                            <input name="edit-event-type" type="radio" id="Social" value="Social"/>
+                            <span class="black-text">Social</span>
+                          </label>
+                        </div>
+                        <div class="col s6">
+                          <p><b>Attendance</b></p>
+                          <label>
+                            <input name="edit-event-attendance" type="radio" id="Optional" value="Optional"/>
+                            <span class="black-text">Optional</span>
+                          </label>
+                          <label>
+                            <input name="edit-event-attendance" type="radio" id="Mandatory" value="Mandatory"/>
+                            <span class="black-text">Mandatory</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col s5">
+                      <textarea class="materialize-textarea" name="edit-description" placeholder="Event Description" autocomplete="off" spellcheck="false" maxlength="500"></textarea>
+                    </div>
+                    <div class="col s3">
+                      <div class="center">
+                        <div style="height: 80px; padding: 10px;">
+                          <img id="edit-output-image" style="max-height: 100%; max-width: 100%; overflow: scroll;" src="/images/meme.png">
+                        </div>
+                        <div class="file-field input-field">
+                          <div class="btn-flat">
+                            <span>Upload Image</span>
+                            <input type="file" accept="image/*" onchange="preview_image(event)" style="max-width: 100%" id="edit-image" name="edit-image">
+                          </div>
+                          <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row right">
+                <div class="col">
+                  <input class="btn waves-effect waves-light red lighten-1" type="reset" value="CANCEL" onclick="cancelEdit()">
+                </div>
+                <div class="col">
+                  <button class="btn waves-effect waves-light" type="submit" name="action" onclick="loadPending()">POST
+                    <i class="material-icons right">send</i>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer class="page-footer blue-grey lighten-2 ">
+        <div class="footer-copyright blue-grey lighten-2">
+            <div class="container blue-grey-text text-darken-2 left">
+            © 2020 Covidiena. All Rights Reserved.
+            <a class="blue-text text-darken-1 right" href="mailto: covidiena@gmail.com">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+  </body>
+</html>
