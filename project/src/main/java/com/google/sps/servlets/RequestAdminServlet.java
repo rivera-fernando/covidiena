@@ -63,6 +63,7 @@ public class RequestAdminServlet extends HttpServlet {
         }
         else {
         String pending_email = request.getParameter("email");
+        String action = request.getParameter("action");
         Query query = new Query("RequestAdmin");
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -73,12 +74,14 @@ public class RequestAdminServlet extends HttpServlet {
                 datastore.delete(entity.getKey());
             }
         }
-        query = new Query("User");
-        results = datastore.prepare(query);
-        for (Entity entity:results.asIterable()){
-            if (entity.getProperty("email").equals(pending_email)){
-                entity.setProperty("admin", true);
-                datastore.put(entity);
+        if (action.equals("approve")) {
+            query = new Query("User");
+            results = datastore.prepare(query);
+            for (Entity entity:results.asIterable()){
+                if (entity.getProperty("email").equals(pending_email)){
+                    entity.setProperty("admin", true);
+                    datastore.put(entity);
+                }
             }
         }
         }
