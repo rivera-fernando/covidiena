@@ -65,7 +65,7 @@ public class LogInServlet extends HttpServlet {
                 if (entity.getProperty("password").equals(password) && entity.getProperty("email").equals(email)){
                     session.setAttribute("userId", (long) entity.getKey().getId());
                     session.setAttribute("name", (String) entity.getProperty("name"));  
-                    session.setAttribute("email", (String) entity.getProperty("email"));  
+                    session.setAttribute("email", ((String) entity.getProperty("email")).toLowerCase());  
                     session.setAttribute("password", (String) entity.getProperty("password"));  
                     session.setAttribute("birthdate", (String) entity.getProperty("birthdate"));  
                     session.setAttribute("studentId", (long) entity.getProperty("studentId"));  

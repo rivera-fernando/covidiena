@@ -53,6 +53,7 @@
                             <input type="password" name="password" class="validate" id="password">
                             <label for="password">Password</label>
                             <i style="color: #42a5f5;" class="material-icons prefix">edit</i>
+                            <i style="color: #42a5f5;" class="material-icons suffix" onclick="viewPassword()">remove_red_eye</i>
                         </div>
                     </div>
                     <div class="row">
@@ -109,7 +110,17 @@
                             <button onclick= "requestAdmin()" class="btn white-text" style="background-color: #42a5f5;">Request Admin Access</button>
                         </div>
                         <div class = "input-field col s12 right-align">
-                            <button onclick= "deleteUser()" class="btn red white-text">Delete My Accont</button>
+                            <a href="#warning" class="btn modal-trigger red white-text" id="deleteButton">Delete My Accont</a>
+                            <div class="modal" id="warning">
+                                <div class="modal-content center">
+                                    <h4>Warning</h4>
+                                    <p>When you delete your account, all the data assocaited with this account will also be deleted.</p>
+                                </div>
+                                <div class= "modal-footer">
+                                    <a onclick="deleteUser()" class ="btn modal-close" style="background-color: #42a5f5;">Proceed</a>
+                                    <a class ="btn modal-close" style="background-color: #42a5f5;">Cancel</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </form>

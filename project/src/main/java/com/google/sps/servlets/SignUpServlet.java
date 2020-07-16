@@ -69,27 +69,7 @@ public class SignUpServlet extends HttpServlet {
         userEntity.setProperty("admin", false);
         userEntity.setProperty("password", password);
 
-        datastore.put(userEntity);
-
-        for (Entity entity:results.asIterable()){
-            if (entity.getProperty("email").equals(email)){
-                session.setAttribute("userId", (long) entity.getKey().getId());
-                session.setAttribute("name", (String) entity.getProperty("name"));  
-                session.setAttribute("email", (String) entity.getProperty("email"));  
-                session.setAttribute("password", (String) entity.getProperty("password"));  
-                session.setAttribute("birthdate", (String) entity.getProperty("birthdate"));  
-                session.setAttribute("studentId", (long) entity.getProperty("studentId"));  
-                session.setAttribute("sex", (String) entity.getProperty("sex"));
-                session.setAttribute("school", (String) entity.getProperty("school"));
-                session.setAttribute("phone", (String) entity.getProperty("phone"));
-                session.setAttribute("metric", (String) entity.getProperty("metric")); 
-                session.setAttribute("admin", (boolean) entity.getProperty("admin"));  
-
-                EmailSender.sendEmail(email);
-                response.sendRedirect("/dashboard");
-                return;
-            }
-        }   
+        datastore.put(userEntity);  
 
         response.sendRedirect("/login.html");
     }

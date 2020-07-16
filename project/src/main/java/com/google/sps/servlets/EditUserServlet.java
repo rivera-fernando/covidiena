@@ -67,11 +67,6 @@ public class EditUserServlet extends HttpServlet {
         } else {
             user.setProperty("name", oldInfo.getName());
         }
-        
-        for(int i=0; i<request.getParameterValues("metric").length; i++){
-            System.out.println(request.getParameterValues("metric")[i]);
-        }
-
 
         if (request.getParameter("metric")!= null){
             if (request.getParameter("metric").equals("celsius")){
