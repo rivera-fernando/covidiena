@@ -49,7 +49,7 @@ public class LogInServlet extends HttpServlet {
           session.removeAttribute("school");
           session.removeAttribute("phone");
           session.removeAttribute("metric"); 
-          session.removeAttribute("admin");    
+          session.removeAttribute("is_admin");    
 
           response.sendRedirect("/index.html");
           return;

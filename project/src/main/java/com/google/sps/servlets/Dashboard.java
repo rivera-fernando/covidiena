@@ -57,7 +57,7 @@ public class Dashboard extends HttpServlet {
     if (!found) {
       response.sendRedirect("/login.html");
     } else {
-      boolean isAdmin = (boolean) session.getAttribute("admin");
+      boolean isAdmin = (boolean) session.getAttribute("is_admin");
       if (isAdmin) {
         response.sendRedirect("/admin_dash.html");
       } else {
