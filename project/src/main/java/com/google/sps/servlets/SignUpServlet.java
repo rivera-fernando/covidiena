@@ -1,12 +1,5 @@
 package com.google.sps.servlets;
 
-import com.google.appengine.api.blobstore.BlobInfo;
-import com.google.appengine.api.blobstore.BlobInfoFactory;
-import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
-import com.google.appengine.api.images.ImagesService;
-import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -14,8 +7,6 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.sps.classes.User;
 import com.google.sps.classes.PasswordHash;
@@ -33,6 +24,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 
 /*creates a user entity in datastore with user information so they can update it whenever they log in*/
 @WebServlet("/user")
@@ -42,6 +35,7 @@ public class SignUpServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession();  
         String name = request.getParameter("fname") + " " + request.getParameter("lname");
         String email = request.getParameter("email").toLowerCase();
         String birthdate = request.getParameter("birthdate");
@@ -77,20 +71,26 @@ public class SignUpServlet extends HttpServlet {
 
         datastore.put(userEntity);
 
-        user = new User(userEntity.getKey().getId(), name, email, password, birthdate, studentId, sex, school, phone, "fahrenheit", false);
-        Gson gson = new Gson();
-        response.setContentType("application/json;");
-        response.getWriter().println(gson.toJson(user));
+        for (Entity entity:results.asIterable()){
+            if (entity.getProperty("email").equals(email)){
+                session.setAttribute("userId", (long) entity.getKey().getId());
+                session.setAttribute("name", (String) entity.getProperty("name"));  
+                session.setAttribute("email", (String) entity.getProperty("email"));  
+                session.setAttribute("password", (String) entity.getProperty("password"));  
+                session.setAttribute("birthdate", (String) entity.getProperty("birthdate"));  
+                session.setAttribute("studentId", (long) entity.getProperty("studentId"));  
+                session.setAttribute("sex", (String) entity.getProperty("sex"));
+                session.setAttribute("school", (String) entity.getProperty("school"));
+                session.setAttribute("phone", (String) entity.getProperty("phone"));
+                session.setAttribute("metric", (String) entity.getProperty("metric")); 
+                session.setAttribute("admin", (boolean) entity.getProperty("admin"));  
 
-        EmailSender.sendEmail(email);
+                EmailSender.sendEmail(email);
+                response.sendRedirect("/dashboard");
+                return;
+            }
+        }   
 
         response.sendRedirect("/login.html");
-    }
-
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        Gson gson = new Gson();
-        response.setContentType("application/json;");
-        response.getWriter().println(gson.toJson(user));
     }
 }

@@ -25,26 +25,31 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+import javax.servlet.http.HttpSession;
+
 
 /*user requests admin access which creates a new entity pending approval*/
 @WebServlet("/request-admin")
 public class RequestAdminServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-
+        Boolean found = Boolean.parseBoolean(request.getParameter("found"));
+        HttpSession session = request.getSession(false);
         Query query = new Query("RequestAdmin");
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
-        ArrayList<String> users = new ArrayList<String>();
         for (Entity entity:results.asIterable()){
-            if (entity.getProperty("email").equals(email)){
+            if (entity.getProperty("email").equals(session.getAttribute("email"))){
                 return;
             }
         }
 
+        String name = (String)session.getAttribute("name");
+        String email = (String)session.getAttribute("email");
+        
         Entity requestAdminEntity = new Entity("RequestAdmin");
         requestAdminEntity.setProperty("name", name);
         requestAdminEntity.setProperty("email", email);
