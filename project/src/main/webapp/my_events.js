@@ -16,6 +16,8 @@
  * ################# INITIALIZERS #################
  */
 
+var user = null;
+
 $(document).ready(function(){
   $('.tabs').tabs();
 });
@@ -42,9 +44,11 @@ document.addEventListener('DOMContentLoaded', function() {
  * ################# LOADERS #################
  */
 
-function loadMyEvents() {
+async function loadMyEvents() {
+  await loadUser();
   loadPending();
   loadApproved();
+  loadUpdates();
   fetchBlobstoreUrlAndShowForm();
 }
 
@@ -58,11 +62,7 @@ function loadPending() {
     // Right now this if statement won't work for admins
     if (Object.keys(events).length == 0) {
       pendingEvents.innerText = "You have no pending events";
-    } else if (events[0].name === "Admin") {
-      delete events[0];
-      if (Object.keys(events).length == 0) {
-        pendingEvents.innerText = "You have no pending events";
-      }
+    } else if (user.admin == true) {
       events.forEach((event) => {
         var eventElement = createEventElement(event);
         addApprovalBtn(eventElement);
@@ -89,7 +89,7 @@ function loadApproved() {
     approvedEvents.innerHTML = '';
     // Right now this if statement won't work for admins
     if (Object.keys(events).length == 0) {
-      approvedEvents.innerText = "You have no pending events";
+      approvedEvents.innerText = "You have no approved events";
     } else {
       events.forEach((event) => {
         var eventElement = createEventElement(event);
@@ -126,6 +126,38 @@ function loadEditForm(event) {
   entityType.value = event.entityType;
   const entityId = document.getElementsByName("event-id")[0];
   entityId.value = event.id;
+}
+
+async function loadUser() {
+  await fetch('/login').then(response => response.json()).then((users) => {
+    user = users[0]; 
+    var helloMsg = document.getElementById("helloMsg");
+    helloMsg.innerText = user.name + "'s Events";
+  });
+}
+
+function loadUpdates() {
+  const url = "/load-event-updates";
+  fetch(url, {
+    method: 'GET'
+  }).then(response => response.json()).then((updates) => {
+    var approvalUpdates = document.getElementById("approval-updates");
+    var changesUpdates = document.getElementById("changes-updates");
+
+    if (Object.keys(updates).length == 0) {
+      approvalUpdates.innerText = "You have no updates";
+      changesUpdates.innerText = "You have no updates";
+    } else {
+      updates.forEach(update => {
+        createUpdateElement(update);
+      });
+    }
+    if (!approvalUpdates.hasChildNodes()) {
+      approvalUpdates.innerText = "You have no updates";
+    } else if (!changesUpdates.hasChildNodes()) {
+      changesUpdates.innerText = "You have no updates";
+    }
+  });
 }
 
 /*
@@ -227,7 +259,14 @@ function createEventElement(event) {
     changes.onclick = function() {
       const viewChanges = document.getElementById("requested-changes");
       viewChanges.innerHTML = '<h5>' + event.name + '</h5><p>Changes requested by: ' 
-        + event.adminEmail + '</p><p>' + event.changes + '</p>';
+        + event.adminEmail + '</p>';
+      var index = 1;
+      event.changes.forEach(change => {
+        var requestedChange = document.createElement('p');
+        requestedChange.innerText = "Change #" + index + ": " + change;
+        viewChanges.appendChild(requestedChange);
+        index++;
+      })
     }
     rejected.innerHTML = "Rejected - ";
     rejected.appendChild(changes);
@@ -266,6 +305,39 @@ function createEventElement(event) {
   return eventElement;
 }
 
+function createUpdateElement(update) {
+  const updateElement = document.createElement('div');
+  const name = document.createElement('h6');
+  name.style.fontWeight = "bold";
+  name.innerText = update.name;
+  const adminEmail = document.createElement('span');
+  adminEmail.innerHTML = "<b>Change requested by: </b>" + update.adminEmail;
+  const changeRequested = document.createElement('p');
+  changeRequested.innerHTML = "<b>Description: </b>" + update.changeRequested;
+
+  updateElement.appendChild(name);
+  updateElement.appendChild(adminEmail);
+  updateElement.appendChild(changeRequested);
+  
+  if (update.isRejected) {
+    const changesUpdates = document.getElementById("changes-updates");
+    changesUpdates.appendChild(updateElement);
+    if (!$(updateElement).is(':last-child')) {
+      const divider = document.createElement('div');
+      divider.classList.add('divider');
+      changesUpdates.appendChild(divider);
+    }
+  } else {
+    const approvalUpdates = document.getElementById("approval-updates");
+    approvalUpdates.appendChild(updateElement);
+    if (!$(updateElement).is(':last-child')) {
+      const divider = document.createElement('div');
+      divider.classList.add('divider');
+      approvalUpdates.appendChild(divider);
+    }
+  }
+}
+
 /*
  * ################# BUTTONS #################
  */
@@ -302,7 +374,7 @@ function addRejectionBtn(eventElement) {
  
   rejectionBtn.addEventListener('click', async () => {
     var changesContainerInput = document.getElementById('changes-input');
-    changesContainerInput.value = '';
+    //changesContainerInput.value = '';
     var approved = document.getElementById('approved');
     approved.value = false;
     var eventId = document.getElementById('event-changes-id');

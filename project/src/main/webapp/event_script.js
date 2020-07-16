@@ -90,12 +90,22 @@ function loadExplore(week, filter, type, attendance) {
     const tableBody = document.getElementById("explore-body");
     tableBody.innerHTML = '';
     var isFull = 0;
+    const today = (new Date()).getDay();
+    var dayIndex = -1;
     // Load dates
     week.forEach((day) => {
       const date = document.getElementById(day.name+"-date");
       const theDay = day.date.slice(0,2);
       const rest = day.date.slice(2, day.date.length);
-      date.innerHTML = "<span style=\"font-size: 20px;\">"+theDay+"</span>"+"<br>"+"<span>"+rest+"</span>";
+      if (today == dayIndex && currWeek == 0) {
+        date.innerHTML = 
+          "<span style=\"font-size: 20px; border-radius: 50%; background-color: black; color: white; padding: 5px\">"
+          + theDay + "</span>" + "<br>" + "<span>" + rest + "</span>";
+      } else {
+        date.innerHTML = "<span style=\"font-size: 20px;\">"
+          + theDay + "</span>" + "<br>" + "<span>" + rest + "</span>";
+      }
+      dayIndex++;
     });
     // While the week is not empty
     while (week[0].events.length != 0 || week[1].events.length != 0 || week[2].events.length != 0
@@ -223,7 +233,7 @@ function createSearchEvent(event) {
     preview.appendChild(previewElem);
     loadDropdowns();
   }
-  seeMore.classList.add('cyan-text', 'text-accent-1')
+  seeMore.classList.add('blue-text', 'text-darken-3')
   var triggers = document.querySelectorAll('.modal');
   var instances = M.Modal.init(triggers, {});
   seeMore.innerText = 'See More';
@@ -309,7 +319,7 @@ function createEventPreview(event) {
   attendance.innerHTML = "<b>" + event.attendance + "</b>";
   type.innerHTML = "<b>" + event.type + "</b>";
   seeMore.innerHTML = "<b>See More</b>";
-  seeMore.classList.add('cyan-text', 'text-accent-1')
+  seeMore.classList.add('cyan-text', 'text-accent-1');
  
   container.appendChild(name);
   container.appendChild(date);

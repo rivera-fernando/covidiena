@@ -48,7 +48,7 @@
           <div class="row">
             <div class="card blue-grey lighten-4" style="min-height: 500px">
               <div class="card-content">
-                <h4 class="card-title">My Events</h4>
+                <h4 id="helloMsg" class="card-title"></h4>
                 <p>Remember to RSVP to all events you plan on going to!</p>
               </div>
               <div class="card-tabs">
@@ -60,6 +60,26 @@
               <div class="card-content" style="overflow-y: scroll; max-height: 70%;">
                 <div id="approved-events"></div>
                 <div id="pending-events"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="row">
+            <div class="card medium blue-grey darken-1 left" style="width: 50%">
+              <div class="card-content white-text">
+                <h4 class="card-title center">Updates</h4>
+                <p class="center">Updates on all your owned events.</p>
+              <div class="card-tabs">
+                <ul class="tabs tabs-fixed-width tabs-transparent">
+                  <li class="tab" style="width: 50%"><a class="active" href="#approval-updates">Approvals</a></li>
+                  <li class="tab" style="width: 50%"><a href="#changes-updates">Changes</a></li>
+                </ul>
+              </div>
+              <div class="card-content" style="overflow-y: scroll;">
+                <div id="approval-updates"></div>
+                <div id="changes-updates"></div>
+              </div>
               </div>
             </div>
           </div>

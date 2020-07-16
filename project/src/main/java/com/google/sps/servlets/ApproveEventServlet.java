@@ -41,6 +41,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import com.google.sps.classes.EventUpdate;
+
 
 /** Servlet that loads upcoming events*/
 @WebServlet("/approve-event")
@@ -84,21 +86,52 @@ public class ApproveEventServlet extends HttpServlet {
       approvedEventEntity.setProperty("attendees", attendees);
  
       datastore.put(approvedEventEntity);
+
+      // Handle event update
+      Entity updateEntity = new Entity("EventUpdate");
+      updateEntity.setProperty("id", requestId);
+      updateEntity.setProperty("name", unapprovedEvent.getProperty("name"));
+      updateEntity.setProperty("owner", unapprovedEvent.getProperty("email"));
+      updateEntity.setProperty("adminEmail", session.getAttribute("email"));
+      updateEntity.setProperty("isRejected", false);
+      updateEntity.setProperty("changeRequested", null);
+
+      datastore.put(updateEntity);
+
       response.sendRedirect("/events.html");
       } catch(EntityNotFoundException e) {
         return;
       }
     } else {
       try {
-
-        String changes = request.getParameter("changes");
-
         Entity unapprovedEvent = datastore.get(eventKey);
+
+        String requestedChange = request.getParameter("changes");
+
+        @SuppressWarnings("unchecked") // Cast can't verify generic type.
+        Collection<String> changes = (Collection<String>) unapprovedEvent.getProperty("changes");
+        if (changes == null) {
+          changes = new ArrayList<String>();
+        }
+        changes.add(requestedChange);
+
         unapprovedEvent.setProperty("rejected", true);
         unapprovedEvent.setProperty("changes", changes);
         unapprovedEvent.setProperty("edited", false);
         unapprovedEvent.setProperty("admin-email", ((String) session.getAttribute("email")).toLowerCase());
+
         datastore.put(unapprovedEvent);  
+
+        Entity updateEntity = new Entity("EventUpdate");
+        updateEntity.setProperty("id", requestId);
+        updateEntity.setProperty("name", unapprovedEvent.getProperty("name"));
+        updateEntity.setProperty("owner", unapprovedEvent.getProperty("email"));
+        updateEntity.setProperty("adminEmail", session.getAttribute("email"));
+        updateEntity.setProperty("isRejected", true);
+        updateEntity.setProperty("changeRequested", requestedChange);
+
+        datastore.put(updateEntity);
+
         response.sendRedirect("/events.html"); 
       } catch(EntityNotFoundException e) {
         return;

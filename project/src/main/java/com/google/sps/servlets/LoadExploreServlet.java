@@ -61,8 +61,8 @@ public class LoadExploreServlet extends HttpServlet {
 
     List<Entity> resultsList = new ArrayList<>();
 
-    resultsList.addAll(approvedResultsList);
     resultsList.addAll(pastResultsList);
+    resultsList.addAll(approvedResultsList);
 
     int numWeeks = Integer.parseInt(request.getParameter("week"));
     long firstDayOfWeek = getFirstDayOfWeek();
@@ -156,7 +156,7 @@ public class LoadExploreServlet extends HttpServlet {
         int day = calendar.get(Calendar.DAY_OF_WEEK);
         Event event = new Event(id, name, location, date, time, description, type, attendance, 
           timestamp, entity.getProperty("email").equals(email), "ApprovedEvent", imageKey, 
-          day, attendees.size(), capacity, false, "", "", edited, category);
+          day, attendees.size(), capacity, false, new ArrayList<String>(), "", edited, category);
         
         if (day == 1) {
             sundayEvents.add(event);

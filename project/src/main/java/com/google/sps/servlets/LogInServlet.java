@@ -32,83 +32,95 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/login")
 public class LogInServlet extends HttpServlet {
 
-    public User user = null;
+  public User user = null;
 
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session=request.getSession();  
-        Gson gson = new Gson();
-        response.setContentType("application/json");
-        // First if handles log out
-        if (request.getParameter("logout") != null ) {
-          session.removeAttribute("name");  
-          session.removeAttribute("email");  
-          session.removeAttribute("password");  
-          session.removeAttribute("birthdate");  
-          session.removeAttribute("studentId");  
-          session.removeAttribute("sex");
-          session.removeAttribute("school");
-          session.removeAttribute("phone");
-          session.removeAttribute("metric"); 
-          session.removeAttribute("admin");    
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      HttpSession session = request.getSession();  
+      Gson gson = new Gson();
+      response.setContentType("application/json");
+      // First if handles log out
+      if (request.getParameter("logout") != null ) {
+        session.removeAttribute("name");  
+        session.removeAttribute("email");  
+        session.removeAttribute("password");  
+        session.removeAttribute("birthdate");  
+        session.removeAttribute("studentId");  
+        session.removeAttribute("sex");
+        session.removeAttribute("school");
+        session.removeAttribute("phone");
+        session.removeAttribute("metric"); 
+        session.removeAttribute("admin");    
 
-          response.sendRedirect("/index.html");
-          return;
-        } else {
-            String password = PasswordHash.hashPassword(request.getParameter("password").toCharArray());
-            String email = request.getParameter("email").toLowerCase();
-            Query query = new Query("User");
+        response.sendRedirect("/index.html");
+        return;
+      } else {
+          String password = PasswordHash.hashPassword(request.getParameter("password").toCharArray());
+          String email = request.getParameter("email").toLowerCase();
+          Query query = new Query("User");
 
-            DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-            PreparedQuery results = datastore.prepare(query);
-            ArrayList<String> users = new ArrayList<String>();
-            for (Entity entity:results.asIterable()){
-                if (entity.getProperty("password").equals(password) && entity.getProperty("email").equals(email)){
-                    user = new User(
-                        (long) entity.getKey().getId(),
-                        (String) entity.getProperty("name"),
-                        (String) entity.getProperty("email"),
-                        (String) entity.getProperty("password"),
-                        (String) entity.getProperty("birthdate"),
-                        (long) entity.getProperty("studentId"),
-                        (String) entity.getProperty("sex"),
-                        (String) entity.getProperty("school"),
-                        (String) entity.getProperty("phone"),
-                        (String) entity.getProperty("metric"), 
-                        (Boolean) entity.getProperty("admin")
-                    );
-                    session.setAttribute("userId", user.getUserId());
-                    session.setAttribute("name", user.getName());  
-                    session.setAttribute("email", user.getEmail());  
-                    session.setAttribute("password", user.getPassword());  
-                    session.setAttribute("birthdate", user.getBirthdate());  
-                    session.setAttribute("studentId", user.getStudentId());  
-                    session.setAttribute("sex", user.getSex());
-                    session.setAttribute("school", user.getSchool());
-                    session.setAttribute("phone", user.getPhone());
-                    session.setAttribute("metric", user.getMetric()); 
-                    session.setAttribute("admin", user.getAdmin());        
+          DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+          PreparedQuery results = datastore.prepare(query);
+          ArrayList<String> users = new ArrayList<String>();
+          for (Entity entity:results.asIterable()){
+              if (entity.getProperty("password").equals(password) && entity.getProperty("email").equals(email)){
+                  user = new User(
+                      (long) entity.getKey().getId(),
+                      (String) entity.getProperty("name"),
+                      (String) entity.getProperty("email"),
+                      (String) entity.getProperty("password"),
+                      (String) entity.getProperty("birthdate"),
+                      (long) entity.getProperty("studentId"),
+                      (String) entity.getProperty("sex"),
+                      (String) entity.getProperty("school"),
+                      (String) entity.getProperty("phone"),
+                      (String) entity.getProperty("metric"), 
+                      (Boolean) entity.getProperty("admin")
+                  );
+                  session.setAttribute("userId", user.getUserId());
+                  session.setAttribute("name", user.getName());  
+                  session.setAttribute("email", user.getEmail());  
+                  session.setAttribute("password", user.getPassword());  
+                  session.setAttribute("birthdate", user.getBirthdate());  
+                  session.setAttribute("studentId", user.getStudentId());  
+                  session.setAttribute("sex", user.getSex());
+                  session.setAttribute("school", user.getSchool());
+                  session.setAttribute("phone", user.getPhone());
+                  session.setAttribute("metric", user.getMetric()); 
+                  session.setAttribute("admin", user.getAdmin());        
 
-                    response.sendRedirect("/dashboard");
-                    return;
-                }
-            }   
-            response.sendRedirect("/login.html");
-        }
+                  response.sendRedirect("/dashboard");
+                  return;
+              }
+          }   
+          response.sendRedirect("/login.html");
+      }
+  }
+
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    HttpSession session = request.getSession(false);
+    List<User> users = new ArrayList<User>();
+
+    if (session.getAttribute("name") != null) {
+      long id = (long) session.getAttribute("userId");
+      String name = (String) session.getAttribute("name");
+      String email = (String) session.getAttribute("email");
+      String password = (String) session.getAttribute("password");
+      String birthdate = (String) session.getAttribute("birthdate");
+      long studentId = (long) session.getAttribute("studentId");
+      String sex = (String) session.getAttribute("sex");
+      String school = (String) session.getAttribute("school");
+      String phone = (String) session.getAttribute("phone");
+      String metric = (String) session.getAttribute("metric");
+      boolean admin = (boolean) session.getAttribute("admin");
+      user = new User(id, name, email, password, birthdate, studentId, sex, school, phone, metric, admin);
     }
 
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        Gson gson = new Gson();
-        HttpSession session = request.getSession(false);
-        boolean found = false;
-        if (session.getAttribute("name") != null) {
-          found = true;
-        }
-        List<Boolean> log = new ArrayList<Boolean>();
-        log.add(found);
+    Gson gson = new Gson();
+    response.setContentType("application/json");
 
-        response.setContentType("application/loggedIn");
-        response.getWriter().println(log);
-    }
+    users.add(user);
+    response.getWriter().println(gson.toJson(users));
+  }
 }

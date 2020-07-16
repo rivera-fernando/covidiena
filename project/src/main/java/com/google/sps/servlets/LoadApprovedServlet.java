@@ -48,7 +48,6 @@ public class LoadApprovedServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query approvedQuery = new Query("ApprovedEvent");
-    Query unapprovedQuery = new Query("UnapprovedEvent");
     Query pastQuery = new Query("PastEvent");
 
     HttpSession session = request.getSession(false);
@@ -63,18 +62,15 @@ public class LoadApprovedServlet extends HttpServlet {
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
       PreparedQuery approvedResults = datastore.prepare(approvedQuery);
-      PreparedQuery unapprovedResults = datastore.prepare(unapprovedQuery);
       PreparedQuery pastResults = datastore.prepare(pastQuery);
 
       List<Entity> approvedResultsList = approvedResults.asList(FetchOptions.Builder.withDefaults());
-      List<Entity> unapprovedResultsList = unapprovedResults.asList(FetchOptions.Builder.withDefaults());
       List<Entity> pastResultsList = pastResults.asList(FetchOptions.Builder.withDefaults());
 
       List<Entity> resultsList = new ArrayList<>();
 
-      resultsList.addAll(approvedResultsList);
-      resultsList.addAll(unapprovedResultsList);
       resultsList.addAll(pastResultsList);
+      resultsList.addAll(approvedResultsList);
 
       List<Event> events = new ArrayList<>();
  
@@ -109,7 +105,7 @@ public class LoadApprovedServlet extends HttpServlet {
             
             Event event = new Event(id, name, location, date, time, description, type, 
                 attendance, timestamp, entity.getProperty("email").equals(email), "ApprovedEvent", 
-                imageKey, day, attendees.size(), capacity, false, "", "", edited, "Approved");
+                imageKey, day, attendees.size(), capacity, false, new ArrayList<String>(), "", edited, "Approved");
 
             events.add(event);
           }
