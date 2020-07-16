@@ -25,7 +25,7 @@ import com.google.gson.Gson;
 public class EditUserServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        HttpSession session=request.getSession(false);  
+        HttpSession session = request.getSession(false);  
         Query query = new Query("User");
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         PreparedQuery results = datastore.prepare(query);
