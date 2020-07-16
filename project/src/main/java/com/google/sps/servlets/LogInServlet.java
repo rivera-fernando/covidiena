@@ -73,7 +73,7 @@ public class LogInServlet extends HttpServlet {
                     session.setAttribute("school", (String) entity.getProperty("school"));
                     session.setAttribute("phone", (String) entity.getProperty("phone"));
                     session.setAttribute("metric", (String) entity.getProperty("metric")); 
-                    session.setAttribute("admin", (boolean) entity.getProperty("admin"));        
+                    session.setAttribute("is_admin", (boolean) entity.getProperty("admin"));        
 
                     response.sendRedirect("/dashboard");
                     return;

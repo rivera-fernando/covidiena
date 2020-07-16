@@ -38,7 +38,7 @@ public class DeleteUserServlet extends HttpServlet {
             session.removeAttribute("school");
             session.removeAttribute("phone");
             session.removeAttribute("metric"); 
-            session.removeAttribute("admin");
+            session.removeAttribute("is_admin");
         }
         response.sendRedirect("/login.html");
 
