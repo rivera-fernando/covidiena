@@ -50,7 +50,7 @@ public class LogInServlet extends HttpServlet {
           session.removeAttribute("school");
           session.removeAttribute("phone");
           session.removeAttribute("metric"); 
-          session.removeAttribute("admin");    
+          session.removeAttribute("is_admin");    
 
           response.sendRedirect("/index.html");
           return;
@@ -87,7 +87,7 @@ public class LogInServlet extends HttpServlet {
                     session.setAttribute("school", user.getSchool());
                     session.setAttribute("phone", user.getPhone());
                     session.setAttribute("metric", user.getMetric()); 
-                    session.setAttribute("admin", user.getAdmin());        
+                    session.setAttribute("is_admin", user.getAdmin());        
 
                     response.sendRedirect("/dashboard");
                     return;

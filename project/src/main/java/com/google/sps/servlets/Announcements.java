@@ -48,7 +48,7 @@ public class Announcements extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
       HttpSession session = request.getSession(false); 
-      boolean isAdmin = (boolean) session.getAttribute("admin");
+      boolean isAdmin = (boolean) session.getAttribute("is_admin");
       String name = (String) session.getAttribute("name"); 
       String school = (String) session.getAttribute("school");
       String title = request.getParameter("title");

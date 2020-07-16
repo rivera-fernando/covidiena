@@ -107,7 +107,7 @@ public class dataAnalytics extends HttpServlet {
             pair.add(99);
             data.add(pair);
       }
-      if ((boolean) session.getAttribute("admin")) {
+      if ((boolean) session.getAttribute("is_admin")) {
           response.setContentType("application/json;");
           response.getWriter().println(gson.toJson(data));
       }
