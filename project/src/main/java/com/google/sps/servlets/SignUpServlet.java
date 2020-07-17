@@ -25,6 +25,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.blobstore.BlobInfo;
+import com.google.appengine.api.blobstore.BlobInfoFactory;
+
 
 
 /*creates a user entity in datastore with user information so they can update it whenever they log in*/
@@ -44,6 +50,7 @@ public class SignUpServlet extends HttpServlet {
         String school = request.getParameter("school");
         String phone = request.getParameter("phone");
         String password = PasswordHash.hashPassword(request.getParameter("password").toCharArray());
+        String imageKey = getUploadedFileUrl(request, "image");
 
         Query query = new Query("User");
 
@@ -68,9 +75,31 @@ public class SignUpServlet extends HttpServlet {
         userEntity.setProperty("metric", "fahrenheit");
         userEntity.setProperty("admin", false);
         userEntity.setProperty("password", password);
+        userEntity.setProperty("imageKey", imageKey);
 
         datastore.put(userEntity);  
 
         response.sendRedirect("/login.html");
     }
+
+
+    private String getUploadedFileUrl(HttpServletRequest request, String formInputElementName) {
+    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+    Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
+    List<BlobKey> blobKeys = blobs.get(formInputElementName);
+ 
+    if (blobKeys == null || blobKeys.isEmpty()) {
+      return null;
+    }
+ 
+    BlobKey blobKey = blobKeys.get(0);
+ 
+    BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
+    if (blobInfo.getSize() == 0) {
+      blobstoreService.delete(blobKey);
+      return null;
+    } else {
+      return blobKey.getKeyString();
+    }
+  }
 }

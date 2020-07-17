@@ -17,8 +17,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.google.gson.Gson;
-
-
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.blobstore.BlobInfo;
+import com.google.appengine.api.blobstore.BlobInfoFactory;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Map;
 
 /*gets the user's userId and edits their entity in the datastore and then redirects them to login again*/
 @WebServlet("/edit-user")
@@ -47,7 +58,8 @@ public class EditUserServlet extends HttpServlet {
                     (String)entity.getProperty("school"),
                     (String)entity.getProperty("phone"),
                     (String)entity.getProperty("metric"),
-                    (boolean) entity.getProperty("admin"));
+                    (boolean) entity.getProperty("admin"),
+                    (String) entity.getProperty("imageKey"));
                 break;
             }
         }
@@ -89,6 +101,13 @@ public class EditUserServlet extends HttpServlet {
         } else {
             user.setProperty("password", oldInfo.getPassword());
         }
+        System.out.println(request.getParameter("edit-image"));
+        if(request.getParameter("edit-image") != null){
+            user.setProperty("imageKey", getUploadedFileUrl(request, "edit-image"));
+            session.setAttribute("imageKey", getUploadedFileUrl(request, "edit-image"));
+        }else{
+            user.setProperty("imageKey", oldInfo.getImageKey());
+        }
     
         user.setProperty("birthdate", oldInfo.getBirthdate());
         user.setProperty("studentId", oldInfo.getStudentId());
@@ -118,10 +137,30 @@ public class EditUserServlet extends HttpServlet {
             (String) session.getAttribute("school"),
             (String) session.getAttribute("phone"),
             (String) session.getAttribute("metric"),
-            (boolean) session.getAttribute("admin"));  
+            (boolean) session.getAttribute("admin"),
+            (String) session.getAttribute("imageKey"));
 
         response.getWriter().println(gson.toJson(user));
 
-
     }
+
+    private String getUploadedFileUrl(HttpServletRequest request, String formInputElementName) {
+    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+    Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
+    List<BlobKey> blobKeys = blobs.get(formInputElementName);
+ 
+    if (blobKeys == null || blobKeys.isEmpty()) {
+      return null;
+    }
+ 
+    BlobKey blobKey = blobKeys.get(0);
+ 
+    BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
+    if (blobInfo.getSize() == 0) {
+      blobstoreService.delete(blobKey);
+      return null;
+    } else {
+      return blobKey.getKeyString();
+    }
+  }
 }

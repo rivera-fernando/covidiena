@@ -14,13 +14,13 @@
         });
         </script>
     </head>
-    <body onload ="populateUser();updateLogIn();">
+    <body onload ="populateUser();updateLogIn();fetchBlobstoreUrl();">
         <nav>
             <div class="nav-wrapper blue-grey lighten-4">
                 <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
                 <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
                 <ul id="nav-mobile" class="right">
-                    <li><a href="/settings.html" id="settingButton"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
+                    <li><a href="/settings.html" id="settingButton"><img class = "profilePic"></a></li>
                 </ul>
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
                     <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
@@ -40,8 +40,18 @@
         <main>
             <div class="container">
                 <h3>Profile</h3>
-                <form action="/edit-user" method="POST" form class="my-form">
+                <form action="/edit-user" method="POST" form id="edit-user-form" enctype="multipart/form-data">
                     <input name="userEmail" id="userEmail" value="" type ="hidden">
+                    <div class="row">
+                        <div class = "file-field input-field col s12 l12 center">
+                            <img id="edit-output-image" style="max-height: 100%; max-width: 100%; overflow: scroll;">
+                            <!-- <i style="color: #42a5f5;" class="material-icons halfway-fab">edit</i> -->
+                            <input type="file" accept="image/*" onchange="preview_image(event)" name="edit-image">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text" id="edit-image" name="edit-image" hidden>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="input-field col s12 l12">
                             <input type="text" name="name" id= "name" placeholder="name">
@@ -110,7 +120,7 @@
                             <button onclick= "requestAdmin()" class="btn white-text" style="background-color: #42a5f5;" id="requestAdminButton">Request Admin Access</button>
                         </div>
                         <div class = "input-field col s12 right-align">
-                            <a href="#warning" class="btn modal-trigger red white-text" id="deleteButton">Delete My Accont</a>
+                            <a href="#warning" class="btn modal-trigger red lighten-1 white-text" id="deleteButton">Delete My Accont</a>
                             <div class="modal" id="warning">
                                 <div class="modal-content center">
                                     <h4>Warning</h4>
