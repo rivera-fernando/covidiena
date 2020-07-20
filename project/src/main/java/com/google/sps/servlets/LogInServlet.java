@@ -32,7 +32,7 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/login")
 public class LogInServlet extends HttpServlet {
 
-    public User user = null;
+  public User user = null;
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -52,12 +52,12 @@ public class LogInServlet extends HttpServlet {
           session.removeAttribute("metric"); 
           session.removeAttribute("is_admin");    
 
-          response.sendRedirect("/index.html");
-          return;
-        } else {
-            String password = PasswordHash.hashPassword(request.getParameter("password").toCharArray());
-            String email = request.getParameter("email").toLowerCase();
-            Query query = new Query("User");
+        response.sendRedirect("/index.html");
+        return;
+      } else {
+          String password = PasswordHash.hashPassword(request.getParameter("password").toCharArray());
+          String email = request.getParameter("email").toLowerCase();
+          Query query = new Query("User");
 
             DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
             PreparedQuery results = datastore.prepare(query);
@@ -89,26 +89,38 @@ public class LogInServlet extends HttpServlet {
                     session.setAttribute("metric", user.getMetric()); 
                     session.setAttribute("is_admin", user.getAdmin());        
 
-                    response.sendRedirect("/dashboard");
-                    return;
-                }
-            }   
-            response.sendRedirect("/login.html");
-        }
+                  response.sendRedirect("/dashboard");
+                  return;
+              }
+          }   
+          response.sendRedirect("/login.html");
+      }
+  }
+
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    HttpSession session = request.getSession(false);
+    List<User> users = new ArrayList<User>();
+
+    if (session.getAttribute("name") != null) {
+      long id = (long) session.getAttribute("userId");
+      String name = (String) session.getAttribute("name");
+      String email = (String) session.getAttribute("email");
+      String password = (String) session.getAttribute("password");
+      String birthdate = (String) session.getAttribute("birthdate");
+      long studentId = (long) session.getAttribute("studentId");
+      String sex = (String) session.getAttribute("sex");
+      String school = (String) session.getAttribute("school");
+      String phone = (String) session.getAttribute("phone");
+      String metric = (String) session.getAttribute("metric");
+      boolean admin = (boolean) session.getAttribute("admin");
+      user = new User(id, name, email, password, birthdate, studentId, sex, school, phone, metric, admin);
     }
 
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        Gson gson = new Gson();
-        HttpSession session = request.getSession(false);
-        boolean found = false;
-        if (session.getAttribute("name") != null) {
-          found = true;
-        }
-        List<Boolean> log = new ArrayList<Boolean>();
-        log.add(found);
+    Gson gson = new Gson();
+    response.setContentType("application/json");
 
-        response.setContentType("application/loggedIn");
-        response.getWriter().println(log);
-    }
+    users.add(user);
+    response.getWriter().println(gson.toJson(users));
+  }
 }

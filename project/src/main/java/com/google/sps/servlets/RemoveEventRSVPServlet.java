@@ -35,11 +35,9 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.google.sps.classes.User;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 
 /** Servlet that allows user to remove an RSVP to an event*/
 @WebServlet("/remove-event-rsvp")
@@ -49,7 +47,6 @@ public class RemoveEventRSVPServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    UserService userService = UserServiceFactory.getUserService();
 
     //Find the appropriate event using a key
     long requestId = Long.parseLong(request.getParameter("id"));
@@ -58,7 +55,8 @@ public class RemoveEventRSVPServlet extends HttpServlet {
     try { 
       Entity approvedEvent = datastore.get(eventKey);
 
-      String email = userService.getCurrentUser().getEmail().toLowerCase();
+      HttpSession session = request.getSession(false);
+      String email = ((String) session.getAttribute("email")).toLowerCase();
       
       @SuppressWarnings("unchecked") // Cast can't verify generic type.
       Collection<String> attendees = (Collection<String>) approvedEvent.getProperty("attendees");
