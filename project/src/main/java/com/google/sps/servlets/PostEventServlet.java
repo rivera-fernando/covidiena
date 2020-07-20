@@ -80,7 +80,7 @@ public class PostEventServlet extends HttpServlet {
     List<String> changes = new ArrayList<String>();
  
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
- 
+
     HttpSession session = request.getSession(false);
     boolean found = false;
     if (session.getAttribute("name") != null) {

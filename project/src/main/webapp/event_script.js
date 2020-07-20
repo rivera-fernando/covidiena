@@ -517,8 +517,8 @@ function serveBlob(event, eventElement) {
     fetch('/serve-blob?imageKey='+event.imageKey).then((image)=>{
       imageElement.src = image.url;
     });
-    imageElement.style.maxHeight = '200px';
-    imageElement.style.maxWidth = '200px';
+    imageElement.style.maxHeight = '90%';
+    imageElement.style.maxWidth = '90%';
     eventElement.appendChild(imageElement);
   }
 }

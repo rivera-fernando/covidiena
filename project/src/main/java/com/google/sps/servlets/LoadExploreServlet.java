@@ -156,7 +156,8 @@ public class LoadExploreServlet extends HttpServlet {
         int day = calendar.get(Calendar.DAY_OF_WEEK);
         Event event = new Event(id, name, location, date, time, description, type, attendance, 
           timestamp, entity.getProperty("email").equals(email), "ApprovedEvent", imageKey, 
-          day, attendees.size(), capacity, false, new ArrayList<String>(), "", edited, category);
+          day, attendees.size(), capacity, false, new ArrayList<String>(), "", edited, category,
+          new ArrayList<String>());
         
         if (day == 1) {
             sundayEvents.add(event);
