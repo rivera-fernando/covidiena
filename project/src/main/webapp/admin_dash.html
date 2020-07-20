@@ -26,7 +26,7 @@
       google.charts.setOnLoadCallback(drawAvg);
     </script>
   </head>
-  <body onload ="updateLogIn();">
+  <body onload ="updateLogIn();showPending();">
       <nav>
     	<div class="nav-wrapper blue-grey lighten-4">
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
@@ -51,55 +51,34 @@
         <li><a style="color: #42a5f5;" class="signupButton" href="/signup.html">Sign Up</a></li>
         <li><a style="color: #42a5f5;" class="loginButton">Log In</a></li>
       </ul>
-      <main>
-
-        <div class="container">
-          <h1>Admin Dashboard</h1>
-          <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
-                <div class="row">
-                    <div class="col s12 m5">
-                        <div style="border-radius: 10px;" class="card white">
-                            <div class="card-content blue-grey-text-darken-2">
-                                <span class="card-title">Avg. Daily Temperature</span>
-                                <h5 class="center-align" id="avg-temp">__</h5>
-                                <span class="card-title">Daily Fevers</span>
-                                <h5 class="center-align" id="fevers">__</h5>
-                                <a onclick="calcAvgTemp()" class="waves-effect waves-light btn">Get Stats</a>
+      <div class="container">
+      <h1>Admin Dashboard</h1>
+      <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
+            <div class="row">
+                <div class="col s12 m5">
+                    <div style="border-radius: 10px;" class="card white">
+                        <div class="card-content blue-grey-text-darken-2">
+                            <span class="card-title">Avg. Daily Temperature</span>
+                            <h5 class="center-align" id="avg-temp">__</h5>
+                            <span class="card-title">Daily Fevers</span>
+                            <h5 class="center-align" id="fevers">__</h5>
+                            <a onclick="calcAvgTemp()" class="waves-effect waves-light btn">Get Stats</a>
                         </div>
                     </div>
-                    <div class="col s12 m7">
-                        <div style="border-radius: 10px;" class="card white">
-                            <div class="card-content blue-grey-text-darken-2">
-                                <span class="card-title">Temperature Trends</span>
-                                <div id="chart" class="goog-chart"></div>
+                </div>
+                <div class="col s12 m7">
+                    <div style="border-radius: 10px;" class="card white">
+                        <div class="card-content blue-grey-text-darken-2">
+                            <span class="card-title">Temperature Trends</span>
+                            <div id="chart" class="goog-chart">
+                                <div class="progress">
+                                    <div class="indeterminate"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-        </div>
-        <div class="card-panel blue-grey lighten-4">
-            <h3>Make an Announcement</h3>
-            <div class="row">
-                <div class="col m3 s12">
-                    <div class="input-field">
-                        <input id="title" type="text">
-                        <label for="title">Title</label>
-                    </div>
-                </div>
             </div>
-            <div class="row">
-                <div class="col s12">
-                    <textarea id="content" class="materialize-textarea"></textarea>
-                    <label for="content">Write your announcement here!</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col m2 s1 push-s9 push-m10">
-                        <button class="btn waves-effect waves-light blue lighten-1" onclick="createAnnouncement();">Submit</button>
-                </div>
-            </div>
-        </div>
-        </div>
       </div>
       <div class="card-panel blue-grey lighten-4">
           <h3>Make an Announcement</h3>
@@ -132,8 +111,12 @@
               </div>
           </div>
       </div>
+      <div class="card-panel blue-grey lighten-4">
+          <h3>Pending Admin Approval</h3>
+          <div class="row" id="pending">
+          </div>
+      </div>
     </div>
-    </main>
      <footer class="page-footer blue-grey lighten-2 ">
         <div class="footer-copyright blue-grey lighten-2">
             <div class="container blue-grey-text text-darken-2 left">
