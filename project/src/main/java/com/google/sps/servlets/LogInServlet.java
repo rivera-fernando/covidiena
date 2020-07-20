@@ -34,23 +34,23 @@ public class LogInServlet extends HttpServlet {
 
   public User user = null;
 
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      HttpSession session = request.getSession();  
-      Gson gson = new Gson();
-      response.setContentType("application/json");
-      // First if handles log out
-      if (request.getParameter("logout") != null ) {
-        session.removeAttribute("name");  
-        session.removeAttribute("email");  
-        session.removeAttribute("password");  
-        session.removeAttribute("birthdate");  
-        session.removeAttribute("studentId");  
-        session.removeAttribute("sex");
-        session.removeAttribute("school");
-        session.removeAttribute("phone");
-        session.removeAttribute("metric"); 
-        session.removeAttribute("admin");    
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session=request.getSession();  
+        Gson gson = new Gson();
+        response.setContentType("application/json");
+        // First if handles log out
+        if (request.getParameter("logout") != null ) {
+          session.removeAttribute("name");  
+          session.removeAttribute("email");  
+          session.removeAttribute("password");  
+          session.removeAttribute("birthdate");  
+          session.removeAttribute("studentId");  
+          session.removeAttribute("sex");
+          session.removeAttribute("school");
+          session.removeAttribute("phone");
+          session.removeAttribute("metric"); 
+          session.removeAttribute("is_admin");    
 
         response.sendRedirect("/index.html");
         return;
@@ -59,35 +59,35 @@ public class LogInServlet extends HttpServlet {
           String email = request.getParameter("email").toLowerCase();
           Query query = new Query("User");
 
-          DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-          PreparedQuery results = datastore.prepare(query);
-          ArrayList<String> users = new ArrayList<String>();
-          for (Entity entity:results.asIterable()){
-              if (entity.getProperty("password").equals(password) && entity.getProperty("email").equals(email)){
-                  user = new User(
-                      (long) entity.getKey().getId(),
-                      (String) entity.getProperty("name"),
-                      (String) entity.getProperty("email"),
-                      (String) entity.getProperty("password"),
-                      (String) entity.getProperty("birthdate"),
-                      (long) entity.getProperty("studentId"),
-                      (String) entity.getProperty("sex"),
-                      (String) entity.getProperty("school"),
-                      (String) entity.getProperty("phone"),
-                      (String) entity.getProperty("metric"), 
-                      (Boolean) entity.getProperty("admin")
-                  );
-                  session.setAttribute("userId", user.getUserId());
-                  session.setAttribute("name", user.getName());  
-                  session.setAttribute("email", user.getEmail());  
-                  session.setAttribute("password", user.getPassword());  
-                  session.setAttribute("birthdate", user.getBirthdate());  
-                  session.setAttribute("studentId", user.getStudentId());  
-                  session.setAttribute("sex", user.getSex());
-                  session.setAttribute("school", user.getSchool());
-                  session.setAttribute("phone", user.getPhone());
-                  session.setAttribute("metric", user.getMetric()); 
-                  session.setAttribute("admin", user.getAdmin());        
+            DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+            PreparedQuery results = datastore.prepare(query);
+            ArrayList<String> users = new ArrayList<String>();
+            for (Entity entity:results.asIterable()){
+                if (entity.getProperty("password").equals(password) && entity.getProperty("email").equals(email)){
+                    user = new User(
+                        (long) entity.getKey().getId(),
+                        (String) entity.getProperty("name"),
+                        (String) entity.getProperty("email"),
+                        (String) entity.getProperty("password"),
+                        (String) entity.getProperty("birthdate"),
+                        (long) entity.getProperty("studentId"),
+                        (String) entity.getProperty("sex"),
+                        (String) entity.getProperty("school"),
+                        (String) entity.getProperty("phone"),
+                        (String) entity.getProperty("metric"), 
+                        (Boolean) entity.getProperty("admin")
+                    );
+                    session.setAttribute("userId", user.getUserId());
+                    session.setAttribute("name", user.getName());  
+                    session.setAttribute("email", user.getEmail());  
+                    session.setAttribute("password", user.getPassword());  
+                    session.setAttribute("birthdate", user.getBirthdate());  
+                    session.setAttribute("studentId", user.getStudentId());  
+                    session.setAttribute("sex", user.getSex());
+                    session.setAttribute("school", user.getSchool());
+                    session.setAttribute("phone", user.getPhone());
+                    session.setAttribute("metric", user.getMetric()); 
+                    session.setAttribute("is_admin", user.getAdmin());        
 
                   response.sendRedirect("/dashboard");
                   return;

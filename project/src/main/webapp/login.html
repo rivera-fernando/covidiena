@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html>
   <head>
-        <meta charset="UTF-8">
-        <title>Log In</title>
-        <link rel="stylesheet" href="icons.css">
-        <link rel="stylesheet" href="materialize.min.css">
-        <script src="materialize.min.js"></script>
-        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-        <script>
-        $(document).ready(function(){
-            $('.sidenav').sidenav();
-        });
-        </script>
-    </head>
+    <meta charset="UTF-8">
+    <title>Log In</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="icons.css">
+    <script src="covid_data.js"></script>
+    <link rel="stylesheet" href="materialize.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="materialize.min.js"></script>
+    <script>
+    $(document).ready(function(){
+        $('.sidenav').sidenav();
+    });
+    </script>
+  </head>
     <body onload = "updateLogIn()">
-        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <nav>
     	<div class="nav-wrapper blue-grey lighten-4">
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
@@ -24,7 +25,7 @@
             </ul>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
-                <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
+                <li><a style="color: #42a5f5;" href="/info.html">Information</a></li>
                 <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
                 <li style="width: 50px; height: 60px;">&nbsp;</li>
             </ul>
@@ -32,7 +33,7 @@
         </nav>
         <ul class="sidenav" id="mobile-demo">
             <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
-            <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
+            <li><a style="color: #42a5f5;" href="/info.html">Information</a></li>
             <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
         </ul>
         <main>
