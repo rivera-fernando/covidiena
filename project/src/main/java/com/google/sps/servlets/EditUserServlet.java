@@ -122,7 +122,7 @@ public class EditUserServlet extends HttpServlet {
     }
 
     
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Gson gson = new Gson();
         response.setContentType("application/json;");
         HttpSession session = request.getSession(false);
@@ -141,7 +141,6 @@ public class EditUserServlet extends HttpServlet {
             (String) session.getAttribute("imageKey"));
 
         response.getWriter().println(gson.toJson(user));
-
     }
 
     private String getUploadedFileUrl(HttpServletRequest request, String formInputElementName) {
