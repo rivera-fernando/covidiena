@@ -1,4 +1,5 @@
 package com.google.sps.servlets;
+
 import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -6,8 +7,6 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.sps.classes.User;
@@ -51,6 +50,7 @@ public class LogInServlet extends HttpServlet {
           session.removeAttribute("phone");
           session.removeAttribute("metric"); 
           session.removeAttribute("is_admin");    
+          session.removeAttribute("imageKey");
 
         response.sendRedirect("/index.html");
         return;
@@ -64,30 +64,18 @@ public class LogInServlet extends HttpServlet {
             ArrayList<String> users = new ArrayList<String>();
             for (Entity entity:results.asIterable()){
                 if (entity.getProperty("password").equals(password) && entity.getProperty("email").equals(email)){
-                    user = new User(
-                        (long) entity.getKey().getId(),
-                        (String) entity.getProperty("name"),
-                        (String) entity.getProperty("email"),
-                        (String) entity.getProperty("password"),
-                        (String) entity.getProperty("birthdate"),
-                        (long) entity.getProperty("studentId"),
-                        (String) entity.getProperty("sex"),
-                        (String) entity.getProperty("school"),
-                        (String) entity.getProperty("phone"),
-                        (String) entity.getProperty("metric"), 
-                        (Boolean) entity.getProperty("admin")
-                    );
-                    session.setAttribute("userId", user.getUserId());
-                    session.setAttribute("name", user.getName());  
-                    session.setAttribute("email", user.getEmail());  
-                    session.setAttribute("password", user.getPassword());  
-                    session.setAttribute("birthdate", user.getBirthdate());  
-                    session.setAttribute("studentId", user.getStudentId());  
-                    session.setAttribute("sex", user.getSex());
-                    session.setAttribute("school", user.getSchool());
-                    session.setAttribute("phone", user.getPhone());
-                    session.setAttribute("metric", user.getMetric()); 
-                    session.setAttribute("is_admin", user.getAdmin());        
+                    session.setAttribute("userId", (long) entity.getKey().getId());
+                    session.setAttribute("name", (String) entity.getProperty("name"));  
+                    session.setAttribute("email", ((String) entity.getProperty("email")).toLowerCase());  
+                    session.setAttribute("password", (String) entity.getProperty("password"));  
+                    session.setAttribute("birthdate", (String) entity.getProperty("birthdate"));  
+                    session.setAttribute("studentId", (long) entity.getProperty("studentId"));  
+                    session.setAttribute("sex", (String) entity.getProperty("sex"));
+                    session.setAttribute("school", (String) entity.getProperty("school"));
+                    session.setAttribute("phone", (String) entity.getProperty("phone"));
+                    session.setAttribute("metric", (String) entity.getProperty("metric")); 
+                    session.setAttribute("is_admin", (boolean) entity.getProperty("admin"));      
+                    session.setAttribute("imageKey", (String) entity.getProperty("imageKey"));  
 
                   response.sendRedirect("/dashboard");
                   return;
@@ -101,7 +89,6 @@ public class LogInServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     HttpSession session = request.getSession(false);
     List<User> users = new ArrayList<User>();
-
     if (session.getAttribute("name") != null) {
       long id = (long) session.getAttribute("userId");
       String name = (String) session.getAttribute("name");
