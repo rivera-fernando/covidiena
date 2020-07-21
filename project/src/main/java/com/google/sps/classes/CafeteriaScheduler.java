@@ -26,16 +26,17 @@ import com.google.sps.classes.Student;
 import com.google.sps.classes.TimeRange;
 
 public final class CafeteriaScheduler {
-  // Variables
-
-  // Constructor
-  public CafeteriaScheduler() {
-
-  }
 
   // Return schedule
-  public Schedule schedule(Collection<Event> events, MeetingRequest request) {
-    Schedule schedule = new Schedule();
+  public Schedule schedule(TimeRange lunch, TimeRange dinner, 
+    int mealTime, int maxCapacity, List<Student> students) {
+
+    Schedule schedule = new Schedule(lunch, dinner, mealTime);
+
+    if (students.isEmpty()) {
+      return schedule;
+    }
+
     return schedule;
   }
 }

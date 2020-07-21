@@ -25,8 +25,8 @@ import com.google.sps.classes.TimeRange;
 public final class Student {
 
   private final String name;
-  private final TimeRange lunchPref;
-  private final TimeRange dinnerPref;
+  private TimeRange lunchPref;
+  private TimeRange dinnerPref;
 
   public Student(String name, TimeRange lunchPref, TimeRange dinnerPref) {
 
@@ -48,15 +48,21 @@ public final class Student {
     
   }
 
-  public TimeRange getLunchPref(Student student) {
+  public static TimeRange getLunchPref(Student student) {
 
     return student.lunchPref;
 
   }
 
-  public TimeRange getDinnerPref(Student student) {
+  public static TimeRange getDinnerPref(Student student) {
 
     return student.dinnerPref;
+
+  }
+
+  public String getName() {
+
+    return this.name;
 
   }
 }
