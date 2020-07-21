@@ -35,6 +35,7 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.sps.classes.User;
@@ -57,7 +58,8 @@ public class RSVPServlet extends HttpServlet {
     try { 
       Entity approvedEvent = datastore.get(eventKey);
 
-      String email = userService.getCurrentUser().getEmail().toLowerCase();
+      HttpSession session = request.getSession(false);
+      String email = ((String) session.getAttribute("email")).toLowerCase();
       
       @SuppressWarnings("unchecked") // Cast can't verify generic type.
       Collection<String> attendees = (Collection<String>) approvedEvent.getProperty("attendees");

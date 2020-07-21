@@ -11,9 +11,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
+ 
 package com.google.sps.servlets;
-
+ 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -23,6 +23,8 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.gson.Gson;
 import com.google.sps.classes.Event;
+import com.google.sps.classes.EventUpdate;
+import com.google.sps.classes.Day;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,64 +37,56 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-/** Servlet that loads past events*/
-@WebServlet("/load-past")
-public class LoadPastEventsServlet extends HttpServlet {
-
+import java.util.Calendar;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+ 
+/** Servlet that loads pending events*/
+@WebServlet("/load-event-updates")
+public class LoadEventUpdatesServlet extends HttpServlet {
+ 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query("PastEvent");
-    query.addSort("dateTimestamp", SortDirection.DESCENDING);
+    Query query = new Query("EventUpdate");
 
     HttpSession session = request.getSession(false);
     boolean found = false;
     if (session.getAttribute("name") != null) {
-        found = true;
+      found = true;
     }
 
     if (found) {
       String email = ((String) session.getAttribute("email")).toLowerCase();
-
+ 
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
       PreparedQuery results = datastore.prepare(query);
       List<Entity> resultsList = results.asList(FetchOptions.Builder.withDefaults());
-      List<Event> pastEvents = new ArrayList<>();
-
+      List<EventUpdate> updates = new ArrayList<>();
+ 
       for (int i = 0; i < resultsList.size(); i++) {
-
+ 
         Entity entity = resultsList.get(i);
-        // Load the event only if this user's email matches the email of an attendee
-        @SuppressWarnings("unchecked") // Cast can't verify generic type.
-        Collection<String> attendees = (Collection<String>) entity.getProperty("attendees");
-        if (!attendees.isEmpty()) {
-          if (attendees.contains(email)) {
-            long id = entity.getKey().getId();
-            String name = (String) entity.getProperty("name");
-            String location = (String) entity.getProperty("location");
-            String date = (String) entity.getProperty("date");
-            String time = (String) entity.getProperty("time");
-            String description = (String) entity.getProperty("description");
-            String type = (String) entity.getProperty("attendance");
-            String attendance = (String) entity.getProperty("type");
-            long timestamp = (long) entity.getProperty("timestamp");
-            String imageKey = (String) entity.getProperty("imageKey");
+        String ownerEmail = (String) entity.getProperty("owner");
 
-            Event event = new Event(id, name, location, date, time, description, 
-              type, attendance, timestamp, true, "PastEvent", imageKey, -1, 
-              attendees.size(), 0);
-            
-            pastEvents.add(event);
-          }
+        if (ownerEmail.equals(email)) {
+          long id = (long) entity.getProperty("id");
+          String name = (String) entity.getProperty("name");
+          String adminEmail = (String) entity.getProperty("adminEmail");
+          boolean isRejected = (boolean) entity.getProperty("isRejected");
+          String changeRequested = (String) entity.getProperty("changeRequested");
+
+          EventUpdate update = new EventUpdate(id, name, email, adminEmail, isRejected, changeRequested);
+          updates.add(update);
         }
       }
-
+ 
       Gson gson = new Gson();
-
+ 
       response.setContentType("application/json;");
-      response.getWriter().println(gson.toJson(pastEvents));
-    }
-    else {
+      response.getWriter().println(gson.toJson(updates));
+    } else {
       response.sendRedirect("/login.html");
     }
   }

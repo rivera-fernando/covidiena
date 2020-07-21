@@ -95,12 +95,13 @@ public class EditEventServlet extends HttpServlet {
       event.setProperty("attendance", attendance);
       event.setProperty("description", description);
       event.setProperty("dateTimestamp", dateTimestamp);
+      event.setProperty("edited", true);
       if (imageKey != null) {
         event.setProperty("imageKey", imageKey);
       }
  
       datastore.put(event);
-      response.sendRedirect("/events.html");
+      response.sendRedirect("/my-events.html");
     } catch(EntityNotFoundException e) {
       return;
     }
