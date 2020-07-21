@@ -83,7 +83,7 @@ public class dataAnalytics extends HttpServlet {
       ArrayList<String> data = new ArrayList<String>();
       data.add(val);
       data.add(Integer.toString(fevers));
-      if ((boolean) session.getAttribute("admin")) {
+      if ((boolean) session.getAttribute("is_admin")) {
           response.setContentType("application/json;");
           response.getWriter().println(gson.toJson(data));
       }

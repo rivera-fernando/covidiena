@@ -56,7 +56,7 @@ public class LoadPendingEventsServlet extends HttpServlet {
       List<Event> pendingEvents = new ArrayList<>();
  
       // If the user is an admin, load ALL pending. Otherwise, just the ones that the student posted.
-      boolean isAdmin = (boolean) session.getAttribute("admin");
+      boolean isAdmin = (boolean) session.getAttribute("is_admin");
       if (isAdmin) {
         // Should probably find a better way to send this metadata like Lian told me to
         Event metadata = new Event(0, "Admin", "", "", "", "", "", "", 0, false, "", "", -1, 0, 0);

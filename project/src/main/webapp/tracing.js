@@ -35,14 +35,12 @@ function createMap() {
 
   // Perform a nearby search.
   service.nearbySearch(
-      {location: pos, radius: 50000,
-        type: ['library', 'liquor_store', 'atm', 
-            'bakery', 'bar', 'meal_takeaway', 'meal_delivery', 
-            'beauty_salon', 'book_store', 'movie_theater', 
-            'bowling_alley', 'cafe', 'night_club', 'park',
-            'pharmacy','clothing_store', 'convenience_store', 'restaurant', 
-            'department_store', 'shoe_store', 'shopping_mall', 
-            'spa', 'store', 'laundry', 'hair_care']},
+      {location: pos, radius: 9700,
+        type: [ 
+            'liquor_store', 'bakery', 'bar', 'meal_takeaway',
+            'meal_delivery','cafe', 'pharmacy','clothing_store',
+            'convenience_store', 'restaurant', 'store'
+            ]},
       function(results, status, pagination) {
         if (status !== 'OK') return;
 

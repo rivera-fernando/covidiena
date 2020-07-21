@@ -42,7 +42,7 @@ public class RequestAdminServlet extends HttpServlet {
 
         String name = (String) session.getAttribute("name");
         String email = (String) session.getAttribute("email");
-        boolean isAdmin = (boolean) session.getAttribute("admin");
+        boolean isAdmin = (boolean) session.getAttribute("is_admin");
         if (!isAdmin) {
             Query query = new Query("RequestAdmin");
 
@@ -81,7 +81,7 @@ public class RequestAdminServlet extends HttpServlet {
                 results = datastore.prepare(query);
                 for (Entity entity:results.asIterable()){
                     if (entity.getProperty("email").equals(pending_email)){
-                        entity.setProperty("admin", true);
+                        entity.setProperty("is_admin", true);
                         datastore.put(entity);
                     }
                 }

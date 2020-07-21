@@ -35,7 +35,7 @@ public class LogInServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session=request.getSession();  
+        HttpSession session = request.getSession();  
         Gson gson = new Gson();
         response.setContentType("application/json");
         // First if handles log out
@@ -74,7 +74,7 @@ public class LogInServlet extends HttpServlet {
                     session.setAttribute("school", (String) entity.getProperty("school"));
                     session.setAttribute("phone", (String) entity.getProperty("phone"));
                     session.setAttribute("metric", (String) entity.getProperty("metric")); 
-                    session.setAttribute("is_admin", (boolean) entity.getProperty("admin"));      
+                    session.setAttribute("is_admin", (boolean) entity.getProperty("is_admin"));      
                     session.setAttribute("imageKey", (String) entity.getProperty("imageKey"));  
 
                     response.sendRedirect("/dashboard");
