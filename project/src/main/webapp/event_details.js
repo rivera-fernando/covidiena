@@ -111,11 +111,13 @@ function createEventElement(event) {
   info.appendChild(attendance);
   
   const changes = document.getElementById('event-changes');
-  event.changes.forEach(change => {
-    const changeElement = document.createElement('li');
-    changeElement.innerText = change;
-    changes.appendChild(changeElement);
-  });
+  if (event.changes != undefined) {
+    event.changes.forEach(change => {
+      const changeElement = document.createElement('li');
+      changeElement.innerText = change;
+      changes.appendChild(changeElement);
+    });
+  }
   
   const attendees = document.getElementById('event-attendees');
   attendees.innerHTML = "<b>Capacity:</b> " + event.numAttendees + "/" + event.maxCapacity;

@@ -64,5 +64,6 @@ public class AddCommentServlet extends HttpServlet {
     } catch(EntityNotFoundException e) {
       return;
     }
+    response.sendRedirect("/event-details.html");
   }
 }

@@ -67,12 +67,14 @@ function loadPending() {
         var eventElement = createEventElement(event);
         addApprovalBtn(eventElement);
         addRejectionBtn(eventElement);
+        addViewDetailsBtn(eventElement, event);
         pendingEvents.appendChild(eventElement);
         loadDropdowns();
       })
     } else {
       events.forEach((event) => {
         var eventElement = createEventElement(event);
+        addViewDetailsBtn(eventElement, event);
         pendingEvents.appendChild(eventElement);
         loadDropdowns();
       })
@@ -93,6 +95,7 @@ function loadApproved() {
     } else {
       events.forEach((event) => {
         var eventElement = createEventElement(event);
+        addViewDetailsBtn(eventElement, event);
         approvedEvents.appendChild(eventElement);
         loadDropdowns();
       })
@@ -301,7 +304,6 @@ function createEventElement(event) {
   container.appendChild(row);
   eventElement.appendChild(container);
   addDropdownMenu(dropdownColumn, event, eventElement);
-  addViewDetailsBtn(eventElement, event);
  
   return eventElement;
 }
@@ -412,7 +414,7 @@ function addDeleteBtn(eventElement, entityType) {
 }
 
 function addViewDetailsBtn(eventElement, event) {
-  const viewDetails = document.createElement('button');
+  const viewDetails = document.createElement('li');
 
   viewDetails.innerText = "Event Details";
   viewDetails.classList.add('waves-light', 'btn-flat', 'btn-small');

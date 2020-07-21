@@ -19,6 +19,7 @@
 var currWeek = 0;
 var typeInput = [];
 var attendanceInput = [];
+var user = null;
  
 document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.datepicker');
@@ -69,6 +70,7 @@ function closeForm() {
  */
  
 async function loadPage() {
+  await loadUser();
   await loadEvents();
 }
  
@@ -76,6 +78,13 @@ async function loadEvents() {
   fetchBlobstoreUrlAndShowForm();
   loadExplore();
   loadSearchExplore();
+}
+
+async function loadUser() {
+  await fetch('/login').then(response => response.json()).then((users) => {
+    user = users[0]; 
+    console.log(user);
+  });
 }
  
 function loadExplore(week, filter, type, attendance) {
@@ -230,6 +239,7 @@ function createSearchEvent(event) {
     } else if (event.category === "Upcoming") {
       addRemovalBtn(previewElem);
     }
+    addViewDetailsBtn(previewElem, event);
     preview.appendChild(previewElem);
     loadDropdowns();
   }
@@ -307,6 +317,7 @@ function createEventPreview(event) {
     } else if (event.category === "Upcoming") {
       addRemovalBtn(previewElem);
     }
+    addViewDetailsBtn(previewElem, event);
     preview.appendChild(previewElem);
     loadDropdowns();
   }
@@ -506,6 +517,28 @@ function addRSVPBtn(eventElement) {
   var dropdownList = eventElement.getElementsByTagName('ul')[0];
   dropdownList.appendChild(RSVPBtn);
 }
+
+function addViewDetailsBtn(eventElement, event) {
+  const viewDetails = document.createElement('li');
+
+  viewDetails.innerText = "Event Details";
+  viewDetails.classList.add('waves-light', 'btn-flat', 'btn-small');
+
+  viewDetails.addEventListener('click', () => {
+    const params = new URLSearchParams();
+    params.append('eventId', eventElement.id);
+    params.append('eventType', event.entityType);
+    fetch ('event-details', {
+      method: 'POST',
+      body: params
+    });
+    location.replace('/event-details.html');
+  });
+
+  var dropdownList = eventElement.getElementsByTagName('ul')[0];
+  dropdownList.appendChild(viewDetails);
+}
+
 
 /*
  * ################# BLOB METHODS #################

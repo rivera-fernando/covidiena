@@ -33,6 +33,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.gson.Gson;
 import javax.servlet.http.HttpSession;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import java.util.Collection;
  
 /** Servlet that posts an event*/
 @WebServlet("/event-details")
@@ -78,9 +79,11 @@ public class EventDetailsServlet extends HttpServlet {
       String adminEmail = (String) entity.getProperty("admin-email");
       boolean edited = (boolean) entity.getProperty("edited");
       List<String> comments = (List<String>) entity.getProperty("comments");
+      @SuppressWarnings("unchecked") // Cast can't verify generic type.
+      Collection<String> attendees = (Collection<String>) entity.getProperty("attendees");
 
       Event event = new Event(id, name, location, date, time, description, type, attendance, 
-        timestamp, true, eventType, imageKey, -1, 0, capacity, rejected, changes, 
+        timestamp, true, eventType, imageKey, -1, attendees.size(), capacity, rejected, changes, 
         adminEmail, edited, "", comments);
 
       events.add(event);
