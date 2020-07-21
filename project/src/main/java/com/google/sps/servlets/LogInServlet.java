@@ -91,7 +91,7 @@ public class LogInServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         Boolean found = false;
         if (session.getAttribute("name") != null) {
-            found = true;
+          found = true;
         }
         List<Boolean> log = new ArrayList<Boolean>();
         log.add(found);
