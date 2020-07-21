@@ -72,9 +72,6 @@ function createMarkers(places) {
       position: place.geometry.location
     });
     markers.push(marker);
-    // console.log("{" + marker.getPosition().lat() + " , " + marker.getPosition().lng() + "}");
-    // console.log(marker.getTitle());
-
     var li = document.createElement('li');
     li.textContent = place.name;
     placesList.appendChild(li);
