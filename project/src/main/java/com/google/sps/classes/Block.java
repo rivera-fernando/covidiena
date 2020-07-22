@@ -47,6 +47,14 @@ public final class Block {
 
   }
 
+  public void addStudents(List<Student> students) {
+    
+    for (Student student : students) {
+      this.students.add(student);
+    }
+    
+  }
+
   public Student removeStudent(Student student) {
 
     this.students.remove(student);
@@ -57,6 +65,18 @@ public final class Block {
   public List<Student> getStudents() {
 
     return this.students;
+
+  }
+
+  public TimeRange getTime() {
+
+    return this.time;
+
+  }
+
+  public int getCapacity() {
+
+    return this.students.size();
 
   }
 

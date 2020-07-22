@@ -16,6 +16,7 @@ package com.google.sps.classes;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Comparator;
 import com.google.sps.classes.TimeRange;
  
 /**
@@ -48,15 +49,15 @@ public final class Student {
     
   }
 
-  public static TimeRange getLunchPref(Student student) {
+  public TimeRange getLunchPref() {
 
-    return student.lunchPref;
+    return this.lunchPref;
 
   }
 
-  public static TimeRange getDinnerPref(Student student) {
+  public TimeRange getDinnerPref() {
 
-    return student.dinnerPref;
+    return this.dinnerPref;
 
   }
 
@@ -65,4 +66,51 @@ public final class Student {
     return this.name;
 
   }
+
+  @Override
+  public String toString() {
+
+    return String.format(this.name);
+  
+  }
+
+  /**
+   * A comparator for sorting ranges by their start time in ascending order.
+   */
+  public static final Comparator<Student> ORDER_LUNCH_START = new Comparator<Student>() {
+    @Override
+    public int compare(Student a, Student b) {
+      return Long.compare(a.getLunchPref().start(), b.getLunchPref().start());
+    }
+  };
+
+  /**
+   * A comparator for sorting ranges by their start time in ascending order.
+   */
+  public static final Comparator<Student> ORDER_LUNCH_END = new Comparator<Student>() {
+    @Override
+    public int compare(Student a, Student b) {
+      return Long.compare(a.getLunchPref().end(), b.getLunchPref().end());
+    }
+  };
+
+  /**
+   * A comparator for sorting ranges by their start time in ascending order.
+   */
+  public static final Comparator<Student> ORDER_DINNER_START = new Comparator<Student>() {
+    @Override
+    public int compare(Student a, Student b) {
+      return Long.compare(a.getDinnerPref().start(), b.getDinnerPref().start());
+    }
+  };
+
+  /**
+   * A comparator for sorting ranges by their start time in ascending order.
+   */
+  public static final Comparator<Student> ORDER_DINNER_END = new Comparator<Student>() {
+    @Override
+    public int compare(Student a, Student b) {
+      return Long.compare(a.getDinnerPref().end(), b.getDinnerPref().end());
+    }
+  };
 }

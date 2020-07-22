@@ -140,4 +140,135 @@ public final class CafeteriaSchedulerTest {
     Assert.assertEquals(dinnerExpected, actual.getDinnerBlocks());
 
   }
+
+  @Test
+  public void oneStudent() {
+    
+    List<Student> students = new ArrayList<Student>();
+    students.add(STUDENT_C);
+    Schedule actual = scheduler.schedule(LUNCH_A, DINNER_A, DURATION_30_MINUTES, CAPACITY_1, students);
+    
+    List<Block> lunchExpected = new ArrayList<Block>();
+    lunchExpected.add(new Block(TIME_1100, DURATION_30_MINUTES));
+    lunchExpected.add(new Block(TIME_1130, DURATION_30_MINUTES));
+    Block student_C_Lunch = new Block(TIME_1200, DURATION_30_MINUTES);
+    student_C_Lunch.addStudent(STUDENT_C);
+    lunchExpected.add(student_C_Lunch);
+    lunchExpected.add(new Block(TIME_1230, DURATION_30_MINUTES));
+    
+    List<Block> dinnerExpected = new ArrayList<Block>();
+    dinnerExpected.add(new Block(TIME_1700, DURATION_30_MINUTES));
+    dinnerExpected.add(new Block(TIME_1730, DURATION_30_MINUTES));
+    Block student_C_Dinner = new Block(TIME_1800, DURATION_30_MINUTES);
+    student_C_Dinner.addStudent(STUDENT_C);
+    dinnerExpected.add(student_C_Dinner);
+    dinnerExpected.add(new Block(TIME_1830, DURATION_30_MINUTES));
+
+    Assert.assertEquals(lunchExpected, actual.getLunchBlocks());
+    Assert.assertEquals(dinnerExpected, actual.getDinnerBlocks());
+
+  }
+
+  @Test
+  public void twoStudents() {
+    
+    List<Student> students = new ArrayList<Student>();
+    // Full overlap for lunch, no overlap for dinner
+    students.add(STUDENT_A);
+    students.add(STUDENT_H);
+    Schedule actual = scheduler.schedule(LUNCH_A, DINNER_A, DURATION_30_MINUTES, CAPACITY_1, students);
+    
+    List<Block> lunchExpected = new ArrayList<Block>();
+    Block student_A_Lunch = new Block(TIME_1100, DURATION_30_MINUTES);
+    student_A_Lunch.addStudent(STUDENT_A);
+    lunchExpected.add(student_A_Lunch);
+    Block student_H_Lunch = new Block(TIME_1130, DURATION_30_MINUTES);
+    student_H_Lunch.addStudent(STUDENT_H);
+    lunchExpected.add(student_H_Lunch);
+    lunchExpected.add(new Block(TIME_1200, DURATION_30_MINUTES));
+    lunchExpected.add(new Block(TIME_1230, DURATION_30_MINUTES));
+    
+    List<Block> dinnerExpected = new ArrayList<Block>();
+    Block student_A_Dinner = new Block(TIME_1700, DURATION_30_MINUTES);
+    student_A_Dinner.addStudent(STUDENT_A);
+    dinnerExpected.add(student_A_Dinner);
+    dinnerExpected.add(new Block(TIME_1730, DURATION_30_MINUTES));
+    Block student_H_Dinner = new Block(TIME_1800, DURATION_30_MINUTES);
+    student_H_Dinner.addStudent(STUDENT_H);
+    dinnerExpected.add(student_H_Dinner);
+    dinnerExpected.add(new Block(TIME_1830, DURATION_30_MINUTES));
+
+    Assert.assertEquals(lunchExpected, actual.getLunchBlocks());
+    Assert.assertEquals(dinnerExpected, actual.getDinnerBlocks());
+
+  }
+
+  @Test
+  public void twoStudentsSameBlock() {
+    
+    List<Student> students = new ArrayList<Student>();
+    // Full overlap for lunch, no overlap for dinner
+    students.add(STUDENT_A);
+    students.add(STUDENT_A);
+    Schedule actual = scheduler.schedule(LUNCH_A, DINNER_A, DURATION_30_MINUTES, CAPACITY_3, students);
+    
+    List<Block> lunchExpected = new ArrayList<Block>();
+    Block block1_lunch = new Block(TIME_1100, DURATION_30_MINUTES);
+    block1_lunch.addStudents(students);
+    lunchExpected.add(block1_lunch);
+    lunchExpected.add(new Block(TIME_1130, DURATION_30_MINUTES));
+    lunchExpected.add(new Block(TIME_1200, DURATION_30_MINUTES));
+    lunchExpected.add(new Block(TIME_1230, DURATION_30_MINUTES));
+    
+    List<Block> dinnerExpected = new ArrayList<Block>();
+    Block block1_dinner = new Block(TIME_1700, DURATION_30_MINUTES);
+    block1_dinner.addStudents(students);
+    dinnerExpected.add(block1_dinner);
+    dinnerExpected.add(new Block(TIME_1730, DURATION_30_MINUTES));
+    dinnerExpected.add(new Block(TIME_1800, DURATION_30_MINUTES));
+    dinnerExpected.add(new Block(TIME_1830, DURATION_30_MINUTES));
+
+    Assert.assertEquals(lunchExpected, actual.getLunchBlocks());
+    Assert.assertEquals(dinnerExpected, actual.getDinnerBlocks());
+
+  }
+
+  @Test
+  public void noOptimalSolution() {
+    
+    List<Student> students = new ArrayList<Student>();
+    // Full overlap for lunch, no overlap for dinner
+    students.add(STUDENT_A);
+    students.add(STUDENT_A);
+    students.add(STUDENT_A);
+    Schedule actual = scheduler.schedule(LUNCH_A, DINNER_A, DURATION_30_MINUTES, CAPACITY_1, students);
+    
+    List<Block> lunchExpected = new ArrayList<Block>();
+    Block block1_lunch = new Block(TIME_1100, DURATION_30_MINUTES);
+    block1_lunch.addStudent(STUDENT_A);
+    lunchExpected.add(block1_lunch);    
+    Block block2_lunch = new Block(TIME_1130, DURATION_30_MINUTES);
+    block2_lunch.addStudent(STUDENT_A);
+    lunchExpected.add(block2_lunch);
+    Block block3_lunch = new Block(TIME_1200, DURATION_30_MINUTES);
+    block3_lunch.addStudent(STUDENT_A);
+    lunchExpected.add(block3_lunch);
+    lunchExpected.add(new Block(TIME_1230, DURATION_30_MINUTES));
+    
+    List<Block> dinnerExpected = new ArrayList<Block>();
+    Block block1_dinner = new Block(TIME_1700, DURATION_30_MINUTES);
+    block1_dinner.addStudent(STUDENT_A);
+    dinnerExpected.add(block1_dinner);    
+    Block block2_dinner = new Block(TIME_1730, DURATION_30_MINUTES);
+    block2_dinner.addStudent(STUDENT_A);
+    dinnerExpected.add(block2_dinner);
+    Block block3_dinner = new Block(TIME_1800, DURATION_30_MINUTES);
+    block3_dinner.addStudent(STUDENT_A);
+    dinnerExpected.add(block3_dinner);
+    dinnerExpected.add(new Block(TIME_1830, DURATION_30_MINUTES));
+
+    Assert.assertEquals(lunchExpected, actual.getLunchBlocks());
+    Assert.assertEquals(dinnerExpected, actual.getDinnerBlocks());
+
+  }
 }
