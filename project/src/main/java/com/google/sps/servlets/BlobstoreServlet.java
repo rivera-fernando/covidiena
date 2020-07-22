@@ -41,10 +41,6 @@ public class BlobstoreServlet extends HttpServlet {
     String uploadUrlEdit = blobstoreService.createUploadUrl("/edit-event");
     String uploadUrlEditUser = blobstoreService.createUploadUrl("/edit-user");
     String uploadUrlSignUp = blobstoreService.createUploadUrl("/user");
-
-
-
- 
     uploadUrls.add(uploadUrlPost);
     uploadUrls.add(uploadUrlEdit);
     uploadUrls.add(uploadUrlEditUser);

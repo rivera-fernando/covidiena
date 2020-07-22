@@ -47,8 +47,10 @@ public class SearchEventsServlet extends HttpServlet {
  
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query("ApprovedEvent");
-    query.addSort("dateTimestamp", SortDirection.ASCENDING);
+    Query approvedQuery = new Query("ApprovedEvent");
+    approvedQuery.addSort("dateTimestamp", SortDirection.ASCENDING);
+    Query pastQuery = new Query("PastEvent");
+    pastQuery.addSort("dateTimestamp", SortDirection.ASCENDING);
 
     HttpSession session = request.getSession(false);
     boolean found = false;
@@ -60,8 +62,17 @@ public class SearchEventsServlet extends HttpServlet {
       String email = ((String) session.getAttribute("email")).toLowerCase();
  
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      PreparedQuery results = datastore.prepare(query);
-      List<Entity> resultsList = results.asList(FetchOptions.Builder.withDefaults());
+      PreparedQuery approvedResults = datastore.prepare(approvedQuery);
+      List<Entity> approvedResultsList = approvedResults.asList(FetchOptions.Builder.withDefaults());
+      PreparedQuery pastResults = datastore.prepare(pastQuery);
+      List<Entity> pastResultsList = pastResults.asList(FetchOptions.Builder.withDefaults());
+      
+      List<Entity> resultsList = new ArrayList<>();
+      resultsList.addAll(pastResultsList);
+      resultsList.addAll(approvedResultsList);
+
+      long today = System.currentTimeMillis();
+      
       List<Event> events = new ArrayList<>();
  
       for (int i = 0; i < resultsList.size(); i++) {
@@ -71,26 +82,39 @@ public class SearchEventsServlet extends HttpServlet {
         @SuppressWarnings("unchecked") // Cast can't verify generic type.
         Collection<String> attendees = (Collection<String>) entity.getProperty("attendees");
         if (!attendees.isEmpty()) {
-          if (!attendees.contains(email)) {
-            long id = entity.getKey().getId();
-            String name = (String) entity.getProperty("name");
-            String location = (String) entity.getProperty("location");
-            String date = (String) entity.getProperty("date");
-            String time = (String) entity.getProperty("time");
-            String description = (String) entity.getProperty("description");
-            String type = (String) entity.getProperty("attendance");
-            String attendance = (String) entity.getProperty("type");
-            long timestamp = (long) entity.getProperty("timestamp");
-            String imageKey = (String) entity.getProperty("imageKey");
-            long dateTimestamp = (long) entity.getProperty("dateTimestamp");
+          long id = entity.getKey().getId();
+          String name = (String) entity.getProperty("name");
+          String location = (String) entity.getProperty("location");
+          String date = (String) entity.getProperty("date");
+          String time = (String) entity.getProperty("time");
+          String description = (String) entity.getProperty("description");
+          String type = (String) entity.getProperty("attendance");
+          String attendance = (String) entity.getProperty("type");
+          long timestamp = (long) entity.getProperty("timestamp");
+          String imageKey = (String) entity.getProperty("imageKey");
+          long dateTimestamp = (long) entity.getProperty("dateTimestamp");
+          long capacity = (long) entity.getProperty("capacity");
+          boolean edited = (boolean) entity.getProperty("edited");
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.clear();
-            calendar.setTimeInMillis(dateTimestamp);
-            int day = calendar.get(Calendar.DAY_OF_WEEK);
-            Event event = new Event(id, name, location, date, time, description, type, attendance, timestamp, entity.getProperty("email").equals(email), "ApprovedEvent", imageKey, day, attendees.size(), 0);
-            events.add(event);
+          Calendar calendar = Calendar.getInstance();
+          calendar.clear();
+          calendar.setTimeInMillis(dateTimestamp);
+          int day = calendar.get(Calendar.DAY_OF_WEEK);
+        
+          String category = "";
+          if (dateTimestamp < today) {
+            category = "Past";
+          } else if (attendees.contains(email)) {
+            category = "Upcoming";
+          } else {
+            category = "Explore";
           }
+          
+          Event event = new Event(id, name, location, date, time, description, type, 
+            attendance, timestamp, entity.getProperty("email").equals(email), "ApprovedEvent", 
+            imageKey, day, attendees.size(), capacity, false, new ArrayList<String>(), "", edited, category);
+
+          events.add(event);
         }
       }
  

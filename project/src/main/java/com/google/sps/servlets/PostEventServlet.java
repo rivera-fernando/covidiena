@@ -75,7 +75,9 @@ public class PostEventServlet extends HttpServlet {
     String attendance = request.getParameter("event-attendance");
     String description = request.getParameter("description");
     String imageKey = getUploadedFileUrl(request, "image");
+    int capacity = Integer.parseInt(request.getParameter("capacity"));
     long timestamp = System.currentTimeMillis();
+    List<String> changes = new ArrayList<String>();
  
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
  
@@ -108,6 +110,10 @@ public class PostEventServlet extends HttpServlet {
         approvedEventEntity.setProperty("attendees", attendees);
         approvedEventEntity.setProperty("dateTimestamp", dateTimestamp);
         approvedEventEntity.setProperty("imageKey", imageKey);
+        approvedEventEntity.setProperty("capacity", capacity);
+        approvedEventEntity.setProperty("rejected", false);
+        approvedEventEntity.setProperty("edited", false);
+        approvedEventEntity.setProperty("changes", changes);
  
         datastore.put(approvedEventEntity);
       } else {
@@ -124,6 +130,10 @@ public class PostEventServlet extends HttpServlet {
         unapprovedEventEntity.setProperty("email", email);
         unapprovedEventEntity.setProperty("dateTimestamp", dateTimestamp);
         unapprovedEventEntity.setProperty("imageKey", imageKey);
+        unapprovedEventEntity.setProperty("capacity", capacity);
+        unapprovedEventEntity.setProperty("rejected", false);
+        unapprovedEventEntity.setProperty("edited", false);
+        unapprovedEventEntity.setProperty("changes", changes);
  
         datastore.put(unapprovedEventEntity);
       }

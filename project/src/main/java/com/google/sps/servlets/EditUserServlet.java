@@ -42,7 +42,6 @@ public class EditUserServlet extends HttpServlet {
         PreparedQuery results = datastore.prepare(query);
         String userEmail = request.getParameter("userEmail");
         User oldInfo = null;
-
         long userId = -1;
         for (Entity entity : results.asIterable()){
             if (userEmail.equals((String)entity.getProperty("email"))){
@@ -63,7 +62,6 @@ public class EditUserServlet extends HttpServlet {
                 break;
             }
         }
-
         Entity user = null;
         try {
             Key userKey = KeyFactory.createKey("User", userId);
@@ -72,14 +70,12 @@ public class EditUserServlet extends HttpServlet {
         catch ( Exception EntityNotFoundException){
             return;
         }
-
         if (!request.getParameter("name").isEmpty()){
             user.setProperty("name", request.getParameter("name"));
             session.setAttribute("name", request.getParameter("name"));
         } else {
             user.setProperty("name", oldInfo.getName());
         }
-
         if (request.getParameter("metric")!= null){
             if (request.getParameter("metric").equals("celsius")){
                 user.setProperty("metric", "celsius");
@@ -108,14 +104,12 @@ public class EditUserServlet extends HttpServlet {
         }else{
             user.setProperty("imageKey", oldInfo.getImageKey());
         }
-    
         user.setProperty("birthdate", oldInfo.getBirthdate());
         user.setProperty("studentId", oldInfo.getStudentId());
         user.setProperty("school", oldInfo.getSchool());
         user.setProperty("is_admin", oldInfo.getIsAdmin());
         user.setProperty("sex", oldInfo.getSex());
         user.setProperty("email", oldInfo.getEmail());
-
 
         datastore.put(user);
         response.sendRedirect("/settings.html");
@@ -139,7 +133,6 @@ public class EditUserServlet extends HttpServlet {
             (String) session.getAttribute("metric"),
             (boolean) session.getAttribute("is_admin"),
             (String) session.getAttribute("imageKey"));
-
         response.getWriter().println(gson.toJson(user));
     }
 
@@ -147,13 +140,10 @@ public class EditUserServlet extends HttpServlet {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get(formInputElementName);
- 
     if (blobKeys == null || blobKeys.isEmpty()) {
       return null;
     }
- 
     BlobKey blobKey = blobKeys.get(0);
- 
     BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
     if (blobInfo.getSize() == 0) {
       blobstoreService.delete(blobKey);
