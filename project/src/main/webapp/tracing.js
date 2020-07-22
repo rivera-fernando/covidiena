@@ -81,8 +81,6 @@ function createMarkers(places) {
 
   for (let mark of markers){
       mark.addListener('click', function() {
-        console.log("{" + mark.getPosition().lat() + " , " + marker.getPosition().lng() + "}");
-        console.log(mark.getTitle());
         document.getElementById("logLocationButton").style.display = "";
         document.getElementById("log-location-form").style.display = "";
         document.getElementById("longitude").value = mark.getPosition().lat();
