@@ -101,7 +101,8 @@ public class LogInServlet extends HttpServlet {
       String phone = (String) session.getAttribute("phone");
       String metric = (String) session.getAttribute("metric");
       boolean admin = (boolean) session.getAttribute("admin");
-      user = new User(id, name, email, password, birthdate, studentId, sex, school, phone, metric, admin);
+      String imageKey = (String) session.getAttribute("imageKey");
+      user = new User(id, name, email, password, birthdate, studentId, sex, school, phone, metric, admin, imageKey);
     }
 
     Gson gson = new Gson();
