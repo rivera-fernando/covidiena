@@ -60,12 +60,12 @@ public final class CafeteriaSchedulerTest {
   // Sample Lunch Blocks
   private static final TimeRange LUNCH_A = TimeRange.fromStartEnd(TIME_1100, TIME_1300, false);
   private static final TimeRange LUNCH_B = TimeRange.fromStartEnd(TIME_1200, TIME_1500, false);
-  private static final TimeRange LUNCH_C = TimeRange.fromStartEnd(TIME_1130, TIME_1430, false);
+  private static final TimeRange LUNCH_C = TimeRange.fromStartEnd(TIME_1100, TIME_1500, false);
 
   // Sample Dinner Blocks
   private static final TimeRange DINNER_A = TimeRange.fromStartEnd(TIME_1700, TIME_1900, false);
   private static final TimeRange DINNER_B = TimeRange.fromStartEnd(TIME_1800, TIME_2100, false);
-  private static final TimeRange DINNER_C = TimeRange.fromStartEnd(TIME_1730, TIME_2030, false);
+  private static final TimeRange DINNER_C = TimeRange.fromStartEnd(TIME_1700, TIME_2100, false);
 
   // Sample meal durations
   private static final int DURATION_30_MINUTES = 30;
@@ -77,6 +77,7 @@ public final class CafeteriaSchedulerTest {
   private static final int CAPACITY_3 = 3;
   private static final int CAPACITY_5 = 5;
   private static final int CAPACITY_10 = 10;
+  private static final int CAPACITY_125 = 125;
 
   // Sample Lunch Preferences
   private static final TimeRange PREF_1100 = TimeRange.fromStartDuration(TIME_1100, DURATION_60_MINUTES);
@@ -107,16 +108,23 @@ public final class CafeteriaSchedulerTest {
   private static final Student STUDENT_H = new Student("Student H", PREF_1100, PREF_1800);
   private static final Student STUDENT_I = new Student("Student I", PREF_1130, PREF_1930);
   private static final Student STUDENT_J = new Student("Student J", PREF_1200, PREF_1200);
-  private static final Student STUDENT_K = new Student("Student K", PREF_1230, PREF_1730);
-  private static final Student STUDENT_L = new Student("Student L", PREF_1300, PREF_2000);
-  private static final Student STUDENT_M = new Student("Student M", PREF_1330, PREF_1900);
-  private static final Student STUDENT_N = new Student("Student N", PREF_1400, PREF_1700);
 
   private CafeteriaScheduler scheduler;
+  private List<Student> studentsPool = new ArrayList<Student>();
 
   @Before
   public void setUp() {
     scheduler = new CafeteriaScheduler();
+    studentsPool.add(STUDENT_A);
+    studentsPool.add(STUDENT_B);
+    studentsPool.add(STUDENT_C);
+    studentsPool.add(STUDENT_D);
+    studentsPool.add(STUDENT_E);
+    studentsPool.add(STUDENT_F);
+    studentsPool.add(STUDENT_G);
+    studentsPool.add(STUDENT_H);
+    studentsPool.add(STUDENT_I);
+    studentsPool.add(STUDENT_J);
   }
 
   @Test
@@ -270,5 +278,51 @@ public final class CafeteriaSchedulerTest {
     Assert.assertEquals(lunchExpected, actual.getLunchBlocks());
     Assert.assertEquals(dinnerExpected, actual.getDinnerBlocks());
 
+  }
+  
+  @Test
+  public void lotsOfStudents() {
+    
+    // Create a pool of 1000 students
+    List<Student> students = new ArrayList<Student>();
+    for (int index = 0; index < 100; index++) {
+      students.addAll(studentsPool);
+    }
+
+    Schedule actual = scheduler.schedule(LUNCH_C, DINNER_C, DURATION_30_MINUTES, CAPACITY_125, students);
+
+    Assert.assertEquals(CAPACITY_125, actual.getLunchBlocks().get(0).getCapacity());
+    Assert.assertEquals(CAPACITY_125, actual.getLunchBlocks().get(1).getCapacity());
+    Assert.assertEquals(CAPACITY_125, actual.getLunchBlocks().get(2).getCapacity());
+    Assert.assertEquals(CAPACITY_125, actual.getLunchBlocks().get(3).getCapacity());
+    Assert.assertEquals(CAPACITY_125, actual.getDinnerBlocks().get(0).getCapacity());
+    Assert.assertEquals(CAPACITY_125, actual.getDinnerBlocks().get(1).getCapacity());
+    Assert.assertEquals(CAPACITY_125, actual.getDinnerBlocks().get(2).getCapacity());
+    Assert.assertEquals(CAPACITY_125, actual.getDinnerBlocks().get(3).getCapacity());
+
+
+    System.out.println(actual.getHappiness());
+
+    Assert.assertTrue(actual.getLunchBlocks().get(0).contains(63, "Student A"));
+    Assert.assertTrue(actual.getLunchBlocks().get(0).contains(62, "Student H"));
+    Assert.assertTrue(actual.getLunchBlocks().get(1).contains(37, "Student A"));
+    Assert.assertTrue(actual.getLunchBlocks().get(1).contains(38, "Student H"));
+    Assert.assertTrue(actual.getLunchBlocks().get(1).contains(25, "Student B"));
+    Assert.assertTrue(actual.getLunchBlocks().get(1).contains(25, "Student I"));
+    Assert.assertTrue(actual.getLunchBlocks().get(2).contains(63, "Student B"));
+    Assert.assertTrue(actual.getLunchBlocks().get(2).contains(62, "Student I"));
+    Assert.assertTrue(actual.getLunchBlocks().get(3).contains(63, "Student C"));
+    Assert.assertTrue(actual.getLunchBlocks().get(3).contains(62, "Student J"));
+    Assert.assertTrue(actual.getLunchBlocks().get(4).contains(100, "Student D"));
+    Assert.assertTrue(actual.getLunchBlocks().get(4).contains(25, "Student E"));
+    Assert.assertTrue(actual.getLunchBlocks().get(5).contains(75, "Student E"));    
+    Assert.assertTrue(actual.getLunchBlocks().get(5).contains(50, "Student F"));    
+    Assert.assertTrue(actual.getLunchBlocks().get(6).contains(50, "Student F"));    
+    Assert.assertTrue(actual.getLunchBlocks().get(6).contains(75, "Student G"));    
+    Assert.assertTrue(actual.getLunchBlocks().get(7).contains(25, "Student G")); 
+    Assert.assertTrue(actual.getLunchBlocks().get(7).contains(12, "Student B")); 
+    Assert.assertTrue(actual.getLunchBlocks().get(7).contains(13, "Student I")); 
+    Assert.assertTrue(actual.getLunchBlocks().get(7).contains(37, "Student C")); 
+    Assert.assertTrue(actual.getLunchBlocks().get(7).contains(38, "Student J")); 
   }
 }

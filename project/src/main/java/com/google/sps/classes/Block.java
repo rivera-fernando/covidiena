@@ -52,7 +52,7 @@ public final class Block {
     for (Student student : students) {
       this.students.add(student);
     }
-    
+
   }
 
   public Student removeStudent(Student student) {
@@ -114,4 +114,14 @@ public final class Block {
   
   }
 
+  // For testing
+  public boolean contains(int numNames, String name) {
+    int actual = 0;
+    for (Student student : this.students) {
+      if (student.getName().equals(name)) {
+        actual++;
+      }
+    }
+    return actual == numNames;
+  }
 }

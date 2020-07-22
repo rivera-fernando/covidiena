@@ -32,6 +32,8 @@ public final class CafeteriaScheduler {
   public Schedule schedule(TimeRange lunch, TimeRange dinner, 
     int mealTime, int maxCapacity, List<Student> students) {
 
+    int numStudents = students.size();
+
     Schedule schedule = new Schedule(lunch, dinner, mealTime);
 
     if (students.isEmpty()) {
@@ -51,38 +53,57 @@ public final class CafeteriaScheduler {
     Collections.sort(studentsDinnerCopy, Student.ORDER_DINNER_END);
 
     // Handle lunch
-    int blockIndex = 0;
-    while (!studentsLunchCopy.isEmpty()) {
-      Student student = studentsLunchCopy.get(0);
-      TimeRange lunchPref = student.getLunchPref();
-      Block block = lunchBlocks.get(blockIndex);
-      // If the block is full, or if there are not students
-      // who want to eat at this block's time, go to next block.
-      if ((lunchPref.start() > block.getTime().start())
-        || (block.getCapacity() >= maxCapacity)) {
-        blockIndex++;
-        continue;
-      } else {
-        block.addStudent(student);
-        studentsLunchCopy.remove(student);
+    List<Student> unhappyLunchStudents = new ArrayList<Student>();
+    for (Student student : studentsLunchCopy) {
+      boolean assigned = false;
+      // While the student is unassigned
+      for (Block block : lunchBlocks) {
+        if ((block.getTime().overlaps(student.getLunchPref())) && (block.getCapacity() < maxCapacity)) {
+          block.addStudent(student);
+          schedule.incrementHappiness();
+          assigned = true;
+          break;
+        }
+      }
+      if (!assigned) {
+        unhappyLunchStudents.add(student);
+      }
+    }
+
+    while (!unhappyLunchStudents.isEmpty()) {
+      for (Block block : lunchBlocks) {
+        while (block.getCapacity() < maxCapacity && !unhappyLunchStudents.isEmpty()) {
+          Student student = unhappyLunchStudents.get(0);
+          block.addStudent(student);
+          unhappyLunchStudents.remove(student);
+        }
       }
     }
 
     // Handle dinner
-    blockIndex = 0;
-    while (!studentsDinnerCopy.isEmpty()) {
-      Student student = studentsDinnerCopy.get(0);
-      TimeRange dinnerPref = student.getDinnerPref();
-      Block block = dinnerBlocks.get(blockIndex);
-      // If the block is full, or if there are not students
-      // who want to eat at this block's time, go to next block.
-      if ((dinnerPref.start() > block.getTime().start())
-        || (block.getCapacity() >= maxCapacity)) {
-        blockIndex++;
-        continue;
-      } else {
-        block.addStudent(student);
-        studentsDinnerCopy.remove(student);
+    List<Student> unhappyDinnerStudents = new ArrayList<Student>();
+    for (Student student : studentsDinnerCopy) {
+      boolean assigned = false;
+      // While the student is unassigned
+      for (Block block : dinnerBlocks) {
+        if ((block.getTime().overlaps(student.getDinnerPref())) && (block.getCapacity() < maxCapacity)) {
+          block.addStudent(student);
+          assigned = true;
+          break;
+        }
+      }
+      if (!assigned) {
+        unhappyDinnerStudents.add(student);
+      }
+    }
+
+    while (!unhappyDinnerStudents.isEmpty()) {
+      for (Block block : dinnerBlocks) {
+        while (block.getCapacity() < maxCapacity && !unhappyDinnerStudents.isEmpty()) {
+          Student student = unhappyDinnerStudents.get(0);
+          block.addStudent(student);
+          unhappyDinnerStudents.remove(student);
+        }
       }
     }
 

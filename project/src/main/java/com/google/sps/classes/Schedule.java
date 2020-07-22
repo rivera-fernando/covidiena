@@ -30,7 +30,8 @@ public final class Schedule {
   private final TimeRange dinner;
   private final int mealTime;
   private List<Block> lunchBlocks; 
-  private List<Block> dinnerBlocks; 
+  private List<Block> dinnerBlocks;
+  private int happy; 
 
   public Schedule(TimeRange lunch, TimeRange dinner, int mealTime) {
 
@@ -71,6 +72,18 @@ public final class Schedule {
   public List<Block> getDinnerBlocks() {
 
     return this.dinnerBlocks;
+    
+  }
+
+  public void incrementHappiness() {
+   
+    this.happy++;
+  
+  }
+
+  public int getHappiness() {
+
+    return this.happy;
     
   }
 }
