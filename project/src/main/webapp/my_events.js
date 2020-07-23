@@ -67,12 +67,14 @@ function loadPending() {
         var eventElement = createEventElement(event);
         addApprovalBtn(eventElement);
         addRejectionBtn(eventElement);
+        addViewDetailsBtn(eventElement, event);
         pendingEvents.appendChild(eventElement);
         loadDropdowns();
       })
     } else {
       events.forEach((event) => {
         var eventElement = createEventElement(event);
+        addViewDetailsBtn(eventElement, event);
         pendingEvents.appendChild(eventElement);
         loadDropdowns();
       })
@@ -93,6 +95,7 @@ function loadApproved() {
     } else {
       events.forEach((event) => {
         var eventElement = createEventElement(event);
+        addViewDetailsBtn(eventElement, event);
         approvedEvents.appendChild(eventElement);
         loadDropdowns();
       })
@@ -410,6 +413,27 @@ function addDeleteBtn(eventElement, entityType) {
   dropdownList.appendChild(deleteBtn);
 }
 
+function addViewDetailsBtn(eventElement, event) {
+  const viewDetails = document.createElement('li');
+
+  viewDetails.innerText = "Event Details";
+  viewDetails.classList.add('waves-light', 'btn-flat', 'btn-small');
+
+  viewDetails.addEventListener('click', () => {
+    const params = new URLSearchParams();
+    params.append('eventId', eventElement.id);
+    params.append('eventType', event.entityType);
+    fetch ('event-details', {
+      method: 'POST',
+      body: params
+    });
+    location.replace('/event-details.html');
+  });
+
+  var dropdownList = eventElement.getElementsByTagName('ul')[0];
+  dropdownList.appendChild(viewDetails);
+}
+
 function addEditBtn(eventElement, event) {
   const editBtn = document.createElement('li');
 
@@ -431,6 +455,7 @@ function cancelEdit() {
   editForm.style.display = "none";
 }
 
+
 /*
  * ################# BLOB METHODS #################
  */
@@ -441,8 +466,8 @@ function serveBlob(event, eventElement) {
     fetch('/serve-blob?imageKey='+event.imageKey).then((image)=>{
       imageElement.src = image.url;
     });
-    imageElement.style.maxHeight = '200px';
-    imageElement.style.maxWidth = '200px';
+    imageElement.style.maxHeight = "90%";
+    imageElement.style.maxWidth = "90%";
     eventElement.appendChild(imageElement);
   }
 }

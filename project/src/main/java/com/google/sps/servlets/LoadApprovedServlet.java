@@ -105,7 +105,8 @@ public class LoadApprovedServlet extends HttpServlet {
             
             Event event = new Event(id, name, location, date, time, description, type, 
                 attendance, timestamp, entity.getProperty("email").equals(email), "ApprovedEvent", 
-                imageKey, day, attendees.size(), capacity, false, new ArrayList<String>(), "", edited, "Approved");
+                imageKey, day, attendees.size(), capacity, false, new ArrayList<String>(), "", edited, 
+                "Approved", new ArrayList<String>());
 
             events.add(event);
           }

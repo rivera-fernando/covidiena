@@ -80,7 +80,7 @@ public class LoadPendingEventsServlet extends HttpServlet {
           if (!rejected || edited) {
             Event event = new Event(id, name, location, date, time, description, type, attendance,
               timestamp, isMine, "unapproved", imageKey, -1, 0, 0, rejected, changes, adminEmail, 
-              edited, "Pending");
+              edited, "Pending", new ArrayList<String>());
             pendingEvents.add(event);
           }
         }
@@ -110,7 +110,7 @@ public class LoadPendingEventsServlet extends HttpServlet {
  
             Event event = new Event(id, name, location, date, time, description, type, attendance, 
               timestamp, true, "UnapprovedEvent", imageKey, -1, 0, capacity, rejected, changes, 
-              adminEmail, edited, "Pending");
+              adminEmail, edited, "Pending", new ArrayList<String>());
                 
             pendingEvents.add(event);
           }

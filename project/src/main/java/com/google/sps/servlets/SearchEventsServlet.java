@@ -112,7 +112,8 @@ public class SearchEventsServlet extends HttpServlet {
           
           Event event = new Event(id, name, location, date, time, description, type, 
             attendance, timestamp, entity.getProperty("email").equals(email), "ApprovedEvent", 
-            imageKey, day, attendees.size(), capacity, false, new ArrayList<String>(), "", edited, category);
+            imageKey, day, attendees.size(), capacity, false, new ArrayList<String>(), "", 
+            edited, category, new ArrayList<String>());
 
           events.add(event);
         }

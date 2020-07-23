@@ -80,7 +80,7 @@ public class PostEventServlet extends HttpServlet {
     List<String> changes = new ArrayList<String>();
  
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
- 
+
     HttpSession session = request.getSession(false);
     boolean found = false;
     if (session.getAttribute("name") != null) {
@@ -89,7 +89,7 @@ public class PostEventServlet extends HttpServlet {
 
     if (found) {
       String email = ((String) session.getAttribute("email")).toLowerCase();
-      boolean isAdmin = (boolean) session.getAttribute("admin");
+      boolean isAdmin = (boolean) session.getAttribute("is_admin");
 
       if (isAdmin) {
         Entity approvedEventEntity = new Entity("ApprovedEvent");
