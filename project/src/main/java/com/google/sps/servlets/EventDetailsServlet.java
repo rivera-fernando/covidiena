@@ -91,6 +91,7 @@ public class EventDetailsServlet extends HttpServlet {
       response.setContentType("application/json;");
       response.getWriter().println(gson.toJson(events));
     } catch(EntityNotFoundException e) {
+      e.printStackTrace();
       return;
     }
   }

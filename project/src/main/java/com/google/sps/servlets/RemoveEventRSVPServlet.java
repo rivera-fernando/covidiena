@@ -67,6 +67,7 @@ public class RemoveEventRSVPServlet extends HttpServlet {
 
       response.sendRedirect("/events.html");
     } catch(EntityNotFoundException e) {
+      e.printStackTrace();
       return;
     }
   }

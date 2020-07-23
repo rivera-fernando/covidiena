@@ -100,6 +100,7 @@ public class ApproveEventServlet extends HttpServlet {
 
         response.sendRedirect("/events.html");
       } catch(EntityNotFoundException e) {
+        e.printStackTrace();
         return;
       }
     } else {
@@ -134,6 +135,7 @@ public class ApproveEventServlet extends HttpServlet {
 
         response.sendRedirect("/events.html"); 
       } catch(EntityNotFoundException e) {
+        e.printStackTrace();
         return;
       }
     }

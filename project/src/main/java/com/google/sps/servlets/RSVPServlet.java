@@ -70,6 +70,7 @@ public class RSVPServlet extends HttpServlet {
 
       datastore.put(approvedEvent);
     } catch(EntityNotFoundException e) {
+      e.printStackTrace();
       return;
     }
   }
