@@ -57,7 +57,7 @@ public class EditUserServlet extends HttpServlet {
                     (String)entity.getProperty("school"),
                     (String)entity.getProperty("phone"),
                     (String)entity.getProperty("metric"),
-                    (boolean) entity.getProperty("admin"),
+                    (boolean) entity.getProperty("is_admin"),
                     (String) entity.getProperty("imageKey"));
                 break;
             }
@@ -107,7 +107,7 @@ public class EditUserServlet extends HttpServlet {
         user.setProperty("birthdate", oldInfo.getBirthdate());
         user.setProperty("studentId", oldInfo.getStudentId());
         user.setProperty("school", oldInfo.getSchool());
-        user.setProperty("admin", oldInfo.getAdmin());
+        user.setProperty("is_admin", oldInfo.getIsAdmin());
         user.setProperty("sex", oldInfo.getSex());
         user.setProperty("email", oldInfo.getEmail());
 
@@ -116,7 +116,7 @@ public class EditUserServlet extends HttpServlet {
     }
 
     
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Gson gson = new Gson();
         response.setContentType("application/json;");
         HttpSession session = request.getSession(false);
@@ -131,7 +131,7 @@ public class EditUserServlet extends HttpServlet {
             (String) session.getAttribute("school"),
             (String) session.getAttribute("phone"),
             (String) session.getAttribute("metric"),
-            (boolean) session.getAttribute("admin"),
+            (boolean) session.getAttribute("is_admin"),
             (String) session.getAttribute("imageKey"));
         response.getWriter().println(gson.toJson(user));
     }

@@ -9,7 +9,11 @@
     <link rel='icon' href='./static/favicon.png' type='image/x-icon'/ >
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="materialize.min.js"></script>
+    <script src="tracing.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGiqqHxV-dvFdgBu_CXqovT85uLxs5m-c&libraries=places" type="text/javascript"></script> -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGiqqHxV-dvFdgBu_CXqovT85uLxs5m-c&callback=createMap&libraries=places&v=weekly" defer></script>
     <script>
     $(document).ready(function(){
         $('.sidenav').sidenav();
@@ -27,7 +31,7 @@
       google.charts.setOnLoadCallback(drawBasic);
     </script>
   </head>
-  <body onload ="updateLogIn();populateLinks();populateAnnouncements();">
+  <body onload ="updateLogIn();populateLinks();populateAnnouncements();createMap();">
       <nav>
     	<div class="nav-wrapper blue-grey lighten-4">
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
@@ -65,6 +69,52 @@
                         </div>
                         <div class="center-align col s6 m2 l3">
                             <a style="width: 100%;" class="waves-effect waves-light btn blue lighten-1" href="#">No</a>
+                        </div>
+                    </div>
+                </div>
+                <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
+                    <div class="row">
+                        <div class="col s12 m8 l6">
+                            <p>Have you left campus? Log where you have gone</p>
+                        </div>
+                        <div class="center-align col s6 m4 l6">
+                            <a style="width: 50%;" class="center-align waves-effect waves-light btn blue lighten-1" onclick="showLocationForm()">Log Location</a>
+                        </div>
+                    </div>
+                </div>
+                <div id="logLocationCard" style="border-radius: 10px; display:none" class="card-panel blue-grey lighten-4">
+                    <i style="color: #42a5f5;" class="material-icons right" onclick="hideLocationForm()">close</i>
+                    <div id="tracing-map">
+                        <p class="center">Search for a location or choose a purple tag</p>
+                        <div>
+                            <input id="pac-input" class="controls pac-target-input input-field" type="text" placeholder="Search Location">
+                        </div>
+                        <br></br>
+                        <div id="map"></div>
+                        <div class= "card-action">
+                            <form action="/logLocation" method="POST" form id="log-location-form" style="display:none;" onsubmit= "hideLocationForm()">
+                                <div class="row">
+                                    <div class="input-field col s12 l7 offset-l1">
+                                        <input type="text" name="longitude" id="longitude"hidden>
+                                    </div>
+                                    <div class="input-field col s12 l7 offset-l1">
+                                        <input type="text" name="latitude" id="latitude" hidden>
+                                    </div>
+                                    <div class="input-field col s12 l7 offset-l1">
+                                        <input type="text" name="location" id="location" placeholder="" disabled>
+                                        <label for="location">Location</label>
+                                    </div>
+                                    <div class="input-field col s12 l3">
+                                        <input type="text" placeholder="MM/DD/YYYY" name="date" id="date" class= "datepicker" required>
+                                        <label for="date">When</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field center" style="display:"";">
+                                        <button id="logLocationButton" class ="btn" style="background-color: #42a5f5; display:none;" type="submit" value="submit" >Log Location</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -208,4 +258,5 @@
         </div>
     </footer>
   </body>
+  <script src="tracing.js"></script>
 </html>

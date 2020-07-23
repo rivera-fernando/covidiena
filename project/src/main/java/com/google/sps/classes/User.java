@@ -12,11 +12,12 @@ public final class User {
   private final String school;
   private String phone;
   private String metric;
-  private Boolean admin;
+  private Boolean is_admin;
   private String imageKey;
 
   /*User class is instatiated when a user logins so all their info is accesible without the datatsore being queried each time*/
-  public User(long userId, String name, String email, String password, String birthdate, long studentId, String sex, String school, String phone, String metric, Boolean admin, String imageKey) {
+  public User(long userId, String name, String email, String password, String birthdate, long studentId, 
+              String sex, String school, String phone, String metric, Boolean is_admin, String imageKey) {
     this.userId = userId;
     this.name = name;
     this.email = email;
@@ -27,7 +28,7 @@ public final class User {
     this.school = school;
     this.phone = phone;
     this.metric = metric;
-    this.admin = admin;
+    this.is_admin = is_admin;
     this.imageKey = imageKey;
   }
 
@@ -59,8 +60,8 @@ public final class User {
       return sex;
   }
 
-  public Boolean getAdmin(){
-      return admin;
+  public Boolean getIsAdmin(){
+      return is_admin;
   }
 
   public String getSchool(){
