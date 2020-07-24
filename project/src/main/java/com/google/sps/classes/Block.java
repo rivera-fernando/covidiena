@@ -26,59 +26,35 @@ public final class Block {
   private final int duration;
 
   public Block(int start, int duration) {
-
     this.students = new ArrayList<Student>();
     this.time = TimeRange.fromStartDuration(start, duration);
     this.duration = duration;
-
   }
 
   public Block(List<Student> students, TimeRange time) {
-    
     this.students = students;
     this.time = time;
     this.duration = time.duration();
-
   }
 
-  public void addStudent(Student student) {
-
-    this.students.add(student);
-
-  }
+  public void addStudent(Student student) {this.students.add(student)}
 
   public void addStudents(List<Student> students) {
-    
     for (Student student : students) {
       this.students.add(student);
     }
-
   }
 
   public Student removeStudent(Student student) {
-
     this.students.remove(student);
-
     return student;
   }
 
-  public List<Student> getStudents() {
+  public List<Student> getStudents() {return this.students}
 
-    return this.students;
+  public TimeRange getTime() {return this.time}
 
-  }
-
-  public TimeRange getTime() {
-
-    return this.time;
-
-  }
-
-  public int getCapacity() {
-
-    return this.students.size();
-
-  }
+  public int getCapacity() {return this.students.size()}
 
   private static boolean equalStudents(Block a, Block b) {
     if (a.students.size() == b.students.size()) {
@@ -94,9 +70,7 @@ public final class Block {
 
   @Override
   public String toString() {
-
     return String.format("Block: [" + time.start() + ", " + time.end() + "] " + "Students: " + students);
-  
   }
 
   private static boolean equals(Block a, Block b) {
@@ -109,9 +83,7 @@ public final class Block {
 
   @Override
   public boolean equals(Object other) {
-
     return other instanceof Block && equals(this, (Block) other);
-  
   }
 
   // For testing

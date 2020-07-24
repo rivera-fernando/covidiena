@@ -129,7 +129,6 @@ public final class CafeteriaSchedulerTest {
 
   @Test
   public void noStudents() {
-
     Schedule actual = scheduler.schedule(LUNCH_A, DINNER_A, DURATION_30_MINUTES, CAPACITY_1, NO_STUDENTS);
     
     List<Block> lunchExpected = new ArrayList<Block>();
@@ -146,12 +145,10 @@ public final class CafeteriaSchedulerTest {
 
     Assert.assertEquals(lunchExpected, actual.getLunchBlocks());
     Assert.assertEquals(dinnerExpected, actual.getDinnerBlocks());
-
   }
 
   @Test
   public void oneStudent() {
-    
     List<Student> students = new ArrayList<Student>();
     students.add(STUDENT_C);
     Schedule actual = scheduler.schedule(LUNCH_A, DINNER_A, DURATION_30_MINUTES, CAPACITY_1, students);
@@ -174,12 +171,10 @@ public final class CafeteriaSchedulerTest {
 
     Assert.assertEquals(lunchExpected, actual.getLunchBlocks());
     Assert.assertEquals(dinnerExpected, actual.getDinnerBlocks());
-
   }
 
   @Test
   public void twoStudents() {
-    
     List<Student> students = new ArrayList<Student>();
     // Full overlap for lunch, no overlap for dinner
     students.add(STUDENT_A);
@@ -208,12 +203,10 @@ public final class CafeteriaSchedulerTest {
 
     Assert.assertEquals(lunchExpected, actual.getLunchBlocks());
     Assert.assertEquals(dinnerExpected, actual.getDinnerBlocks());
-
   }
 
   @Test
   public void twoStudentsSameBlock() {
-    
     List<Student> students = new ArrayList<Student>();
     // Full overlap for lunch, no overlap for dinner
     students.add(STUDENT_A);
@@ -238,12 +231,10 @@ public final class CafeteriaSchedulerTest {
 
     Assert.assertEquals(lunchExpected, actual.getLunchBlocks());
     Assert.assertEquals(dinnerExpected, actual.getDinnerBlocks());
-
   }
 
   @Test
   public void noOptimalSolution() {
-    
     List<Student> students = new ArrayList<Student>();
     // Full overlap for lunch, no overlap for dinner
     students.add(STUDENT_A);
@@ -277,12 +268,10 @@ public final class CafeteriaSchedulerTest {
 
     Assert.assertEquals(lunchExpected, actual.getLunchBlocks());
     Assert.assertEquals(dinnerExpected, actual.getDinnerBlocks());
-
   }
   
   @Test
   public void lotsOfStudents() {
-    
     // Create a pool of 1000 students
     List<Student> students = new ArrayList<Student>();
     for (int index = 0; index < 100; index++) {

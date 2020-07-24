@@ -30,49 +30,27 @@ public final class Student {
   private TimeRange dinnerPref;
 
   public Student(String name, TimeRange lunchPref, TimeRange dinnerPref) {
-
     this.name = name;
     this.lunchPref = lunchPref;
     this.dinnerPref = dinnerPref;
-
   }
 
   public void setLunchPref(TimeRange lunchPref) {
-
     this.lunchPref = lunchPref;
-    
   }
 
   public void setDinnerPref(TimeRange dinnerPref) {
-
     this.dinnerPref = dinnerPref;
-    
   }
 
-  public TimeRange getLunchPref() {
+  public TimeRange getLunchPref() {return this.lunchPref}
 
-    return this.lunchPref;
+  public TimeRange getDinnerPref() {return this.dinnerPref}
 
-  }
-
-  public TimeRange getDinnerPref() {
-
-    return this.dinnerPref;
-
-  }
-
-  public String getName() {
-
-    return this.name;
-
-  }
+  public String getName() {return this.name}
 
   @Override
-  public String toString() {
-
-    return String.format(this.name);
-  
-  }
+  public String toString() {return String.format(this.name)}
 
   /**
    * A comparator for sorting ranges by their start time in ascending order.

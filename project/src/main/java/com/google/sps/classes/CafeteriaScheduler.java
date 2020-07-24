@@ -33,7 +33,6 @@ public final class CafeteriaScheduler {
     int mealTime, int maxCapacity, List<Student> students) {
 
     int numStudents = students.size();
-
     Schedule schedule = new Schedule(lunch, dinner, mealTime);
 
     if (students.isEmpty()) {

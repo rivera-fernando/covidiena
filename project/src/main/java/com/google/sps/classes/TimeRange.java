@@ -116,9 +116,7 @@ public final class TimeRange {
     return contains(this, other.start) && contains(this, otherInclusiveEnd);
   }
 
-  public boolean contains(int point) {
-    return contains(this, point);
-  }
+  public boolean contains(int point) {return contains(this, point)}
 
   @Override
   public boolean equals(Object other) {

@@ -34,7 +34,6 @@ public final class Schedule {
   private int happy; 
 
   public Schedule(TimeRange lunch, TimeRange dinner, int mealTime) {
-
     this.lunch = lunch;
     this.dinner = dinner;
     this.mealTime = mealTime;
@@ -60,31 +59,16 @@ public final class Schedule {
       Block newBlock = new Block(students, time);
       this.dinnerBlocks.add(newBlock);
     }
-
   }
 
-  public List<Block> getLunchBlocks() {
+  public List<Block> getLunchBlocks() {return this.lunchBlocks}
 
-    return this.lunchBlocks;
-
-  }
-
-  public List<Block> getDinnerBlocks() {
-
-    return this.dinnerBlocks;
-    
-  }
+  public List<Block> getDinnerBlocks() {return this.dinnerBlocks}
 
   public void incrementHappiness() {
-   
     this.happy++;
-  
   }
 
-  public int getHappiness() {
-
-    return this.happy;
-    
-  }
+  public int getHappiness() {return this.happy}
 }
 
