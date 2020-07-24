@@ -9,7 +9,11 @@
     <link rel='icon' href='./static/favicon.png' type='image/x-icon'/ >
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="materialize.min.js"></script>
+    <script src="tracing.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGiqqHxV-dvFdgBu_CXqovT85uLxs5m-c&libraries=visualization">
+    </script>
     <script>
     $(document).ready(function(){
         $('.sidenav').sidenav();
@@ -27,7 +31,7 @@
       google.charts.setOnLoadCallback(drawAvg);
     </script>
   </head>
-  <body onload ="updateLogIn();showPending();">
+  <body onload ="updateLogIn();showPending();heatmap();">
       <nav>
     	<div class="nav-wrapper blue-grey lighten-4">
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
@@ -113,10 +117,14 @@
           </div>
       </div>
       <div class="card-panel blue-grey lighten-4">
-          <h3>Pending Admin Approval</h3>
-          <div class="row" id="pending">
-          </div>
+          <h3>User Admin Requests</h3>
+          <div class="row" id="pending"> </div>
       </div>
+      <div class="card-panel blue-grey lighten-4">
+          <h3>Popular Places</h3>
+          <div id="map"></div>
+      </div>
+      
     </div>
      <footer class="page-footer blue-grey lighten-2 ">
         <div class="footer-copyright blue-grey lighten-2">
