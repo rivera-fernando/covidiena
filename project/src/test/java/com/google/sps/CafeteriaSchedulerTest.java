@@ -326,3 +326,4 @@ public final class CafeteriaSchedulerTest {
     Assert.assertTrue(actual.getLunchBlocks().get(7).contains(38, "Student J")); 
   }
 }
+

@@ -184,3 +184,4 @@ public final class TimeRange {
     return new TimeRange(start, duration);
   }
 }
+
