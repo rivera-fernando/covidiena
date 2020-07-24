@@ -97,8 +97,7 @@ public class EditUserServlet extends HttpServlet {
         } else {
             user.setProperty("password", oldInfo.getPassword());
         }
-        System.out.println(request.getParameter("edit-image"));
-        if(request.getParameter("edit-image") != null){
+        if(getUploadedFileUrl(request, "edit-image") != null){
             user.setProperty("imageKey", getUploadedFileUrl(request, "edit-image"));
             session.setAttribute("imageKey", getUploadedFileUrl(request, "edit-image"));
         }else{
