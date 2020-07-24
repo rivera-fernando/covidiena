@@ -56,7 +56,6 @@ public class EditUserServlet extends HttpServlet {
                     (String)entity.getProperty("sex"),
                     (String)entity.getProperty("school"),
                     (String)entity.getProperty("phone"),
-                    (String)entity.getProperty("metric"),
                     (boolean) entity.getProperty("is_admin"),
                     (String) entity.getProperty("imageKey"));
                 break;
@@ -75,15 +74,6 @@ public class EditUserServlet extends HttpServlet {
             session.setAttribute("name", request.getParameter("name"));
         } else {
             user.setProperty("name", oldInfo.getName());
-        }
-        if (request.getParameter("metric")!= null){
-            if (request.getParameter("metric").equals("celsius")){
-                user.setProperty("metric", "celsius");
-                session.setAttribute("metric", "celsius");
-            } else {
-                user.setProperty("metric", "fahrenheit");
-                session.setAttribute("metric", "fahrenheit");
-            }
         }
         if (!request.getParameter("phone").isEmpty()){
             user.setProperty("phone", request.getParameter("phone"));
@@ -129,7 +119,6 @@ public class EditUserServlet extends HttpServlet {
             (String) session.getAttribute("sex"),
             (String) session.getAttribute("school"),
             (String) session.getAttribute("phone"),
-            (String) session.getAttribute("metric"),
             (boolean) session.getAttribute("is_admin"),
             (String) session.getAttribute("imageKey"));
         response.getWriter().println(gson.toJson(user));
