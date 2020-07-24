@@ -43,14 +43,20 @@ public final class Student {
     this.dinnerPref = dinnerPref;
   }
 
-  public TimeRange getLunchPref() {return this.lunchPref}
+  public TimeRange getPref(String meal) {
+    if (meal.equals("lunch")) {
+      return this.lunchPref;
+    } else if (meal.equals("dinner")) { 
+      return this.dinnerPref;
+    } else {
+      return null;
+    }
+  }
 
-  public TimeRange getDinnerPref() {return this.dinnerPref}
-
-  public String getName() {return this.name}
+  public String getName() {return this.name;}
 
   @Override
-  public String toString() {return String.format(this.name)}
+  public String toString() {return String.format(this.name);}
 
   /**
    * A comparator for sorting ranges by their start time in ascending order.
@@ -58,7 +64,7 @@ public final class Student {
   public static final Comparator<Student> ORDER_LUNCH_START = new Comparator<Student>() {
     @Override
     public int compare(Student a, Student b) {
-      return Long.compare(a.getLunchPref().start(), b.getLunchPref().start());
+      return Long.compare(a.getPref("lunch").start(), b.getPref("lunch").start());
     }
   };
 
@@ -68,7 +74,7 @@ public final class Student {
   public static final Comparator<Student> ORDER_LUNCH_END = new Comparator<Student>() {
     @Override
     public int compare(Student a, Student b) {
-      return Long.compare(a.getLunchPref().end(), b.getLunchPref().end());
+      return Long.compare(a.getPref("lunch").end(), b.getPref("lunch").end());
     }
   };
 
@@ -78,7 +84,7 @@ public final class Student {
   public static final Comparator<Student> ORDER_DINNER_START = new Comparator<Student>() {
     @Override
     public int compare(Student a, Student b) {
-      return Long.compare(a.getDinnerPref().start(), b.getDinnerPref().start());
+      return Long.compare(a.getPref("dinner").start(), b.getPref("dinner").start());
     }
   };
 
@@ -88,7 +94,7 @@ public final class Student {
   public static final Comparator<Student> ORDER_DINNER_END = new Comparator<Student>() {
     @Override
     public int compare(Student a, Student b) {
-      return Long.compare(a.getDinnerPref().end(), b.getDinnerPref().end());
+      return Long.compare(a.getPref("dinner").end(), b.getPref("dinner").end());
     }
   };
 }

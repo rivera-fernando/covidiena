@@ -32,81 +32,50 @@ public final class CafeteriaScheduler {
   public Schedule schedule(TimeRange lunch, TimeRange dinner, 
     int mealTime, int maxCapacity, List<Student> students) {
 
-    int numStudents = students.size();
     Schedule schedule = new Schedule(lunch, dinner, mealTime);
 
     if (students.isEmpty()) {
       return schedule;
     }
 
-    List<Block> lunchBlocks = schedule.getLunchBlocks();
-    List<Block> dinnerBlocks = schedule.getDinnerBlocks();
-
-    // Order students by whoever's preference ends first
-
-    // Make deep copy of students list so we don't edit the existing one
-    List<Student> studentsLunchCopy = new ArrayList<Student>(students);
-    List<Student> studentsDinnerCopy = new ArrayList<Student>(students);
-
-    Collections.sort(studentsLunchCopy, Student.ORDER_LUNCH_END);
-    Collections.sort(studentsDinnerCopy, Student.ORDER_DINNER_END);
-
-    // Handle lunch
-    List<Student> unhappyLunchStudents = new ArrayList<Student>();
-    for (Student student : studentsLunchCopy) {
-      boolean assigned = false;
-      // While the student is unassigned
-      for (Block block : lunchBlocks) {
-        if ((block.getTime().overlaps(student.getLunchPref())) && (block.getCapacity() < maxCapacity)) {
-          block.addStudent(student);
-          schedule.incrementHappiness();
-          assigned = true;
-          break;
-        }
-      }
-      if (!assigned) {
-        unhappyLunchStudents.add(student);
-      }
-    }
-
-    while (!unhappyLunchStudents.isEmpty()) {
-      for (Block block : lunchBlocks) {
-        while (block.getCapacity() < maxCapacity && !unhappyLunchStudents.isEmpty()) {
-          Student student = unhappyLunchStudents.get(0);
-          block.addStudent(student);
-          unhappyLunchStudents.remove(student);
-        }
-      }
-    }
-
-    // Handle dinner
-    List<Student> unhappyDinnerStudents = new ArrayList<Student>();
-    for (Student student : studentsDinnerCopy) {
-      boolean assigned = false;
-      // While the student is unassigned
-      for (Block block : dinnerBlocks) {
-        if ((block.getTime().overlaps(student.getDinnerPref())) && (block.getCapacity() < maxCapacity)) {
-          block.addStudent(student);
-          assigned = true;
-          break;
-        }
-      }
-      if (!assigned) {
-        unhappyDinnerStudents.add(student);
-      }
-    }
-
-    while (!unhappyDinnerStudents.isEmpty()) {
-      for (Block block : dinnerBlocks) {
-        while (block.getCapacity() < maxCapacity && !unhappyDinnerStudents.isEmpty()) {
-          Student student = unhappyDinnerStudents.get(0);
-          block.addStudent(student);
-          unhappyDinnerStudents.remove(student);
-        }
-      }
-    }
+    // Populate meal blocks using deep copies of student lists
+    handleMeal(new ArrayList<Student>(students), schedule.getLunchBlocks(), maxCapacity, "lunch");
+    handleMeal(new ArrayList<Student>(students), schedule.getDinnerBlocks(), maxCapacity, "dinner");
 
     return schedule;
+  }
+
+  public void handleMeal(List<Student> students, List<Block> blocks, int maxCapacity, String meal) {
+    // Order students by whoever's preference ends first
+    Collections.sort(students, Student.ORDER_LUNCH_END);
+
+    // Create list to handle students who don't eat at their preferences
+    List<Student> unhappyStudents = new ArrayList<Student>();
+
+    for (Student student : students) {
+      boolean assigned = false;
+      // While the student is unassigned
+      for (Block block : blocks) {
+        if ((block.getTime().overlaps(student.getPref(meal))) && (block.getCapacity() < maxCapacity)) {
+          block.addStudent(student);
+          assigned = true;
+          break;
+        }
+      }
+      if (!assigned) {
+        unhappyStudents.add(student);
+      }
+    }
+
+    while (!unhappyStudents.isEmpty()) {
+      for (Block block : blocks) {
+        while (block.getCapacity() < maxCapacity && !unhappyStudents.isEmpty()) {
+          Student student = unhappyStudents.get(0);
+          block.addStudent(student);
+          unhappyStudents.remove(student);
+        }
+      }
+    }
   }
 }
 

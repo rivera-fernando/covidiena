@@ -37,7 +37,7 @@ public final class Block {
     this.duration = time.duration();
   }
 
-  public void addStudent(Student student) {this.students.add(student)}
+  public void addStudent(Student student) {this.students.add(student);}
 
   public void addStudents(List<Student> students) {
     for (Student student : students) {
@@ -50,11 +50,11 @@ public final class Block {
     return student;
   }
 
-  public List<Student> getStudents() {return this.students}
+  public List<Student> getStudents() {return this.students;}
 
-  public TimeRange getTime() {return this.time}
+  public TimeRange getTime() {return this.time;}
 
-  public int getCapacity() {return this.students.size()}
+  public int getCapacity() {return this.students.size();}
 
   private static boolean equalStudents(Block a, Block b) {
     if (a.students.size() == b.students.size()) {

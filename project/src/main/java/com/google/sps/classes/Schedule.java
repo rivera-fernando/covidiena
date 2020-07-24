@@ -61,14 +61,14 @@ public final class Schedule {
     }
   }
 
-  public List<Block> getLunchBlocks() {return this.lunchBlocks}
+  public List<Block> getLunchBlocks() {return this.lunchBlocks;}
 
-  public List<Block> getDinnerBlocks() {return this.dinnerBlocks}
+  public List<Block> getDinnerBlocks() {return this.dinnerBlocks;}
 
   public void incrementHappiness() {
     this.happy++;
   }
 
-  public int getHappiness() {return this.happy}
+  public int getHappiness() {return this.happy;}
 }
 
