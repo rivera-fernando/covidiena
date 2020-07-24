@@ -18,7 +18,7 @@ async function heatmap() {
 
     map = new google.maps.Map(document.getElementById('map'), {
         center: center,
-        zoom: 3,
+        zoom: 4,
     });
 
     var heatmap = new google.maps.visualization.HeatmapLayer({
