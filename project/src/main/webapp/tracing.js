@@ -22,7 +22,8 @@ async function heatmap() {
     });
 
     var heatmap = new google.maps.visualization.HeatmapLayer({
-        data: heatmapData
+        data: heatmapData,
+        radius: 15,
     });
     heatmap.setMap(map);
 }
