@@ -20,6 +20,15 @@ async function heatmap() {
         center: center,
         zoom: 4,
     });
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+        var pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+        };
+        map.setCenter(pos);
+        map.setZoom(11);
+        });}
 
     var heatmap = new google.maps.visualization.HeatmapLayer({
         data: heatmapData,
