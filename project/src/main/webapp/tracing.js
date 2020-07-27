@@ -3,6 +3,7 @@
 // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
 var map;
+var heat;
 
 async function heatmap() {
     const heatmapData = [];
@@ -16,7 +17,7 @@ async function heatmap() {
     });
     var center = new google.maps.LatLng(40.774546, -97.433523);
 
-    map = new google.maps.Map(document.getElementById('map'), {
+    heat = new google.maps.Map(document.getElementById('heat'), {
         center: center,
         zoom: 4,
     });
@@ -26,15 +27,15 @@ async function heatmap() {
             lat: position.coords.latitude,
             lng: position.coords.longitude
         };
-        map.setCenter(pos);
-        map.setZoom(9);
+        heat.setCenter(pos);
+        heat.setZoom(9);
         });}
 
     var heatmap = new google.maps.visualization.HeatmapLayer({
         data: heatmapData,
         radius: 15,
     });
-    heatmap.setMap(map);
+    heatmap.setMap(heat);
 }
 
 function createMap() {

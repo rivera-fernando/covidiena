@@ -13,11 +13,12 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGiqqHxV-dvFdgBu_CXqovT85uLxs5m-c&libraries=places" type="text/javascript"></script> -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGiqqHxV-dvFdgBu_CXqovT85uLxs5m-c&callback=createMap&libraries=places&v=weekly" defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGiqqHxV-dvFdgBu_CXqovT85uLxs5m-c&callback=createMap&libraries=places,visualization&v=weekly" defer></script>
     <script>
     $(document).ready(function(){
         $('.sidenav').sidenav();
         $('.collapsible').collapsible();
+        $('.modal').modal();
     });
     $(window).resize(function(){
         drawBasic();
@@ -31,7 +32,7 @@
       google.charts.setOnLoadCallback(drawBasic);
     </script>
   </head>
-  <body onload ="updateLogIn();populateLinks();populateAnnouncements();createMap();">
+  <body onload ="updateLogIn();populateLinks();populateAnnouncements();heatmap();createMap();">
       <nav>
     	<div class="nav-wrapper blue-grey lighten-4">
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
@@ -77,8 +78,10 @@
                         <div class="col s12 m8 l6">
                             <p>Have you left campus? Log where you have gone</p>
                         </div>
-                        <div class="center-align col s6 m4 l6">
-                            <a style="width: 50%;" class="center-align waves-effect waves-light btn blue lighten-1" onclick="showLocationForm()">Log Location</a>
+                        <div class="center-align col s12 m4 l6">
+                            <a style="width: 100%;" class="center-align waves-effect waves-light btn blue lighten-1" onclick="showLocationForm()">Log Location</a>
+                            &nbsp
+                            <a style="width: 100%;" class="waves-effect waves-light btn modal-trigger" href="#modal1">View Heatmap</a>
                         </div>
                     </div>
                 </div>
@@ -247,6 +250,9 @@
                 </div>
         <h2>Announcements</h2>
         <ul style="border-radius: 10px;" id="announcements" class="collapsible popout"> </ul>
+        <div style="height: 500px" id="modal1" class="modal">
+            <div id="heat"></div>
+        </div>
         </div>
     </main>
     <footer class="page-footer blue-grey lighten-2 ">
@@ -258,5 +264,4 @@
         </div>
     </footer>
   </body>
-  <script src="tracing.js"></script>
 </html>
