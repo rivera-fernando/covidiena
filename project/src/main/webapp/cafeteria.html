@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Cafeteria</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="icons.css">
+    <link rel="stylesheet" href="materialize.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="materialize.min.js"></script>
+    <script>
+    $(document).ready(function(){
+        $('.sidenav').sidenav();
+    });
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="materialize.min.js"></script>
+    <script src="event_script.js"></script>
+    <script src="my_events.js"></script>
+  </head>
+  <body onload="loadMyEvents(); updateLogIn()">
+      <nav>
+        <div class="nav-wrapper blue-grey lighten-4">
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
+            <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
+            <ul id="nav-mobile" class="right">
+                <li><a href="/settings.html" id="settingButton"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
+            </ul>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
+                <li><a style="color: #42a5f5;" href="/info.html">Information</a></li>
+                <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+                <li style="width: 50px; height: 60px;">&nbsp;</li>
+                <li><a style="color: #42a5f5;" href="/signup.html" class="signupButton">Sign Up</a></li>
+                <li><a style="color: #42a5f5;" class= "loginButton">Log In</a></li>
+            </ul>
+        </div>
+      </nav>
+      <ul class="sidenav" id="mobile-demo">
+        <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
+        <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+        <li><a style="color: #42a5f5;" href="/signup.html" class="signupButton">Sign Up</a></li>
+        <li><a style="color: #42a5f5;" class ="loginButton">Log In</a></li>
+      </ul>
+    <main>
+      <div class="container">
+        <h4>Cafeteria Schedule</h4>
+        <div id="school"></div>
+        <div id="lunch-pref">You designated your lunch preference as: </div>
+        <div id="dinner-pref">You designated your dinner preference as: </div>
+        <div id="lunch">Your assigned lunch time is: </div>
+        <div id="dinner">Your assigned dinner time is: </div>
+      </div>
+    </main>
+    <footer class="page-footer blue-grey lighten-2 ">
+        <div class="footer-copyright blue-grey lighten-2">
+            <div class="container blue-grey-text text-darken-2 left">
+            © 2020 Covidiena. All Rights Reserved.
+            <a class="blue-text text-darken-1 right" href="mailto: covidiena@gmail.com">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+  </body>
+</html>
