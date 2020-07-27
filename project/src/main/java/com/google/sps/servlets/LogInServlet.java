@@ -48,7 +48,6 @@ public class LogInServlet extends HttpServlet {
           session.removeAttribute("sex");
           session.removeAttribute("school");
           session.removeAttribute("phone");
-          session.removeAttribute("metric"); 
           session.removeAttribute("is_admin");    
           session.removeAttribute("imageKey");
 
@@ -73,7 +72,6 @@ public class LogInServlet extends HttpServlet {
                     session.setAttribute("sex", (String) entity.getProperty("sex"));
                     session.setAttribute("school", (String) entity.getProperty("school"));
                     session.setAttribute("phone", (String) entity.getProperty("phone"));
-                    session.setAttribute("metric", (String) entity.getProperty("metric")); 
                     session.setAttribute("is_admin", (boolean) entity.getProperty("is_admin"));      
                     session.setAttribute("imageKey", (String) entity.getProperty("imageKey"));  
 
@@ -99,10 +97,9 @@ public class LogInServlet extends HttpServlet {
       String sex = (String) session.getAttribute("sex");
       String school = (String) session.getAttribute("school");
       String phone = (String) session.getAttribute("phone");
-      String metric = (String) session.getAttribute("metric");
       boolean is_admin = (boolean) session.getAttribute("is_admin");
       String imageKey = (String) session.getAttribute("imageKey");
-      user = new User(id, name, email, password, birthdate, studentId, sex, school, phone, metric, is_admin, imageKey);
+      user = new User(id, name, email, password, birthdate, studentId, sex, school, phone, is_admin, imageKey);
     }
 
     Gson gson = new Gson();

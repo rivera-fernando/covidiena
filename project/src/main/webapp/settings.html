@@ -45,10 +45,10 @@
                     <div class="row">
                         <div class = "file-field input-field col s12 l12 center">
                             <img id="edit-output-image" style="max-height: 100%; max-width: 100%; overflow: scroll;">
-                            <input type="file" accept="image/*" onchange="preview_image(event)" name="edit-image">
+                            <input type="file" accept="image/*" onchange="preview_image(event)" name="edit-image" id="edit-image">
                         </div>
                         <div class="file-path-wrapper">
-                            <input class="file-path validate" type="text" id="edit-image" name="edit-image" hidden>
+                            <input class="file-path validate" type="text" name="edit-image" hidden>
                         </div>
                     </div>
                     <div class="row">
@@ -83,20 +83,6 @@
                             <label for="school">School</label>
                         </div>
                     </div>
-                    <div clas="row">
-                        <label>Metric Preference</label>
-                        <div class="input-field col s12 l2">
-                            <div class="switch">
-                                <label>
-                                °C
-                                <input type="checkbox" id="metric" name="metric">
-                                <span class="lever"></span> 
-                                °F
-                                </label>
-                            </div>
-                            <i style="color: #42a5f5;" class="material-icons right">edit</i>
-                        </div>
-                    </div>
                     <h3>Contact Information</h3>
                     <div class="row">
                         <div class="input-field col s12 l12">
@@ -126,7 +112,7 @@
                                     <p>When you delete your account, all the data assocaited with this account will also be deleted.</p>
                                 </div>
                                 <div class= "modal-footer">
-                                    <a onclick="deleteUser()" class ="btn modal-close" style="background-color: #42a5f5;">Delete Account</a>
+                                    <a onclick="deleteUser()" class ="btn modal-close red lighten-1 white-text">Delete Account</a>
                                     <a class ="btn modal-close" style="background-color: #42a5f5;">Cancel</a>
                                 </div>
                             </div>

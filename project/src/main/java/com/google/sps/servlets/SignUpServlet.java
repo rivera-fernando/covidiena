@@ -72,7 +72,6 @@ public class SignUpServlet extends HttpServlet {
         userEntity.setProperty("sex", sex);
         userEntity.setProperty("school", school);
         userEntity.setProperty("phone", phone);
-        userEntity.setProperty("metric", "fahrenheit");
         userEntity.setProperty("is_admin", false);
         userEntity.setProperty("password", password);
         userEntity.setProperty("imageKey", imageKey);

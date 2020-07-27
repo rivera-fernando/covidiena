@@ -42,6 +42,7 @@ public class LogLocation extends HttpServlet {
         String latitude = request.getParameter("latitude");
         String date = request.getParameter("date");
         String email = (String) session.getAttribute("email");
+        String school = (String) session.getAttribute("school");
         SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
         long dateStamp = 0;
         try {
@@ -52,6 +53,7 @@ public class LogLocation extends HttpServlet {
         }
 
         Entity locationEntity = new Entity("LocationLog");
+        locationEntity.setProperty("school", school);
         locationEntity.setProperty("lng", longitude);
         locationEntity.setProperty("lat", latitude);
         locationEntity.setProperty("email", email);
