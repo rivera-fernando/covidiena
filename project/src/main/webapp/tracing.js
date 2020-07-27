@@ -4,10 +4,43 @@
 
 var map;
 
+async function heatmap() {
+    const heatmapData = [];
+    await fetch("/logLocation").then(function(response) {
+        return response.json();
+    }).then(function(locations) {
+        locations.forEach(location => {
+            var place = new google.maps.LatLng(location[1], location[0]);
+            heatmapData.push(place);
+        });
+    });
+    var center = new google.maps.LatLng(40.774546, -97.433523);
+
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: center,
+        zoom: 4,
+    });
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+        var pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+        };
+        map.setCenter(pos);
+        map.setZoom(9);
+        });}
+
+    var heatmap = new google.maps.visualization.HeatmapLayer({
+        data: heatmapData,
+        radius: 15,
+    });
+    heatmap.setMap(map);
+}
+
 function createMap() {
     map = new google.maps.Map(document.getElementById('map'),
-    {center: {lng: 39.8283, lat: 98.5795},
-    zoom: 12
+    {center: {lng: 50, lat: 57},
+    zoom: 11
     });
     infoWindow = new google.maps.InfoWindow;
 

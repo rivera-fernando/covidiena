@@ -31,6 +31,9 @@ import javax.servlet.http.HttpSession;
 /*user logs locations they have gone off campus for tracing*/
 @WebServlet("/logLocation")
 public class LogLocation extends HttpServlet {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    GsonBuilder gsonBuilder = new GsonBuilder();
+    Gson gson = gsonBuilder.create();
     
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -48,7 +51,6 @@ public class LogLocation extends HttpServlet {
             e.printStackTrace();
         }
 
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Entity locationEntity = new Entity("LocationLog");
         locationEntity.setProperty("lng", longitude);
         locationEntity.setProperty("lat", latitude);
@@ -57,6 +59,23 @@ public class LogLocation extends HttpServlet {
 
         datastore.put(locationEntity);
         response.sendRedirect("/dashboard");
+
+    }
+
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession(false);  
+        ArrayList<Object> locations = new ArrayList<Object>();
+        Query query = new Query("LocationLog");
+        PreparedQuery results = datastore.prepare(query);
+        for(Entity entity:results.asIterable()) {
+            ArrayList<Object> location = new ArrayList<Object>();
+            location.add(entity.getProperty("lat"));
+            location.add(entity.getProperty("lng"));
+            locations.add(location);
+        }
+        response.setContentType("application/json;");
+        response.getWriter().println(gson.toJson(locations));  
 
     }
 }
