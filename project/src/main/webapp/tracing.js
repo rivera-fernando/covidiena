@@ -27,7 +27,7 @@ async function heatmap() {
             lng: position.coords.longitude
         };
         map.setCenter(pos);
-        map.setZoom(11);
+        map.setZoom(9);
         });}
 
     var heatmap = new google.maps.visualization.HeatmapLayer({
