@@ -32,7 +32,7 @@
       google.charts.setOnLoadCallback(drawBasic);
     </script>
   </head>
-  <body onload ="updateLogIn();populateLinks();populateAnnouncements();heatmap();createMap();">
+  <body onload ="updateLogIn();populateLinks();populateAnnouncements();heatmap();createMap();exposed();">
       <nav>
     	<div class="nav-wrapper blue-grey lighten-4">
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
@@ -133,7 +133,7 @@
                         <div class="center-align col s12 m4">
                             <div style="border-radius: 10px;" class="card white">
                                 <div class="card-content blue-grey-text-darken-2">
-                                    <p>Not that we know of</p>
+                                    <p id="status">Not that we know of</p>
                                 </div>
                             </div>
                         </div>

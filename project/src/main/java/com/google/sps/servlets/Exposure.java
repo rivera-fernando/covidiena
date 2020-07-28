@@ -78,7 +78,9 @@ public class Exposure extends HttpServlet {
           query = new Query("LocationLog").setFilter(timeAndPlaceFilter);
           all = datastore.prepare(query);
           for (Entity new_entity : all.asIterable()) {
-              emails.add((String) new_entity.getProperty("email"));
+              if (!((String) new_entity.getProperty("email")).equals(email)) {
+                emails.add((String) new_entity.getProperty("email"));
+              }
           }
       }
       Iterator<String> itr = emails.iterator();  
@@ -92,20 +94,11 @@ public class Exposure extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
       HttpSession session = request.getSession(false); 
-      //example school: "University of Florida", phone: 111-111-1111
-      String school = (String) session.getAttribute("school");
       ArrayList<Object> data = new ArrayList<Object>();
-      Query query = new Query("Announcements").addSort("when", SortDirection.DESCENDING);
+      Query query = new Query("ExposedEmails");
       PreparedQuery results = datastore.prepare(query);
       for(Entity entity:results.asIterable()){
-          if (((String) entity.getProperty("school")).toLowerCase().equals(school.toLowerCase())) {
-              ArrayList<Object> pair = new ArrayList<Object>();
-              pair.add((String) entity.getProperty("from"));
-              pair.add((String) entity.getProperty("title"));
-              pair.add((String) entity.getProperty("importance"));
-              pair.add((String) entity.getProperty("content"));
-              data.add(pair);
-          }
+              data.add((String) entity.getProperty("email"));
       }
       response.setContentType("application/json;");
       response.getWriter().println(gson.toJson(data));
