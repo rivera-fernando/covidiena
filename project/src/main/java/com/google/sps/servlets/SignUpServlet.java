@@ -48,6 +48,7 @@ public class SignUpServlet extends HttpServlet {
         long studentId = Long.parseLong(request.getParameter("studentID"));
         String sex = request.getParameter("sex");
         String school = request.getParameter("school");
+        String state = request.getParameter("state");
         String phone = request.getParameter("phone");
         String password = PasswordHash.hashPassword(request.getParameter("password").toCharArray());
         String imageKey = getUploadedFileUrl(request, "image");
@@ -75,6 +76,7 @@ public class SignUpServlet extends HttpServlet {
         userEntity.setProperty("is_admin", false);
         userEntity.setProperty("password", password);
         userEntity.setProperty("imageKey", imageKey);
+        userEntity.setProperty("state", state);
 
         datastore.put(userEntity);  
 

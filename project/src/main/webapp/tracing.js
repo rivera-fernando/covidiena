@@ -59,7 +59,6 @@ function createMap() {
         map.setCenter(pos);
         const input = document.getElementById("pac-input");
         const searchBox = new google.maps.places.SearchBox(input);
-        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
 
         // Bias the SearchBox results towards current map's viewport.
@@ -124,11 +123,10 @@ function createMap() {
     }, function() {
       handleLocationError(true, infoWindow, map.getCenter());
     });
-  } else {
-    // Browser doesn't support Geolocation
-    handleLocationError(false, infoWindow, map.getCenter());
-  }
-
+    } else {
+        // Browser doesn't support Geolocation
+        handleLocationError(false, infoWindow, map.getCenter());
+    }
 }
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -145,4 +143,39 @@ function showLocationForm(){
 
 function hideLocationForm(){
     document.getElementById("logLocationCard").style.display = "none";
+}
+
+function getPastLocations(){
+    fetch('/load-location').then(response => response.json()).then((locations) => {
+        const pastLocations = document.getElementById('oldLocations');
+        locations.forEach((location) => {
+            pastLocations.appendChild(createLocationElement(location));
+        });
+    });
+}
+
+function createLocationElement(location){
+    const locationElement = document.createElement('tr');
+    const locationInfo = document.createElement('td');
+    locationInfo.innerText = location.name + " on " + location.date;
+    const deleteButton = document.createElement('i');
+    deleteButton.innerText = 'delete';
+    deleteButton.classList.add('material-icons');
+    deleteButton.classList.add('right');
+    deleteButton.addEventListener('click', () => {
+        deleteLocation(location);
+        locationElement.remove();
+    });
+
+    locationElement.appendChild(locationInfo);
+    locationElement.appendChild(deleteButton);
+    return locationElement;
+}
+
+async function deleteLocation(location){
+    (async () =>{
+        const params = new URLSearchParams();
+        params.append('locationId', location.locationId);
+        fetch('/delete-location', {method: 'POST', body:params});
+    })();
 }
