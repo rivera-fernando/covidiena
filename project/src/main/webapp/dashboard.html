@@ -83,13 +83,19 @@
                     </div>
                 </div>
                 <div id="logLocationCard" style="border-radius: 10px; display:none" class="card-panel blue-grey lighten-4">
+                    <a href="#pastLocations" class="modal-trigger" onclick="getPastLocations()">Past Locations</a>
+                    <div id="pastLocations" class="modal">
+                        <div class="modal-content">
+                            <h4>Past Locations</h4>
+                            <table id="oldLocations" class="responsive-table highlight" style="width: 100%; overflow: scroll;"></table>
+                        </div>
+                    </div>
                     <i style="color: #42a5f5;" class="material-icons right" onclick="hideLocationForm()">close</i>
                     <div id="tracing-map">
                         <p class="center">Search for a location or choose a purple tag</p>
                         <div>
                             <input id="pac-input" class="controls pac-target-input input-field" type="text" placeholder="Search Location">
                         </div>
-                        <br></br>
                         <div id="map"></div>
                         <div class= "card-action">
                             <form action="/logLocation" method="POST" form id="log-location-form" style="display:none;" onsubmit= "hideLocationForm()">
@@ -101,7 +107,7 @@
                                         <input type="text" name="latitude" id="latitude" hidden>
                                     </div>
                                     <div class="input-field col s12 l7 offset-l1">
-                                        <input type="text" name="location" id="location" placeholder="" disabled>
+                                        <input type="text" name="location" id="location" placeholder="" readonly="true">
                                         <label for="location">Location</label>
                                     </div>
                                     <div class="input-field col s12 l3">
