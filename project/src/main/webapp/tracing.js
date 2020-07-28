@@ -147,6 +147,7 @@ function hideLocationForm(){
 function getPastLocations(){
     fetch('/load-location').then(response => response.json()).then((locations) => {
         const pastLocations = document.getElementById('oldLocations');
+        pastLocations.innerText= "";
         locations.forEach((location) => {
             pastLocations.appendChild(createLocationElement(location));
         });
