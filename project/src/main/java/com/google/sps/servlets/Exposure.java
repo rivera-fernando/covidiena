@@ -40,7 +40,8 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.HashSet;
+import java.util.Map;
+import java.util.HashMap;
  
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -63,7 +64,7 @@ public class Exposure extends HttpServlet {
       Query query = new Query("LocationLog").setFilter(emailFilter);
       PreparedQuery results = datastore.prepare(query);
       PreparedQuery all;
-      HashSet<String> emails = new HashSet();
+      Map<String, String> emails = new HashMap<String, String>();
       for (Entity entity : results.asIterable()) {
           Filter dateFilter = 
             new FilterPredicate("date", FilterOperator.EQUAL, entity.getProperty("date"));
@@ -79,16 +80,15 @@ public class Exposure extends HttpServlet {
           all = datastore.prepare(query);
           for (Entity new_entity : all.asIterable()) {
               if (!((String) new_entity.getProperty("email")).equals(email)) {
-                emails.add((String) new_entity.getProperty("email"));
+                  Entity exposedEntity = new Entity("ExposedEmails");
+                  exposedEntity.setProperty("email", (String) new_entity.getProperty("email"));
+                  exposedEntity.setProperty("place", (String) new_entity.getProperty("name"));
+                  exposedEntity.setProperty("lat", (String) new_entity.getProperty("lat"));
+                  exposedEntity.setProperty("lng", (String) new_entity.getProperty("lng"));
+                  datastore.put(exposedEntity);
               }
           }
       }
-      Iterator<String> itr = emails.iterator();  
-      while(itr.hasNext()){  
-        Entity exposedEntity = new Entity("ExposedEmails");
-        exposedEntity.setProperty("email", itr.next());
-        datastore.put(exposedEntity);
-      }     
   }
   
   @Override
@@ -98,7 +98,14 @@ public class Exposure extends HttpServlet {
       Query query = new Query("ExposedEmails");
       PreparedQuery results = datastore.prepare(query);
       for(Entity entity:results.asIterable()){
-              data.add((String) entity.getProperty("email"));
+        ArrayList<Object> personAndPlace = new ArrayList<Object>();
+        personAndPlace.add((String) entity.getProperty("email"));
+        personAndPlace.add((String) entity.getProperty("place"));
+        personAndPlace.add((String) entity.getProperty("lat"));
+        personAndPlace.add((String) entity.getProperty("lng"));
+
+
+        data.add(personAndPlace);
       }
       response.setContentType("application/json;");
       response.getWriter().println(gson.toJson(data));
