@@ -111,3 +111,4 @@ public class Exposure extends HttpServlet {
       response.getWriter().println(gson.toJson(data));
   }
 }
+
