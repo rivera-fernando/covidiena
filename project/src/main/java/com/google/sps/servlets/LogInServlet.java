@@ -1,4 +1,5 @@
 package com.google.sps.servlets;
+
 import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -6,8 +7,6 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.gson.Gson;
@@ -38,7 +37,7 @@ public class LogInServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session=request.getSession();  
+        HttpSession session = request.getSession();  
         Gson gson = new Gson();
         response.setContentType("application/json");
         // First if handles log out
@@ -51,9 +50,8 @@ public class LogInServlet extends HttpServlet {
           session.removeAttribute("sex");
           session.removeAttribute("school");
           session.removeAttribute("phone");
-          session.removeAttribute("metric"); 
           session.removeAttribute("is_admin");    
-          session.removeAttribute("key");    
+          session.removeAttribute("imageKey");
 
         response.sendRedirect("/index.html");
         return;
@@ -67,32 +65,18 @@ public class LogInServlet extends HttpServlet {
             ArrayList<String> users = new ArrayList<String>();
             for (Entity entity:results.asIterable()){
                 if (entity.getProperty("password").equals(password) && entity.getProperty("email").equals(email)){
-                    user = new User(
-                        (long) entity.getKey().getId(),
-                        (String) entity.getProperty("name"),
-                        (String) entity.getProperty("email"),
-                        (String) entity.getProperty("password"),
-                        (String) entity.getProperty("birthdate"),
-                        (long) entity.getProperty("studentId"),
-                        (String) entity.getProperty("sex"),
-                        (String) entity.getProperty("school"),
-                        (String) entity.getProperty("phone"),
-                        (String) entity.getProperty("metric"), 
-                        (Boolean) entity.getProperty("is_admin"),
-                        KeyFactory.keyToString(entity.getKey())
-                    );
-                    session.setAttribute("userId", user.getUserId());
-                    session.setAttribute("name", user.getName());  
-                    session.setAttribute("email", user.getEmail());  
-                    session.setAttribute("password", user.getPassword());  
-                    session.setAttribute("birthdate", user.getBirthdate());  
-                    session.setAttribute("studentId", user.getStudentId());  
-                    session.setAttribute("sex", user.getSex());
-                    session.setAttribute("school", user.getSchool());
-                    session.setAttribute("phone", user.getPhone());
-                    session.setAttribute("metric", user.getMetric()); 
-                    session.setAttribute("is_admin", user.getAdmin());        
-                    session.setAttribute("key", user.getKey());        
+
+                    session.setAttribute("userId", (long) entity.getKey().getId());
+                    session.setAttribute("name", (String) entity.getProperty("name"));  
+                    session.setAttribute("email", ((String) entity.getProperty("email")).toLowerCase());  
+                    session.setAttribute("password", (String) entity.getProperty("password"));  
+                    session.setAttribute("birthdate", (String) entity.getProperty("birthdate"));  
+                    session.setAttribute("studentId", (long) entity.getProperty("studentId"));  
+                    session.setAttribute("sex", (String) entity.getProperty("sex"));
+                    session.setAttribute("school", (String) entity.getProperty("school"));
+                    session.setAttribute("phone", (String) entity.getProperty("phone"));
+                    session.setAttribute("is_admin", (boolean) entity.getProperty("is_admin"));      
+                    session.setAttribute("imageKey", (String) entity.getProperty("imageKey"));  
 
                   response.sendRedirect("/dashboard");
                   return;
@@ -106,7 +90,6 @@ public class LogInServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     HttpSession session = request.getSession(false);
     List<User> users = new ArrayList<User>();
-
     if (session.getAttribute("name") != null) {
       long id = (long) session.getAttribute("userId");
       String name = (String) session.getAttribute("name");
@@ -117,10 +100,9 @@ public class LogInServlet extends HttpServlet {
       String sex = (String) session.getAttribute("sex");
       String school = (String) session.getAttribute("school");
       String phone = (String) session.getAttribute("phone");
-      String metric = (String) session.getAttribute("metric");
       boolean is_admin = (boolean) session.getAttribute("is_admin");
-      String key = (String) session.getAttribute("key");
-      user = new User(id, name, email, password, birthdate, studentId, sex, school, phone, metric, is_admin, key);
+      String imageKey = (String) session.getAttribute("imageKey");
+      user = new User(id, name, email, password, birthdate, studentId, sex, school, phone, is_admin, imageKey);
     }
 
     Gson gson = new Gson();

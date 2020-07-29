@@ -1,12 +1,5 @@
 package com.google.sps.servlets;
 
-import com.google.appengine.api.blobstore.BlobInfo;
-import com.google.appengine.api.blobstore.BlobInfoFactory;
-import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
-import com.google.appengine.api.images.ImagesService;
-import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -16,8 +9,6 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.sps.classes.User;
 import com.google.sps.classes.PasswordHash;
@@ -35,6 +26,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.blobstore.BlobInfo;
+import com.google.appengine.api.blobstore.BlobInfoFactory;
+
+
 
 /*creates a user entity in datastore with user information so they can update it whenever they log in*/
 @WebServlet("/user")
@@ -44,6 +43,7 @@ public class SignUpServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession();  
         String name = request.getParameter("fname") + " " + request.getParameter("lname");
         String email = request.getParameter("email").toLowerCase();
         String birthdate = request.getParameter("birthdate");
@@ -52,6 +52,7 @@ public class SignUpServlet extends HttpServlet {
         String school = request.getParameter("school");
         String phone = request.getParameter("phone");
         String password = PasswordHash.hashPassword(request.getParameter("password").toCharArray());
+        String imageKey = getUploadedFileUrl(request, "image");
 
         Query query = new Query("User");
 
@@ -73,29 +74,33 @@ public class SignUpServlet extends HttpServlet {
         userEntity.setProperty("sex", sex);
         userEntity.setProperty("school", school);
         userEntity.setProperty("phone", phone);
-        userEntity.setProperty("metric", "fahrenheit");
-        userEntity.setProperty("is_admin", true);
+        userEntity.setProperty("is_admin", false);
         userEntity.setProperty("password", password);
+        userEntity.setProperty("imageKey", imageKey);
 
-        datastore.put(userEntity);
-
-        user = new User(userEntity.getKey().getId(), name, email, password, 
-          birthdate, studentId, sex, school, phone, "fahrenheit", 
-          false, KeyFactory.keyToString(userEntity.getKey()));
-        
-        Gson gson = new Gson();
-        response.setContentType("application/json;");
-        response.getWriter().println(gson.toJson(user));
-
-        EmailSender.sendEmail(email);
+        datastore.put(userEntity);  
 
         response.sendRedirect("/login.html");
     }
 
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        Gson gson = new Gson();
-        response.setContentType("application/json;");
-        response.getWriter().println(gson.toJson(user));
+
+    private String getUploadedFileUrl(HttpServletRequest request, String formInputElementName) {
+    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+    Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
+    List<BlobKey> blobKeys = blobs.get(formInputElementName);
+ 
+    if (blobKeys == null || blobKeys.isEmpty()) {
+      return null;
     }
+ 
+    BlobKey blobKey = blobKeys.get(0);
+ 
+    BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
+    if (blobInfo.getSize() == 0) {
+      blobstoreService.delete(blobKey);
+      return null;
+    } else {
+      return blobKey.getKeyString();
+    }
+  }
 }

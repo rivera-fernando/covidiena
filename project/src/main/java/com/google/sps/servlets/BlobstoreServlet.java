@@ -39,9 +39,12 @@ public class BlobstoreServlet extends HttpServlet {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     String uploadUrlPost = blobstoreService.createUploadUrl("/post-event");
     String uploadUrlEdit = blobstoreService.createUploadUrl("/edit-event");
- 
+    String uploadUrlEditUser = blobstoreService.createUploadUrl("/edit-user");
+    String uploadUrlSignUp = blobstoreService.createUploadUrl("/user");
     uploadUrls.add(uploadUrlPost);
     uploadUrls.add(uploadUrlEdit);
+    uploadUrls.add(uploadUrlEditUser);
+    uploadUrls.add(uploadUrlSignUp);
  
     Gson gson = new Gson();
  

@@ -5,6 +5,7 @@
         <title>Settings</title>
         <link rel="stylesheet" href="icons.css">
         <link rel="stylesheet" href="materialize.min.css">
+        <link rel='icon' href='./static/favicon.png' type='image/x-icon'/ >
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <script src="materialize.min.js"></script>
         <script>
@@ -13,13 +14,13 @@
         });
         </script>
     </head>
-    <body onload ="populateUser();updateLogIn();">
+    <body onload ="populateUser();updateLogIn();fetchBlobstoreUrl();">
         <nav>
             <div class="nav-wrapper blue-grey lighten-4">
                 <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
                 <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
                 <ul id="nav-mobile" class="right">
-                    <li><a href="/settings.html" id="settingButton"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
+                    <li><a href="/settings.html" id="settingButton"><img class = "profilePic"></a></li>
                 </ul>
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
                     <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
@@ -27,7 +28,7 @@
                     <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
                     <li><a style="color: #42a5f5;" href="/cafeteria.html">Cafeteria</a></li>
                     <li style="width: 50px; height: 60px;">&nbsp;</li>
-                    <li><a style="color: #42a5f5;" class= "loginButton">Log In</a></li>
+                    <li><a style="color: #42a5f5;" class= "loginButton" href="/login.html">Log In</a></li>
                 </ul>
             </div>
         </nav>
@@ -36,13 +37,22 @@
             <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
             <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
             <li><a style="color: #42a5f5;" href="/cafeteria.html">Cafeteria</a></li>
-            <li><a style="color: #42a5f5;" class= "loginButton">Log In</a></li>
+            <li><a style="color: #42a5f5;" class= "loginButton" href="/login.html">Log In</a></li>
         </ul>
         <main>
             <div class="container">
                 <h3>Profile</h3>
-                <form action="/edit-user" method="POST" form class="my-form">
+                <form action="/edit-user" method="POST" form id="edit-user-form" enctype="multipart/form-data">
                     <input name="userEmail" id="userEmail" value="" type ="hidden">
+                    <div class="row">
+                        <div class = "file-field input-field col s12 l12 center">
+                            <img id="edit-output-image" style="max-height: 100%; max-width: 100%; overflow: scroll;">
+                            <input type="file" accept="image/*" onchange="preview_image(event)" name="edit-image" id="edit-image">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text" name="edit-image" hidden>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="input-field col s12 l12">
                             <input type="text" name="name" id= "name" placeholder="name">
@@ -54,7 +64,7 @@
                         <div class="input-field col s12 l12">
                             <input type="password" name="password" class="validate" id="password">
                             <label for="password">Password</label>
-                            <i style="color: #42a5f5;" class="material-icons prefix">edit</i>
+                            <i style="color: #42a5f5;" class="material-icons prefix" onclick="viewPassword()">remove_red_eye</i>
                         </div>
                     </div>
                     <div class="row">
@@ -73,20 +83,6 @@
                         <div class="input-field col s12 l12">
                             <input type="text" name="school" id="school" placeholder= "school" disabled>
                             <label for="school">School</label>
-                        </div>
-                    </div>
-                    <div clas="row">
-                        <label>Metric Preference</label>
-                        <div class="input-field col s12 l2">
-                            <div class="switch">
-                                <label>
-                                °C
-                                <input type="checkbox" id="metric" name="metric">
-                                <span class="lever"></span>
-                                °F
-                                </label>
-                            </div>
-                            <i style="color: #42a5f5;" class="material-icons right">edit</i>
                         </div>
                     </div>
                     <h3>Contact Information</h3>
@@ -108,10 +104,20 @@
                             <button type ="submit" class="btn white-text" style="background-color: #42a5f5;" value="submit">Save Changes</button>
                         </div>
                         <div class="input-field col s12 right-align">
-                            <button onclick= "requestAdmin()" class="btn white-text" style="background-color: #42a5f5;">Request Admin Access</button>
+                            <button onclick= "requestAdmin()" class="btn white-text" style="background-color: #42a5f5;" id="requestAdminButton">Request Admin Access</button>
                         </div>
                         <div class = "input-field col s12 right-align">
-                            <button onclick= "deleteUser()" class="btn red white-text">Delete My Accont</button>
+                            <a href="#warning" class="btn modal-trigger red lighten-1 white-text" id="deleteButton">Delete My Accont</a>
+                            <div class="modal" id="warning">
+                                <div class="modal-content center">
+                                    <h4>Warning</h4>
+                                    <p>When you delete your account, all the data assocaited with this account will also be deleted.</p>
+                                </div>
+                                <div class= "modal-footer">
+                                    <a onclick="deleteUser()" class ="btn modal-close red lighten-1 white-text">Delete Account</a>
+                                    <a class ="btn modal-close" style="background-color: #42a5f5;">Cancel</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </form>

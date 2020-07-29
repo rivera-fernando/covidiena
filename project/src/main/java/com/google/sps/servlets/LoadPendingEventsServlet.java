@@ -56,7 +56,7 @@ public class LoadPendingEventsServlet extends HttpServlet {
       List<Event> pendingEvents = new ArrayList<>();
  
       // If the user is an admin, load ALL pending. Otherwise, just the ones that the student posted.
-      boolean isAdmin = (boolean) session.getAttribute("admin");
+      boolean isAdmin = (boolean) session.getAttribute("is_admin");
       if (isAdmin) {
         for (int i = 0; i < resultsList.size(); i++) {
           Entity entity = resultsList.get(i);
