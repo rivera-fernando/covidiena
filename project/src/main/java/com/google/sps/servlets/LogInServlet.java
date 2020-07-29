@@ -8,6 +8,8 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.sps.classes.User;
@@ -51,6 +53,7 @@ public class LogInServlet extends HttpServlet {
           session.removeAttribute("phone");
           session.removeAttribute("metric"); 
           session.removeAttribute("is_admin");    
+          session.removeAttribute("key");    
 
         response.sendRedirect("/index.html");
         return;
@@ -75,7 +78,8 @@ public class LogInServlet extends HttpServlet {
                         (String) entity.getProperty("school"),
                         (String) entity.getProperty("phone"),
                         (String) entity.getProperty("metric"), 
-                        (Boolean) entity.getProperty("admin")
+                        (Boolean) entity.getProperty("is_admin"),
+                        KeyFactory.keyToString(entity.getKey())
                     );
                     session.setAttribute("userId", user.getUserId());
                     session.setAttribute("name", user.getName());  
@@ -88,6 +92,7 @@ public class LogInServlet extends HttpServlet {
                     session.setAttribute("phone", user.getPhone());
                     session.setAttribute("metric", user.getMetric()); 
                     session.setAttribute("is_admin", user.getAdmin());        
+                    session.setAttribute("key", user.getKey());        
 
                   response.sendRedirect("/dashboard");
                   return;
@@ -113,8 +118,9 @@ public class LogInServlet extends HttpServlet {
       String school = (String) session.getAttribute("school");
       String phone = (String) session.getAttribute("phone");
       String metric = (String) session.getAttribute("metric");
-      boolean admin = (boolean) session.getAttribute("admin");
-      user = new User(id, name, email, password, birthdate, studentId, sex, school, phone, metric, admin);
+      boolean is_admin = (boolean) session.getAttribute("is_admin");
+      String key = (String) session.getAttribute("key");
+      user = new User(id, name, email, password, birthdate, studentId, sex, school, phone, metric, is_admin, key);
     }
 
     Gson gson = new Gson();

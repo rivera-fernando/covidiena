@@ -51,7 +51,8 @@ public class EditUserServlet extends HttpServlet {
                     (String)entity.getProperty("school"),
                     (String)entity.getProperty("phone"),
                     (String)entity.getProperty("metric"),
-                    Boolean.parseBoolean(String.valueOf(entity.getProperty("admin"))));
+                    Boolean.parseBoolean(String.valueOf(entity.getProperty("admin"))),
+                    KeyFactory.keyToString(entity.getKey()));
                 break;
             }
         }

@@ -35,6 +35,12 @@ public final class Student {
     this.dinnerPref = dinnerPref;
   }
 
+  public Student(String name) {
+    this.name = name;
+    this.lunchPref = null;
+    this.dinnerPref = null;
+  }
+
   public void setLunchPref(TimeRange lunchPref) {
     this.lunchPref = lunchPref;
   }
@@ -54,6 +60,10 @@ public final class Student {
   }
 
   public String getName() {return this.name;}
+
+  public TimeRange getLunch() {return this.lunchPref;}
+
+  public TimeRange getDinner() {return this.dinnerPref;}
 
   @Override
   public String toString() {return String.format(this.name);}

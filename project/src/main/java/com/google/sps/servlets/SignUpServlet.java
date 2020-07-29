@@ -10,6 +10,8 @@ import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
@@ -72,12 +74,15 @@ public class SignUpServlet extends HttpServlet {
         userEntity.setProperty("school", school);
         userEntity.setProperty("phone", phone);
         userEntity.setProperty("metric", "fahrenheit");
-        userEntity.setProperty("admin", false);
+        userEntity.setProperty("is_admin", true);
         userEntity.setProperty("password", password);
 
         datastore.put(userEntity);
 
-        user = new User(userEntity.getKey().getId(), name, email, password, birthdate, studentId, sex, school, phone, "fahrenheit", false);
+        user = new User(userEntity.getKey().getId(), name, email, password, 
+          birthdate, studentId, sex, school, phone, "fahrenheit", 
+          false, KeyFactory.keyToString(userEntity.getKey()));
+        
         Gson gson = new Gson();
         response.setContentType("application/json;");
         response.getWriter().println(gson.toJson(user));
