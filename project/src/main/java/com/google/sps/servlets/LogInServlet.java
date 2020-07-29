@@ -31,8 +31,6 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/login")
 public class LogInServlet extends HttpServlet {
 
-  public User user = null;
-
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession(false);  
@@ -91,7 +89,7 @@ public class LogInServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     HttpSession session = request.getSession(false);
     List<User> users = new ArrayList<User>();
-    response.getWriter().flush();
+    User user = null;
     if (session.getAttribute("name") != null) {
         long id = (long) session.getAttribute("userId");
         String name = (String) session.getAttribute("name");
