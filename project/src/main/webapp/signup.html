@@ -6,8 +6,9 @@
         <link rel="stylesheet" href="icons.css">
         <link rel="stylesheet" href="materialize.min.css">
         <link rel='icon' href='./static/favicon.png' type='image/x-icon'/ >
-        <script src="materialize.min.js"></script>
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="materialize.min.js"></script>
+        <script src="college_data.js"></script>
         <script>
         $(document).ready(function(){
             $('.sidenav').sidenav();
@@ -73,7 +74,7 @@
                     </div>
                     <div class="row">
                         <div class="input-field col s12 l6">
-                            <input type="text" name="school" id="school" required>
+                            <input type="text" id="school" name="school" class="autocomplete" placeholder="Search Your College">
                             <label for="school">School Name</label>
                         </div>
                         <div class="input-field col s12 l3">
