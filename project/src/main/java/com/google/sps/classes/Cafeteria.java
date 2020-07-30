@@ -39,8 +39,8 @@ public final class Cafeteria {
 
     this.school = school;
     this.name = name;
-    this.maxCapacity = maxCapacity;
-    this.mealTime = mealTime;
+    this.max_capacity = max_capacity;
+    this.meal_time = meal_time;
     this.lunch_start = lunch_start;
     this.lunch_end = lunch_end;
     this.dinner_start = dinner_start;
