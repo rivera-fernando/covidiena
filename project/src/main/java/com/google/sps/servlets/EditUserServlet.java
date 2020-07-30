@@ -57,7 +57,8 @@ public class EditUserServlet extends HttpServlet {
                     (String)entity.getProperty("school"),
                     (String)entity.getProperty("phone"),
                     (boolean) entity.getProperty("is_admin"),
-                    (String) entity.getProperty("imageKey"));
+                    (String) entity.getProperty("imageKey"),
+                    (String) entity.getProperty("state"));
                 break;
             }
         }
@@ -99,6 +100,7 @@ public class EditUserServlet extends HttpServlet {
         user.setProperty("is_admin", oldInfo.getIsAdmin());
         user.setProperty("sex", oldInfo.getSex());
         user.setProperty("email", oldInfo.getEmail());
+        user.setProperty("state", oldInfo.getState());
 
         datastore.put(user);
         response.sendRedirect("/settings.html");
@@ -120,7 +122,8 @@ public class EditUserServlet extends HttpServlet {
             (String) session.getAttribute("school"),
             (String) session.getAttribute("phone"),
             (boolean) session.getAttribute("is_admin"),
-            (String) session.getAttribute("imageKey"));
+            (String) session.getAttribute("imageKey"),
+            (String) session.getAttribute("state"));
         response.getWriter().println(gson.toJson(user));
     }
 

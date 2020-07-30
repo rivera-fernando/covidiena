@@ -11,7 +11,6 @@
     <script src="materialize.min.js"></script>
     <script src="tracing.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGiqqHxV-dvFdgBu_CXqovT85uLxs5m-c&libraries=places" type="text/javascript"></script> -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGiqqHxV-dvFdgBu_CXqovT85uLxs5m-c&callback=createMap&libraries=places&v=weekly" defer></script>
     <script>
@@ -85,13 +84,23 @@
                     </div>
                 </div>
                 <div id="logLocationCard" style="border-radius: 10px; display:none" class="card-panel blue-grey lighten-4">
+                    <a href="#pastLocations" class="modal-trigger" onclick="getPastLocations()">View Logged Locations</a>
+                    <div id="pastLocations" class="modal">
+                        <div class="modal-content">
+                            <i style="color: #42a5f5;" class="material-icons right modal-close">close</i>
+                            <h4>Logged Locations</h4>
+                            <table id="oldLocations" class="responsive-table highlight" style="width: 100%; overflow: scroll;"></table>
+                        </div>
+                    </div>
                     <i style="color: #42a5f5;" class="material-icons right" onclick="hideLocationForm()">close</i>
                     <div id="tracing-map">
                         <p class="center">Search for a location or choose a purple tag</p>
-                        <div>
-                            <input id="pac-input" class="controls pac-target-input input-field" type="text" placeholder="Search Location">
+                        <div class="row">
+                            <div class="input-field col s12 l12">
+                                <i style="color: #42a5f5;" class="material-icons prefix" onclick="viewPassword()">search</i>
+                                <input id="pac-input" class="controls pac-target-input input-field" type="text" placeholder="Search Location">
+                            </div>
                         </div>
-                        <br></br>
                         <div id="map"></div>
                         <div class= "card-action">
                             <form action="/logLocation" method="POST" form id="log-location-form" style="display:none;" onsubmit= "hideLocationForm()">
@@ -103,7 +112,7 @@
                                         <input type="text" name="latitude" id="latitude" hidden>
                                     </div>
                                     <div class="input-field col s12 l7 offset-l1">
-                                        <input type="text" name="location" id="location" placeholder="" disabled>
+                                        <input type="text" name="location" id="location" placeholder="" readonly="true">
                                         <label for="location">Location</label>
                                     </div>
                                     <div class="input-field col s12 l3">
