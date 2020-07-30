@@ -7,8 +7,6 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.sps.classes.User;
@@ -65,7 +63,6 @@ public class LogInServlet extends HttpServlet {
             ArrayList<String> users = new ArrayList<String>();
             for (Entity entity:results.asIterable()){
                 if (entity.getProperty("password").equals(password) && entity.getProperty("email").equals(email)){
-
                     session.setAttribute("userId", (long) entity.getKey().getId());
                     session.setAttribute("name", (String) entity.getProperty("name"));  
                     session.setAttribute("email", ((String) entity.getProperty("email")).toLowerCase());  

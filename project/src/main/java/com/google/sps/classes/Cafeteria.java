@@ -24,8 +24,8 @@ public final class Cafeteria {
  
   private final String school;
   private final String name;
-  private final int maxCapacity;
-  private final int mealTime;
+  private final int max_capacity;
+  private final int meal_time;
   private final long lunch_start;
   private final long lunch_end;
   private final long dinner_start;
@@ -33,8 +33,8 @@ public final class Cafeteria {
   private final boolean is_scheduled;
   private final String key;
 
-  public Cafeteria(String school, String name, int maxCapacity, 
-    int mealTime, long lunch_start, long lunch_end, long dinner_start, 
+  public Cafeteria(String school, String name, int max_capacity, 
+    int meal_time, long lunch_start, long lunch_end, long dinner_start, 
     long dinner_end, boolean is_scheduled, String key) {
 
     this.school = school;

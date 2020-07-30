@@ -94,17 +94,17 @@ public class CafeteriaSchedulerServlet extends HttpServlet {
         for (int index = 0; index < studentResultsList.size(); index++) {
           Entity studentEntity = studentResultsList.get(index);
           if (studentEntity.getProperty("cafeteria").equals(cafeteriaName)) {
-          long lunch_start_pref = (long) studentEntity.getProperty("lunch_start");
-          long lunch_end_pref = (long) studentEntity.getProperty("lunch_end");
-          long dinner_start_pref = (long) studentEntity.getProperty("dinner_start");
-          long dinner_end_pref = (long) studentEntity.getProperty("dinner_end");
-          String name = (String) studentEntity.getProperty("name");
+            long lunch_start_pref = (long) studentEntity.getProperty("lunch_start");
+            long lunch_end_pref = (long) studentEntity.getProperty("lunch_end");
+            long dinner_start_pref = (long) studentEntity.getProperty("dinner_start");
+            long dinner_end_pref = (long) studentEntity.getProperty("dinner_end");
+            String name = (String) studentEntity.getProperty("name");
 
-          TimeRange lunch = TimeRange.fromStartEnd(Math.toIntExact(lunch_start_pref), Math.toIntExact(lunch_end_pref), false);
-          TimeRange dinner = TimeRange.fromStartEnd(Math.toIntExact(dinner_start_pref), Math.toIntExact(dinner_end_pref), false);
+            TimeRange lunch = TimeRange.fromStartEnd(Math.toIntExact(lunch_start_pref), Math.toIntExact(lunch_end_pref), false);
+            TimeRange dinner = TimeRange.fromStartEnd(Math.toIntExact(dinner_start_pref), Math.toIntExact(dinner_end_pref), false);
 
-          Student student = new Student(name, lunch, dinner);
-          students.add(student);
+            Student student = new Student(name, lunch, dinner);
+            students.add(student);
           }
         }
 
