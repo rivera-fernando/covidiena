@@ -56,13 +56,30 @@ public class Exposure extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      String action = (String) request.getParameter("action");
       HttpSession session = request.getSession(false); 
       String email = (String) session.getAttribute("email");
-
       Filter emailFilter =
         new FilterPredicate("email", FilterOperator.EQUAL, email);
-      Query query = new Query("LocationLog").setFilter(emailFilter);
+      Query query = new Query("User").setFilter(emailFilter);
       PreparedQuery results = datastore.prepare(query);
+      if (action.equals("revert")) {
+          for (Entity entity: results.asIterable()) {
+              entity.setProperty("diagnosed", "negative");
+              datastore.put(entity);
+              session.setAttribute("diagnosed", "negative");
+          }
+          return;
+      }
+      for (Entity entity: results.asIterable()) {
+          entity.setProperty("diagnosed", "positive");
+          datastore.put(entity);
+          session.setAttribute("diagnosed", "positive");
+      }
+
+      
+      query = new Query("LocationLog").setFilter(emailFilter);
+      results = datastore.prepare(query);
       PreparedQuery all;
       Map<String, String> emails = new HashMap<String, String>();
       for (Entity entity : results.asIterable()) {

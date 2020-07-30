@@ -77,6 +77,7 @@ public class SignUpServlet extends HttpServlet {
         userEntity.setProperty("password", password);
         userEntity.setProperty("imageKey", imageKey);
         userEntity.setProperty("state", state);
+        userEntity.setProperty("diagnosed", "negative");
 
         datastore.put(userEntity);  
 

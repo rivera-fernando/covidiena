@@ -62,10 +62,12 @@
                 <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
                     <div class="row">
                         <div class="col s12 m8 l6">
-                            <p>If you have been diagnosed with COVID-19</p>
+                            <p id="text">You have not reported testing COVID-19 positive. Stay healthy, and click the "positive" button if you receive a diagnosis.</p>
                         </div>
                         <div class="center-align col s12 m4 l6">
-                            <a style="width: 100%;" id="report"class="center-align waves-effect waves-light btn blue lighten-1" onclick="exposure();">Click Here!</a>
+                            <a style="width: 100%;" id="report"class="center-align waves-effect waves-light btn blue lighten-1" onclick="exposure();">Positive</a>
+                            &nbsp
+                            <a style="width: 100%;" id="deny"class="center-align waves-effect waves-light btn blue lighten-1" onclick="mistake();">Negative</a>
                         </div>
                     </div>
                 </div>
