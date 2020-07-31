@@ -16,6 +16,10 @@
   height: 500px;
 }
 
+#heat {
+  height: 500px;
+}
+
 .modal {
   width: 70% !important;
 }

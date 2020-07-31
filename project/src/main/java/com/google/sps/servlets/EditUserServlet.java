@@ -58,7 +58,8 @@ public class EditUserServlet extends HttpServlet {
                     (String)entity.getProperty("phone"),
                     (boolean) entity.getProperty("is_admin"),
                     (String) entity.getProperty("imageKey"),
-                    (String) entity.getProperty("state"));
+                    (String) entity.getProperty("state"),
+                    (String) entity.getProperty("diagnosed"));
                 break;
             }
         }
@@ -123,7 +124,8 @@ public class EditUserServlet extends HttpServlet {
             (String) session.getAttribute("phone"),
             (boolean) session.getAttribute("is_admin"),
             (String) session.getAttribute("imageKey"),
-            (String) session.getAttribute("state"));
+            (String) session.getAttribute("state"),
+            (String) session.getAttribute("diagnosed"));
         response.getWriter().println(gson.toJson(user));
     }
 
