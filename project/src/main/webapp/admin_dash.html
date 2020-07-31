@@ -32,21 +32,21 @@
       google.charts.setOnLoadCallback(drawAvg);
     </script>
   </head>
-  <body onload ="updateLogIn();showPending();heatmap();">
+  <body style="background-color:#eeeeee;" onload ="updateLogIn();showPending();heatmap();">
       <nav>
-    	<div class="nav-wrapper blue-grey lighten-4">
-            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
-            <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
+    	<div class="nav-wrapper blue darken-4 z-depth-0">
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons white-text">menu</i></a>
+            <a href="../" class="brand-logo"><img src="./static/logo.png" height="65"></a>
             <ul id="nav-mobile" class="right">
                 <li><a href="/settings.html" id="settingButton"><img class = "profilePic"></a></li>
             </ul>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li  class="active"><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
-                <li><a style="color: #42a5f5;" href="/info.html">Information</a></li>
-                <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+                <li class="active white-text"><a href="/dashboard">Dashboard</a></li>
+                <li class="white-text"><a href="/info.html">Information</a></li>
+                <li class="white-text"><a href="/events.html">Events</a></li>
                 <li style="width: 50px; height: 60px;">&nbsp;</li>
-                <li><a style="color: #42a5f5;" class="signupButton" href="/signup.html">Sign Up</a></li>
-                <li><a style="color: #42a5f5;" class= "loginButton" href="/login.html">Log In</a></li>
+                <li class="white-text"><a class="signupButton" href="/signup.html">Sign Up</a></li>
+                <li class="white-text"><a class= "loginButton" href="/login.html">Log In</a></li>
             </ul>
     	</div>
       </nav>
@@ -59,10 +59,9 @@
       </ul>
       <div class="container">
       <h1>Admin Dashboard</h1>
-      <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
             <div class="row">
                 <div class="col s12 m5">
-                    <div style="border-radius: 10px;" class="card white">
+                    <div style="border-radius: 10px;" class="card white z-depth-0">
                         <div class="card-content blue-grey-text-darken-2">
                             <span class="card-title">Avg. Daily Temperature</span>
                             <h5 class="center-align" id="avg-temp">__</h5>
@@ -71,7 +70,7 @@
                             <a onclick="calcAvgTemp()" class="waves-effect waves-light btn">Get Stats</a>
                         </div>
                     </div>
-                    <div style="border-radius: 10px;" class="card white">
+                    <div style="border-radius: 10px;" class="card white z-depth-0">
                         <div class="card-content blue-grey-text-darken-2">
                             <span class="card-title">Popular Places</span>
                             <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Heatmap</a>
@@ -79,7 +78,7 @@
                     </div>
                 </div>
                 <div class="col s12 m7">
-                    <div style="border-radius: 10px;" class="card white">
+                    <div style="border-radius: 10px;" class="card white z-depth-0">
                         <div class="card-content blue-grey-text-darken-2">
                             <span class="card-title">Temperature Trends</span>
                             <div id="chart" class="goog-chart">
@@ -91,8 +90,7 @@
                     </div>
                 </div>
             </div>
-      </div>
-      <div class="card-panel blue-grey lighten-4">
+      <div class="card-panel z-depth-0">
           <h3>Make an Announcement</h3>
           <div class="row">
               <div class="col m3 s12">
@@ -123,18 +121,16 @@
               </div>
           </div>
       </div>
-      <div class="card-panel blue-grey lighten-4">
           <h3>User Admin Requests</h3>
           <div class="row" id="pending"> </div>
-      </div>
     </div>
     <br>
     <div style="height: 500px" id="modal1" class="modal">
         <div id="heat"></div>
     </div>
-     <footer class="page-footer blue-grey lighten-2 ">
-        <div class="footer-copyright blue-grey lighten-2">
-            <div class="container blue-grey-text text-darken-2 left">
+     <footer class="page-footer blue darken-4 ">
+        <div class="footer-copyright blue darken-4">
+            <div class="container white-text left">
             © 2020 Covidiena. All Rights Reserved.
             <a class="blue-text text-darken-1 right" href="mailto: covidiena@gmail.com">Contact Us</a>
             </div>

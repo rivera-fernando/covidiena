@@ -17,21 +17,21 @@
     });
     </script>
   </head>
-  <body onload ="updateLogIn();">
+  <body style="background-color:#eeeeee;" onload ="updateLogIn();">
       <nav>
-    	<div class="nav-wrapper blue-grey lighten-4">
-            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
-            <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
+    	<div class="nav-wrapper blue darken-4">
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons white-text">menu</i></a>
+            <a href="../" class="brand-logo"><img src="./static/logo.png" height="65"></a>
             <ul id="nav-mobile" class="right">
                 <li><a href="/settings.html" id="settingButton"><img class = "profilePic"></a></li>
             </ul>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
-                <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
-                <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+                <li class="white-text"><a href="/dashboard">Dashboard</a></li>
+                <li class="active white-text"><a href="/info.html">Information</a></li>
+                <li class="white-text"><a href="/events.html">Events</a></li>
                 <li style="width: 50px; height: 60px;">&nbsp;</li>
-                <li><a style="color: #42a5f5;" class="signupButton" href="/signup.html">Sign Up</a></li>
-                <li><a style="color: #42a5f5;" class= "loginButton" href="/login.html">Log In</a></li>
+                <li class="white-text"><a class="signupButton" href="/signup.html">Sign Up</a></li>
+                <li class="white-text"><a class= "loginButton" href="/login.html">Log In</a></li>
             </ul>
     	</div>
       </nav>
@@ -45,11 +45,10 @@
       <main>
         <div class="container">
         <h1>Stay Informed</h1>
-        <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
             <h3>Important Tweets</h3>
             <div class="row">
                 <div class="col s12 m6 l4">
-                    <div style="border-radius: 10px;" class="card white hoverable">
+                    <div style="border-radius: 10px;" class="card white z-depth-0">
                         <div class="card-content blue-grey-text-darken-2">
                             <span class="card-title">CDC</span>
                             <a class="twitter-timeline" data-height="300" data-theme="light" href="https://twitter.com/CDCgov?ref_src=twsrc%5Etfw">Tweets by CDCgov</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
@@ -57,14 +56,14 @@
                     </div>
                 </div>
                 <div class="col s12 m6 l4">
-                    <div style="border-radius: 10px;" class="card white hoverable">
+                    <div style="border-radius: 10px;" class="card white z-depth-0">
                         <div class="card-content blue-grey-text-darken-2">
                             <span class="card-title">POTUS</span>
                             <a class="twitter-timeline" data-height="300" data-theme="light" href="https://twitter.com/POTUS?ref_src=twsrc%5Etfw">Tweets by POTUS</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>                    </div>
                     </div>
                 </div>
                 <div class="col s12 m6 l4">
-                    <div style="border-radius: 10px;" class="card white hoverable">
+                    <div style="border-radius: 10px;" class="card white z-depth-0">
                         <div class="card-content blue-grey-text-darken-2">
                             <span class="card-title">WHO</span>
                             <a class="twitter-timeline" data-height="300" data-theme="light" href="https://twitter.com/WHO?ref_src=twsrc%5Etfw">Tweets by WHO</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
@@ -72,8 +71,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
+        <div style="border-radius: 10px;" class="card-panel z-depth-0">
             <h3>Important Places</h3>
             <div id="map"></div>
                 <div style="display: none" id="right-panel">
@@ -82,38 +80,42 @@
                     <button id="more">More results</button>
                 </div>
         </div>
-        <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
             <h3>Important Videos</h3>
             <div class="row">
                 <div class="col m4 s12">
-                    <iframe id="ytplayer" type="text/html" style="border-radius: 10px;width: 100%;"
-                        allowfullscreen="true"
-                        src="https://www.youtube.com/embed/2xLjCfmx0iE?enablejsapi=1&amp;"
-                        frameborder="0">
-                    </iframe>
+                    <div class="video-container">
+                        <iframe id="ytplayer" type="text/html" style="border-radius: 10px;width: 100%;"
+                            allowfullscreen="true"
+                            src="https://www.youtube.com/embed/2xLjCfmx0iE?enablejsapi=1&amp;"
+                            frameborder="0">
+                        </iframe>
+                    </div>
                 </div>
                 <div class="col m4 s12">
-                    <iframe id="ytplayer" type="text/html" style="border-radius: 10px;width: 100%"
-                        allowfullscreen="true"
-                        src="https://www.youtube.com/embed/seA1wbXUQTs?enablejsapi=1&amp;"
-                        frameborder="0">
-                    </iframe>
+                    <div class="video-container">
+                        <iframe id="ytplayer" type="text/html" style="border-radius: 10px;width: 100%"
+                            allowfullscreen="true"
+                            src="https://www.youtube.com/embed/seA1wbXUQTs?enablejsapi=1&amp;"
+                            frameborder="0">
+                        </iframe>
+                    </div>
                 </div>
                 <div class="col m4 s12">
-                    <iframe id="ytplayer" type="text/html" style="border-radius: 10px;width: 100%;"
-                        allowfullscreen="true"
-                        src="https://www.youtube.com/embed/U8r3oTVMtQ0?enablejsapi=1&amp;"
-                        frameborder="0">
-                    </iframe>
+                    <div class="video-container">
+                        <iframe id="ytplayer" type="text/html" style="border-radius: 10px;width: 100%;"
+                            allowfullscreen="true"
+                            src="https://www.youtube.com/embed/U8r3oTVMtQ0?enablejsapi=1&amp;"
+                            frameborder="0">
+                        </iframe>
+                    </div>
                 </div>
             </div>
-        </div>
         <br><br>
         </div>
       </main>
-      <footer class="page-footer blue-grey lighten-2 ">
-        <div class="footer-copyright blue-grey lighten-2">
-          <div class="container blue-grey-text text-darken-2 left">
+      <footer class="page-footer blue darken-4 ">
+        <div class="footer-copyright blue darken-4">
+          <div class="container white-text left">
             © 2020 Covidiena. All Rights Reserved.
             <a class="blue-text text-darken-1 right" href="mailto: covidiena@gmail.com">Contact Us</a>
           </div>
