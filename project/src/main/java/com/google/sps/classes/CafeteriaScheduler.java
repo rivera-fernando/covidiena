@@ -28,6 +28,8 @@ import com.google.sps.classes.Block;
 
 public final class CafeteriaScheduler {
 
+  List<Student> assignedStudents;
+
   // Return schedule
   public Schedule schedule(TimeRange lunch, TimeRange dinner, 
     int mealTime, int maxCapacity, List<Student> students) {
@@ -38,16 +40,18 @@ public final class CafeteriaScheduler {
       return schedule;
     }
 
-    // Populate meal blocks using deep copies of student lists
-    handleMeal(new ArrayList<Student>(students), schedule.getLunchBlocks(), maxCapacity, "lunch");
-    handleMeal(new ArrayList<Student>(students), schedule.getDinnerBlocks(), maxCapacity, "dinner");
+    // Order students by whoever's preference ends first
+    Collections.sort(students, Student.ORDER_LUNCH_END);
+
+    assignedStudents = new ArrayList<Student>(students);
+
+    handleMeal(assignedStudents, schedule.getLunchBlocks(), maxCapacity, "lunch");
+    handleMeal(assignedStudents, schedule.getDinnerBlocks(), maxCapacity, "dinner");
 
     return schedule;
   }
 
   public void handleMeal(List<Student> students, List<Block> blocks, int maxCapacity, String meal) {
-    // Order students by whoever's preference ends first
-    Collections.sort(students, Student.ORDER_LUNCH_END);
 
     // Create list to handle students who don't eat at their preferences
     List<Student> unhappyStudents = new ArrayList<Student>();
@@ -59,6 +63,7 @@ public final class CafeteriaScheduler {
         if ((block.getTime().overlaps(student.getPref(meal))) && (block.getCapacity() < maxCapacity)) {
           block.addStudent(student);
           assigned = true;
+          student.setReceived(meal, block.getTime());
           break;
         }
       }
@@ -72,10 +77,13 @@ public final class CafeteriaScheduler {
         while (block.getCapacity() < maxCapacity && !unhappyStudents.isEmpty()) {
           Student student = unhappyStudents.get(0);
           block.addStudent(student);
+          student.setReceived(meal, block.getTime());
           unhappyStudents.remove(student);
         }
       }
     }
   }
+
+  public List<Student> getAssignedStudents() {return this.assignedStudents;}
 }
 

@@ -50,6 +50,7 @@ public class LogInServlet extends HttpServlet {
             session.removeAttribute("is_admin");      
             session.removeAttribute("imageKey"); 
             session.removeAttribute("state");
+            session.removeAttribute("diagnosed");
 
             response.sendRedirect("/login.html");
             response.getWriter().flush();
@@ -75,7 +76,8 @@ public class LogInServlet extends HttpServlet {
                     session.setAttribute("phone", (String) entity.getProperty("phone"));
                     session.setAttribute("is_admin", (boolean) entity.getProperty("is_admin"));      
                     session.setAttribute("imageKey", (String) entity.getProperty("imageKey"));
-                    session.setAttribute("state", (String) entity.getProperty("state"));  
+                    session.setAttribute("state", (String) entity.getProperty("state")); 
+                    session.setAttribute("diagnosed", (String) entity.getProperty("diagnosed")); 
 
                     response.sendRedirect("/dashboard");
                     return;
@@ -103,7 +105,8 @@ public class LogInServlet extends HttpServlet {
         boolean is_admin = (boolean) session.getAttribute("is_admin");
         String imageKey = (String) session.getAttribute("imageKey");
         String state = (String) session.getAttribute("state");
-        user = new User(id, name, email, password, birthdate, studentId, sex, school, phone, is_admin, imageKey, state);
+        String diagnosed = (String) session.getAttribute("diagnosed");
+        user = new User(id, name, email, password, birthdate, studentId, sex, school, phone, is_admin, imageKey, state, diagnosed);
     }
 
     Gson gson = new Gson();

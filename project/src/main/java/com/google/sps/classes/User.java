@@ -14,10 +14,11 @@ public final class User {
   private Boolean is_admin;
   private String imageKey;
   private String state;
+  private String diagnosed;
 
   /*User class is instatiated when a user logins so all their info is accesible without the datatsore being queried each time*/
   public User(long userId, String name, String email, String password, String birthdate, long studentId, 
-              String sex, String school, String phone, Boolean is_admin, String imageKey, String state) {
+              String sex, String school, String phone, Boolean is_admin, String imageKey, String state, String diagnosed) {
     this.userId = userId;
     this.name = name;
     this.email = email;
@@ -30,6 +31,7 @@ public final class User {
     this.is_admin = is_admin;
     this.imageKey = imageKey;
     this.state = state;
+    this.diagnosed = diagnosed;
   }
 
   public long getUserId() {
