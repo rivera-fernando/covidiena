@@ -7,6 +7,27 @@
 /* Always set the map height explicitly to define the size of the div
  * element that contains the map. */
 
+html {
+  font-family: 'Montserrat', Calibri, Trebuchet, sans-serif;
+}
+
+.contact-icon {
+  background: none;
+  border: none;
+}
+
+table.tableBodyScroll tbody {
+  display: block;
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
+table.tableBodyScroll thead, table.tableBodyScroll tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
 .goog-chart {
   width: 100%; 
   min-height: 250px;
