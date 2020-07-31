@@ -20,68 +20,80 @@
   </head>
   <body onload="loadMyEvents(); updateLogIn()">
       <nav>
-        <div class="nav-wrapper blue-grey lighten-4">
-            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
-            <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
-            <ul id="nav-mobile" class="right">
-                <li><a href="/settings.html" id="settingButton"><img class = "profilePic"></a></li>
-            </ul>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
-                <li><a style="color: #42a5f5;" href="/info.html">Information</a></li>
-                <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
-                <li><a style="color: #42a5f5;" href="/cafeteria.html">Cafeteria</a></li>
-                <li style="width: 50px; height: 60px;">&nbsp;</li>
-                <li><a style="color: #42a5f5;" href="/signup.html" class="signupButton">Sign Up</a></li>
-                <li><a style="color: #42a5f5;" class= "loginButton">Log In</a></li>
-            </ul>
+        <div class="nav-wrapper blue darken-4 white-text">
+          <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+          <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
+          <ul id="nav-mobile" class="right">
+            <li><a href="/settings.html" id="settingButton"><img class = "profilePic"></a></li>
+          </ul>
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/info.html">Information</a></li>
+            <li class="active"><a href="/events.html">Events</a></li>
+            <li><a href="/cafeteria.html">Cafeteria</a></li>
+            <li style="width: 50px; height: 60px;">&nbsp;</li>
+            <li><a href="/signup.html" class="signupButton">Sign Up</a></li>
+            <li><a class= "loginButton">Log In</a></li>
+          </ul>
         </div>
       </nav>
-      <ul class="sidenav" id="mobile-demo">
-        <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
-        <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
-        <li><a style="color: #42a5f5;" href="/cafeteria.html">Cafeteria</a></li>
-        <li><a style="color: #42a5f5;" href="/signup.html" class="signupButton">Sign Up</a></li>
-        <li><a style="color: #42a5f5;" class ="loginButton">Log In</a></li>
+      <ul class="sidenav blue darken-4 white-text" id="mobile-demo">
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li class="active"><a href="/events.html">Events</a></li>
+        <li><a href="/cafeteria.html">Cafeteria</a></li>
+        <li><a href="/signup.html" class="signupButton">Sign Up</a></li>
+        <li><a class ="loginButton">Log In</a></li>
       </ul>
     <main>
-      <div class="container">
-        <div class="section">
+      <div class="blue darken-4 center center-align">
+        <div class="section blue darken-4 white-text center center-align">
           <div class="row">
-            <div class="card blue-grey lighten-4" style="min-height: 500px">
-              <div class="card-content">
-                <h4 id="helloMsg" class="card-title"></h4>
-                <p>Remember to RSVP to all events you plan on going to!</p>
-              </div>
-              <div class="card-tabs">
-                <ul class="tabs tabs-fixed-width">
-                  <li class="tab"><a class="active" href="#approved-events">Approved</a></li>
-                  <li class="tab"><a href="#pending-events">Pending</a></li>
-                </ul>
-              </div>
-              <div class="card-content" style="overflow-y: scroll; max-height: 70%;">
-                <div id="approved-events"></div>
-                <div id="pending-events"></div>
-              </div>
+            <div class="col s8 offset-s2">
+              <h1 id="helloMsg" class="card-title" style="font-weight: bold;"></h1>
+              <p>Remember to RSVP to all events you plan on going to!</p>
             </div>
           </div>
         </div>
-        <div class="section">
-          <div class="row">
-            <div class="card medium blue-grey darken-1 left" style="width: 50%">
-              <div class="card-content white-text">
-                <h4 class="card-title center">Updates</h4>
-                <p class="center">Updates on all your owned events.</p>
+      </div>
+      <div class="container">
+        <div class="row">
+          <h3 class="center"><b>Events</b></h3>
+          <p class="center">Browse all your events.</p>
+          <div class="card blue darken-4" style="min-height: 500px; border-radius: 3px">
+            <div class="card-content">
               <div class="card-tabs">
                 <ul class="tabs tabs-fixed-width tabs-transparent">
-                  <li class="tab" style="width: 50%"><a class="active" href="#approval-updates">Approvals</a></li>
-                  <li class="tab" style="width: 50%"><a href="#changes-updates">Changes</a></li>
+                  <li class="tab"><a class="white-text active" href="#approved-events">Approved</a></li>
+                  <li class="tab"><a class="white-text" href="#pending-events">Pending</a></li>
                 </ul>
               </div>
-              <div class="card-content" style="overflow-y: scroll;">
-                <div id="approval-updates"></div>
-                <div id="changes-updates"></div>
-              </div>
+            </div>
+            <div class="card-content" style="overflow-y: scroll; max-height: 70%;">
+              <div id="approved-events"></div>
+              <div id="pending-events"></div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s12" style="display: inline-block;" style="width: 100%">
+            <h3 class="center"><b>Updates</b></h3>
+            <p class="center">Updates on all your owned events.</p>
+            <div class="row">
+              <div class="col s12 m6 offset-m3">
+                <div class="card medium blue-grey darken-1 center white-text" style="border-radius: 3px">
+                  <div class="card-content white-text">
+                    <div class="card-tabs">
+                      <ul class="tabs tabs-fixed-width tabs-transparent">
+                        <li class="tab" style="width: 50%"><a class="active" href="#approval-updates">Approvals</a></li>
+                        <li class="tab" style="width: 50%"><a href="#changes-updates">Changes</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="card-content" style="overflow-y: scroll;">
+                    <div id="approval-updates"></div>
+                    <div id="changes-updates"></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -188,13 +200,10 @@
         </div>
       </div>
     </main>
-    <footer class="page-footer blue-grey lighten-2 ">
-        <div class="footer-copyright blue-grey lighten-2">
-            <div class="container blue-grey-text text-darken-2 left">
-            © 2020 Covidiena. All Rights Reserved.
-            <a class="blue-text text-darken-1 right" href="mailto: covidiena@gmail.com">Contact Us</a>
-            </div>
-        </div>
+    <footer class="page-footer blue-grey darken-2">
+      <div class="footer-copyright blue-grey darken-2">
+        <p class="white-text center-block">© 2020 Covidiena. All Rights Reserved.</p>
+      </div>
     </footer>
   </body>
 </html>

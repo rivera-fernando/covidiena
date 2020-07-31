@@ -20,84 +20,100 @@
   </head>
   <body onload="loadPage(); updateLogIn()">
       <nav>
-        <div class="nav-wrapper blue-grey lighten-4">
-            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
+        <div class="nav-wrapper blue darken-4 white-text">
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
             <ul id="nav-mobile" class="right">
                 <li><a href="/settings.html" id="settingButton"><img class = "profilePic"></a></li>
             </ul>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
-                <li><a style="color: #42a5f5;" href="/info.html">Information</a></li>
-                <li class="active"><a style="color: #42a5f5;" href="/events.html">Events</a></li>
-                <li><a style="color: #42a5f5;" href="/cafeteria.html">Cafeteria</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/info.html">Information</a></li>
+                <li class="active"><a href="/events.html">Events</a></li>
+                <li><a href="/cafeteria.html">Cafeteria</a></li>
                 <li style="width: 50px; height: 60px;">&nbsp;</li>
-                <li><a style="color: #42a5f5;" href="/signup.html" class="signupButton">Sign Up</a></li>
-                <li><a style="color: #42a5f5;" class= "loginButton" href="/login.html">Log In</a></li>
+                <li><a href="/signup.html" class="signupButton">Sign Up</a></li>
+                <li><a class= "loginButton" href="/login.html">Log In</a></li>
             </ul>
         </div>
       </nav>
-      <ul class="sidenav" id="mobile-demo">
-        <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
-        <li class="active"><a style="color: #42a5f5;" href="/events.html">Events</a></li>
-        <li><a style="color: #42a5f5;" href="/cafeteria.html">Cafeteria</a></li>
-        <li><a style="color: #42a5f5;" href="/signup.html" class="signupButton">Sign Up</a></li>
-        <li><a style="color: #42a5f5;" class ="loginButton" href="/login.html">Log In</a></li>
+      <ul class="sidenav blue darken-4 white-text" id="mobile-demo">
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li class="active"><a href="/events.html">Events</a></li>
+        <li><a href="/cafeteria.html">Cafeteria</a></li>
+        <li><a href="/signup.html" class="signupButton">Sign Up</a></li>
+        <li><a class ="loginButton" href="/login.html">Log In</a></li>
       </ul>
     <main>
-      <div class="container">
-        <div class="section">
-          <h4>Explore Events</h4>
-          <button class="btn" onclick="originalWeek()">Today</button>
-          <button class="btn-flat" onclick="previousWeek()"><i class="material-icons">navigate_before</i></button>
-          <button class="btn-flat" onclick="nextWeek()"><i class="material-icons">navigate_next</i></button>
-          <button class="btn-flat modal-trigger" data-target="modal-container-search" onclick="showSearch()"><i class="material-icons">search</i></button>
-          <form onchange = "filterExploreEvents()">
-            <a class="dropdown-trigger btn right" data-target="dropdown1">Filter Tags</a>
-            <ul id="dropdown1" class="dropdown-content">
-              <li>
-              <label>
-                <input type="checkbox" id="academic"/>
-                <span>Academic</span>
-              </label>
-              </li>
-              <li>
-              <label>
-                <input type="checkbox" id="social"/>
-                <span>Social</span>
-              </label>
-              </li>
-              <li class="divider" tabindex="-1"></li>
-              <li>
-              <label>
-                <input type="checkbox" id="optional"/>
-                <span>Optional</span>
-              </label>
-              </li>
-              <li>
-              <label>
-                <input type="checkbox" id="mandatory"/>
-                <span>Mandatory</span>
-              </label>
-              </li>
-            </ul>
-          </form>
-          <div id="modal-container-search" style="display:none;" class="modal">
-            <div id="search" style="display: none;" class="modal-content">
-              <input type="text" id="searchInput" onkeyup="searchExploreEvents()" placeholder="Search Event Titles">
-              <table id="searchTable" class ="responsive-table" style="width: 100%; overflow: scroll">
-                <thead style="width: 100%">
-                  <tr>
-                    <th style="width:50%">Title</th>
-                    <th style="width:40%">Date</th>
-                    <th style="width:10%">Link</th>
-                  </tr>
-                </thead>
-                <tbody id="explore-search-body" style="width: 100%; overflow-x: scroll"></tbody>
-              </table>
+      <div class="blue darken-4 center center-align">
+        <div class="section blue darken-4 white-text center center-align">
+          <div class="row">
+            <div class="col s8 offset-s2">
+              <h1 class="center"><b>Explore Events</b></h1>
+              <p>View all events submitted at your school, don't forget to RSVP to any event you wish to go to!</p>
+              <button class="btn" onclick="location.href='/my-events.html'">View My Events</button>
+              <a class="btn modal-trigger" href="#form-modal-container">Post Event</a>
             </div>
           </div>
-          <br><br>
+        </div>
+      </div>
+      <div class="container">
+        <div class="section">
+          <div class="row">
+            <div class="col s8">
+              <button class="btn" onclick="originalWeek()">Today</button>
+              <button class="btn-flat" onclick="previousWeek()"><i class="material-icons">navigate_before</i></button>
+              <button class="btn-flat" onclick="nextWeek()"><i class="material-icons">navigate_next</i></button>
+              <button class="btn-flat modal-trigger" data-target="modal-container-search" onclick="showSearch()"><i class="material-icons">search</i></button>
+            </div>
+            <div class="col s4">
+              <form onchange = "filterExploreEvents()">
+                <a class="dropdown-trigger btn right" data-target="dropdown1">Filter Tags</a>
+                <ul id="dropdown1" class="dropdown-content">
+                  <li>
+                  <label>
+                    <input type="checkbox" id="academic"/>
+                    <span>Academic</span>
+                  </label>
+                  </li>
+                  <li>
+                  <label>
+                    <input type="checkbox" id="social"/>
+                    <span>Social</span>
+                  </label>
+                  </li>
+                  <li class="divider" tabindex="-1"></li>
+                  <li>
+                  <label>
+                    <input type="checkbox" id="optional"/>
+                    <span>Optional</span>
+                  </label>
+                  </li>
+                  <li>
+                  <label>
+                    <input type="checkbox" id="mandatory"/>
+                    <span>Mandatory</span>
+                  </label>
+                  </li>
+                </ul>
+              </form>
+            </div>
+          </div>
+          <div id="modal-container-search" style="display:none;" class="modal">
+              <div id="search" style="display: none;" class="modal-content">
+                <input type="text" id="searchInput" onkeyup="searchExploreEvents()" placeholder="Search Event Titles">
+                <table id="searchTable" class ="responsive-table" style="width: 100%; overflow: scroll">
+                  <thead style="width: 100%">
+                    <tr>
+                      <th style="width:50%">Title</th>
+                      <th style="width:40%">Date</th>
+                      <th style="width:10%">Link</th>
+                    </tr>
+                  </thead>
+                  <tbody id="explore-search-body" style="width: 100%; overflow-x: scroll"></tbody>
+                </table>
+              </div>
+            </div>
           <div id="events-table-container" class="section">
             <div class="row">
               <div class="col s12">
@@ -145,31 +161,21 @@
             </div>
           </div>
         </div>
-        <div class="section">
-          <div class="row">
-            <div class="col s6">
-              <div class="card blue-grey darken-1 left" style="border-radius: 5px; margin: 0">
-                <div class="card-content">
-                  <p class="card-title white-text center">Events Color Key</p>
-                  <p class="valign-wrapper green-text text-darken-2">
-                    <i class="material-icons" style="margin-right: 10px">brightness_1</i>
-                    <span class="white-text">You are signed up for this event</span>
-                  </p>
-                  <p class="valign-wrapper deep-purple-text">
-                    <i class="material-icons" style="margin-right: 10px">brightness_1</i>
-                    <span class="white-text">You are <b>not</b> signed up for this event</span>
-                  </p>
-                  <p class="valign-wrapper yellow-text text-darken-3">
-                    <i class="material-icons" style="margin-right: 10px">brightness_1</i>
-                    <span class="white-text">This is a past event</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="col s6 right right-align">
-              <a class="btn modal-trigger" href="#form-modal-container">Post Event</a>
-              <p>View <a href="/my-events.html">My Events</a></p>
-            </div>
+        <div class="card blue-grey darken-1 left" style="border-radius: 5px; margin: 0">
+          <div class="card-content">
+            <p class="card-title white-text center">Events Color Key</p>
+            <p class="valign-wrapper green-text text-darken-2">
+              <i class="material-icons" style="margin-right: 10px">brightness_1</i>
+              <span class="white-text">You are signed up for this event</span>
+            </p>
+            <p class="valign-wrapper deep-purple-text">
+              <i class="material-icons" style="margin-right: 10px">brightness_1</i>
+              <span class="white-text">You are <b>not</b> signed up for this event</span>
+            </p>
+            <p class="valign-wrapper yellow-text text-darken-3">
+              <i class="material-icons" style="margin-right: 10px">brightness_1</i>
+              <span class="white-text">This is a past event</span>
+            </p>
           </div>
         </div>
         <div class="section">
@@ -270,13 +276,10 @@
       </div>
       </div>
     </main>
-    <footer class="page-footer blue-grey lighten-2 ">
-        <div class="footer-copyright blue-grey lighten-2">
-            <div class="container blue-grey-text text-darken-2 left">
-            © 2020 Covidiena. All Rights Reserved.
-            <a class="blue-text text-darken-1 right" href="mailto: covidiena@gmail.com">Contact Us</a>
-            </div>
-        </div>
+    <footer class="page-footer blue-grey darken-2">
+      <div class="footer-copyright blue-grey darken-2">
+        <p class="white-text center-block">© 2020 Covidiena. All Rights Reserved.</p>
+      </div>
     </footer>
   </body>
 </html>

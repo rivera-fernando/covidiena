@@ -100,7 +100,7 @@ function loadExplore(week, filter, type, attendance) {
     tableBody.innerHTML = '';
     var isFull = 0;
     const today = (new Date()).getDay();
-    var dayIndex = -1;
+    var dayIndex = 0;
     // Load dates
     week.forEach((day) => {
       const date = document.getElementById(day.name+"-date");
@@ -518,21 +518,22 @@ function addRSVPBtn(eventElement) {
   dropdownList.appendChild(RSVPBtn);
 }
 
-function addViewDetailsBtn(eventElement, event) {
+async function addViewDetailsBtn(eventElement, event) {
   const viewDetails = document.createElement('li');
 
   viewDetails.innerText = "Event Details";
   viewDetails.classList.add('waves-light', 'btn-flat', 'btn-small');
 
-  viewDetails.addEventListener('click', () => {
+  viewDetails.addEventListener('click', async () => {
     const params = new URLSearchParams();
+    console.log(eventElement.id);
+    console.log(event.entityType);
     params.append('eventId', eventElement.id);
     params.append('eventType', event.entityType);
-    fetch ('event-details', {
+    await fetch ('event-details', {
       method: 'POST',
       body: params
-    });
-    location.replace('/event-details.html');
+    }).then(location.replace('/event-details.html'));
   });
 
   var dropdownList = eventElement.getElementsByTagName('ul')[0];
