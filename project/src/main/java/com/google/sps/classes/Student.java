@@ -28,18 +28,42 @@ public final class Student {
   private final String name;
   private TimeRange lunchPref;
   private TimeRange dinnerPref;
+  private TimeRange lunchReceived;
+  private TimeRange dinnerReceived;
+  private String cafeteria;
+  private String cafeteriaReceived;
 
   public Student(String name, TimeRange lunchPref, TimeRange dinnerPref) {
     this.name = name;
     this.lunchPref = lunchPref;
     this.dinnerPref = dinnerPref;
+    this.cafeteria = null;
+  }
+
+  public Student(String name, TimeRange lunchPref, TimeRange dinnerPref, String cafeteria) {
+    this.name = name;
+    this.lunchPref = lunchPref;
+    this.dinnerPref = dinnerPref;
+    this.cafeteria = cafeteria;
   }
 
   public Student(String name) {
     this.name = name;
     this.lunchPref = null;
     this.dinnerPref = null;
+    this.cafeteria = null;
   }
+
+  public Student(String name, TimeRange lunchPref, TimeRange dinnerPref, String cafeteria, 
+    TimeRange lunchReceived, TimeRange dinnerReceived, String cafeteriaReceived) {
+      this.name = name;
+      this.lunchPref = lunchPref;
+      this.dinnerPref = dinnerPref;
+      this.cafeteria = cafeteria;
+      this.lunchReceived = lunchReceived;
+      this.dinnerReceived = dinnerReceived;
+      this.cafeteriaReceived = cafeteriaReceived;
+    }
 
   public void setLunchPref(TimeRange lunchPref) {
     this.lunchPref = lunchPref;
@@ -54,6 +78,24 @@ public final class Student {
       return this.lunchPref;
     } else if (meal.equals("dinner")) { 
       return this.dinnerPref;
+    } else {
+      return null;
+    }
+  }
+
+  public void setReceived(String meal, TimeRange received) {
+    if (meal.equals("lunch")) {
+      this.lunchReceived = received;
+    } else if (meal.equals("dinner")) { 
+      this.dinnerReceived = received;
+    }
+  }
+
+  public TimeRange getReceived(String meal) {
+    if (meal.equals("lunch")) {
+      return this.lunchReceived;
+    } else if (meal.equals("dinner")) { 
+      return this.dinnerReceived;
     } else {
       return null;
     }

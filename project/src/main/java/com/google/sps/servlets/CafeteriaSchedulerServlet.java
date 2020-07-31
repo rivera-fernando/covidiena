@@ -110,43 +110,31 @@ public class CafeteriaSchedulerServlet extends HttpServlet {
 
         CafeteriaScheduler scheduler = new CafeteriaScheduler();
         Schedule schedule = scheduler.schedule(lunch_time, dinner_time, mealTime, maxCapacity, students);
+        List<Student> assignedStudents = scheduler.getAssignedStudents();
+
+        // Update studentPref entities
+        int studentIndex = 0;
+        for (Student assignedStudent : assignedStudents) {
+          for (int index = 0; index < studentResultsList.size(); index++) {
+            Entity studentEntity = studentResultsList.get(index);
+            String name = (String) studentEntity.getProperty("name");
+            if (name.equals(assignedStudent.getName())) {
+              studentEntity.setProperty("lunch_start_assigned", assignedStudent.getReceived("lunch").start());
+              studentEntity.setProperty("lunch_end_assigned", assignedStudent.getReceived("lunch").start() + mealTime);
+              studentEntity.setProperty("dinner_start_assigned", assignedStudent.getReceived("dinner").start());
+              studentEntity.setProperty("dinner_end_assigned", assignedStudent.getReceived("dinner").start() + mealTime);
+              studentEntity.setProperty("cafeteria_received", cafeteriaName);
+              datastore.put(studentEntity);
+              break;
+            }
+          }
+        }
 
         EmbeddedEntity scheduleEntity = new EmbeddedEntity();
 
-        EmbeddedEntity lunchBlocksEntity = new EmbeddedEntity();
+        setMealEntity(schedule, scheduleEntity, schedule.getLunchBlocks(), "lunch_blocks");
+        setMealEntity(schedule, scheduleEntity, schedule.getDinnerBlocks(), "dinner_blocks");
 
-        String blockName = "block";
-        int blockIndex = 0;
-        for (Block block : schedule.getLunchBlocks()) {
-          EmbeddedEntity lunchBlock = new EmbeddedEntity();
-          lunchBlock.setProperty("start", block.getTime().start());
-          lunchBlock.setProperty("end", block.getTime().end());
-          List<String> blockStudents = new ArrayList<>();
-          for (Student blockStudent : block.getStudents()) {
-            blockStudents.add(blockStudent.getName());
-          }
-          lunchBlock.setProperty("students", blockStudents);
-          lunchBlocksEntity.setProperty(blockName.concat(Integer.toString(blockIndex)), lunchBlock);
-          blockIndex++;
-        }
-
-        EmbeddedEntity dinnerBlocksEntity = new EmbeddedEntity();
-        blockIndex = 0;
-        for (Block block : schedule.getDinnerBlocks()) {
-          EmbeddedEntity dinnerBlock = new EmbeddedEntity();
-          dinnerBlock.setProperty("start", block.getTime().start());
-          dinnerBlock.setProperty("end", block.getTime().end());
-          List<String> blockStudents = new ArrayList<>();
-          for (Student blockStudent : block.getStudents()) {
-            blockStudents.add(blockStudent.getName());
-          }
-          dinnerBlock.setProperty("students", blockStudents);
-          dinnerBlocksEntity.setProperty(blockName.concat(Integer.toString(blockIndex)), dinnerBlock);
-          blockIndex++;
-        }
-        
-        scheduleEntity.setProperty("lunch_blocks", lunchBlocksEntity);
-        scheduleEntity.setProperty("dinner_blocks", dinnerBlocksEntity);
         entity.setProperty("schedule", scheduleEntity);
         entity.setProperty("is_scheduled", true);
         datastore.put(entity);
@@ -169,45 +157,10 @@ public class CafeteriaSchedulerServlet extends HttpServlet {
     try {
       Entity cafeteria = datastore.get(key);
       EmbeddedEntity scheduleEntity = (EmbeddedEntity) cafeteria.getProperty("schedule");
-
-      EmbeddedEntity lunchBlocks = (EmbeddedEntity) scheduleEntity.getProperty("lunch_blocks");
-      EmbeddedEntity dinnerBlocks = (EmbeddedEntity) scheduleEntity.getProperty("dinner_blocks");
-
-      List<Block> lunchBlocksList = new ArrayList<Block>();
-      List<Block> dinnerBlocksList = new ArrayList<Block>();
-
-      String blockStr = "block";
       int mealTime = Integer.parseInt((String) cafeteria.getProperty("mealTime"));
 
-      int lunch_start = Math.toIntExact((long) cafeteria.getProperty("lunch_start"));
-      int lunch_end = Math.toIntExact((long) cafeteria.getProperty("lunch_end"));
-      int dinner_start = Math.toIntExact((long) cafeteria.getProperty("dinner_start"));
-      int dinner_end = Math.toIntExact((long) cafeteria.getProperty("dinner_end"));
-
-      int numLunchBlocks = (lunch_end-lunch_start)/mealTime;
-      int numDinnerBlocks = (dinner_end-dinner_start)/mealTime;
-
-      for (int lunchIndex = 0; lunchIndex < numLunchBlocks; lunchIndex++) {
-        String blockName = blockStr.concat(Integer.toString(lunchIndex));
-        EmbeddedEntity lunchBlock = (EmbeddedEntity) lunchBlocks.getProperty(blockName);
-        int start = Math.toIntExact((long) lunchBlock.getProperty("start"));
-        int end = Math.toIntExact((long) lunchBlock.getProperty("end"));
-        TimeRange time = TimeRange.fromStartEnd(start, end, false);
-        List<String> students = (List<String>) lunchBlock.getProperty("students");
-        Block blockToAdd = new Block(students, time, true);
-        lunchBlocksList.add(blockToAdd);
-      }
-
-      for (int dinnerIndex = 0; dinnerIndex < numDinnerBlocks; dinnerIndex++) {
-        String blockName = blockStr.concat(Integer.toString(dinnerIndex));
-        EmbeddedEntity dinnerBlock = (EmbeddedEntity) dinnerBlocks.getProperty(blockName);
-        int start = Math.toIntExact((long) dinnerBlock.getProperty("start"));
-        int end = Math.toIntExact((long) dinnerBlock.getProperty("end"));
-        TimeRange time = TimeRange.fromStartEnd(start, end, false);
-        List<String> students = (List<String>) dinnerBlock.getProperty("students");
-        Block blockToAdd = new Block(students, time, true);
-        dinnerBlocksList.add(blockToAdd);
-      }
+      List<Block> lunchBlocksList = getMealData(cafeteria, scheduleEntity, mealTime, "lunch");
+      List<Block> dinnerBlocksList = getMealData(cafeteria, scheduleEntity, mealTime, "dinner");
 
       Gson gson = new Gson();
       response.setContentType("application/json;");
@@ -218,6 +171,48 @@ public class CafeteriaSchedulerServlet extends HttpServlet {
     } catch(EntityNotFoundException e) {
       e.printStackTrace();
     }
+  }
+
+  public List<Block> getMealData(Entity cafeteria, EmbeddedEntity scheduleEntity, int mealTime, String meal) {
+    EmbeddedEntity blocksEntity = (EmbeddedEntity) scheduleEntity.getProperty("lunch_blocks");
+    List<Block> blockList = new ArrayList<Block>();
+    String blockStr = "block";
+
+    int meal_start = Math.toIntExact((long) cafeteria.getProperty(meal.concat("_start")));
+    int meal_end = Math.toIntExact((long) cafeteria.getProperty(meal.concat("_end")));
+
+    int numBlocks = (meal_end-meal_start)/mealTime;
+    for (int index = 0; index < numBlocks; index++) {
+      String blockName = blockStr.concat(Integer.toString(index));
+      EmbeddedEntity blockEntity = (EmbeddedEntity) blocksEntity.getProperty(blockName);
+      int start = Math.toIntExact((long) blockEntity.getProperty("start"));
+      int end = Math.toIntExact((long) blockEntity.getProperty("end"));
+      TimeRange time = TimeRange.fromStartEnd(start, end, false);
+      List<String> students = (List<String>) blockEntity.getProperty("students");
+      Block blockToAdd = new Block(students, time, true);
+      blockList.add(blockToAdd);
+    }
+
+    return blockList;
+  }
+
+  public void setMealEntity(Schedule schedule, EmbeddedEntity scheduleEntity, List<Block> blocks, String meal) {
+    EmbeddedEntity blocksEntity = new EmbeddedEntity();
+    String blockName = "block";
+    int blockIndex = 0;
+    for (Block block : blocks) {
+      EmbeddedEntity blockEntity = new EmbeddedEntity();
+      blockEntity.setProperty("start", block.getTime().start());
+      blockEntity.setProperty("end", block.getTime().end());
+      List<String> blockStudents = new ArrayList<>();
+      for (Student blockStudent : block.getStudents()) {
+        blockStudents.add(blockStudent.getName());
+      }
+      blockEntity.setProperty("students", blockStudents);
+      blocksEntity.setProperty(blockName.concat(Integer.toString(blockIndex)), blockEntity);
+      blockIndex++;
+    }
+    scheduleEntity.setProperty(meal, blocksEntity);
   }
 }
 

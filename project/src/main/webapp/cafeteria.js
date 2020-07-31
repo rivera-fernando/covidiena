@@ -17,6 +17,10 @@
  */
 
 var user = null;
+var cafeteriasArray;
+var currLunch;
+var currDinner;
+var currCafeteria;
 
 document.addEventListener('DOMContentLoaded', function() {
   var elems = document.querySelectorAll('.dropdown-trigger');
@@ -31,6 +35,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 $(document).ready(function(){
   $('.tabs').tabs();
+});
+
+$('.dropdown-trigger').dropdown();
+
+document.addEventListener('DOMContentLoaded', function() {
+  var elems = document.querySelectorAll('.modal');
+  var instances = M.Modal.init(elems, {});
 });
 
 /*
@@ -85,7 +96,20 @@ function updateCafeteriaSelect(cafeterias) {
  
 async function loadPage() {
   await loadUser();
-  await loadMealData();
+  loadMealData();
+}
+
+async function loadUser() {
+  await fetch('/login').then(response => response.json()).then((users) => {
+    user = users[0]; 
+    const header = document.getElementById("header");
+    const name = document.createElement("h4");
+    name.innerText = user.name + "'s Cafeteria Schedule";
+    const school = document.createElement("h5");
+    school.innerText = user.school;
+    header.appendChild(name);
+    header.appendChild(school);
+  });
 }
 
 async function loadMealData() {
@@ -94,22 +118,39 @@ async function loadMealData() {
   await fetch(url, {
     method: 'GET'
   }).then(response => response.json()).then((cafeterias) => {
+    cafeteriasArray = cafeterias;
     if (Object.keys(cafeterias).length == 0) {
       if (user.is_admin == true) {
-        message.innerText = "Please submit a cafeteria for your school.";
-        const form = document.getElementById("preferences-form");
-        form.style.display = "none";
+        message.innerText = "Please submit a cafeteria for your school!";
         loadCafeteriaForm();
       } else {
         message.innerText = "Your school's administration has not submitted any cafeterias.";
       }
     } else {
       const cafeteriaList = document.getElementById("cafeterias");
+      cafeteriaList.style.display = "block";
       updateCafeteriaSelect(cafeterias);
       cafeterias.forEach(cafeteria => {
-        const cafeteriaElement = createCafeteriaElement(cafeteria);
-        cafeteriaList.appendChild(cafeteriaElement);
+        addToDropDown(cafeteria);
       });
+      if (user.is_admin) {
+        addCafeteriaOption();
+      }
+      var elems = document.querySelectorAll('select');
+      var instances = M.FormSelect.init(elems, {});
+      loadPreferencesData();
+    }
+  });
+}
+
+async function loadPreferencesData() {
+  await fetch('cafeteria-preferences').then(response => response.json()).then((student) => {
+    var message = document.getElementById("message");
+    if (Object.keys(student).length == 0) {
+      message.innerText = "Please indicate your preferences.";
+      loadPreferencesForm();
+    } else {
+      createPreferences(message, student[0]);
     }
   });
 }
@@ -118,12 +159,13 @@ function loadScheduleBtn(cafeteria, container, reschedule) {
   reschedule = reschedule || false;
   if (user.is_admin) {
     const scheduleBtn = document.createElement('btn');
+    scheduleBtn.style.paddingLeft = "0";
     if (reschedule) {
       scheduleBtn.innerText = "Reschedule";
     } else {
       scheduleBtn.innerText = "Schedule";
     }
-    scheduleBtn.classList.add('btn-flat', 'center-align', 'small');
+    scheduleBtn.classList.add('btn-flat', 'center-align', 'small', 'white-text');
     scheduleBtn.addEventListener('click', () => {
       const params = new URLSearchParams();
       params.append("cafeteria", cafeteria.name);
@@ -131,97 +173,120 @@ function loadScheduleBtn(cafeteria, container, reschedule) {
       fetch('/cafeteria-scheduler', {
         method: 'POST',
         body: params
-      });
+      }).then(location.reload());
     });
     container.appendChild(scheduleBtn);
   }
 }
 
 function loadCafeteriaForm() {
-  const schoolPreferencesForm = document.getElementById("school-preferences-form");
-  schoolPreferencesForm.action = "/school-meal-preferences";
-  schoolPreferencesForm.style.display = "block";
+  const schoolPreferencesForm = document.getElementById("school-preferences-card");
+  if (schoolPreferencesForm.style.display == "none") {
+    schoolPreferencesForm.style.display = "block";
+  } else {
+    schoolPreferencesForm.style.display = "none";
+  }
 }
 
 function loadPreferencesForm() {
-  const form = document.getElementById("preferences-form");
-  form.style.display = "block";
-}
-
-async function loadUser() {
-  await fetch('/login').then(response => response.json()).then((users) => {
-    user = users[0]; 
-  });
-  await fetch('cafeteria-preferences').then(response => response.json()).then((student) => {
-    var message = document.getElementById("message");
-    if (Object.keys(student).length == 0) {
-      message.innerText = "Please indicate your preferences.";
-      loadPreferencesForm();
-    } else {
-      const card = document.getElementById("card-for-forms");
-      card.style.display = "none";
-      message.innerText = "You indicated the following preferences:";
-      const lunchPref = document.createElement("p");
-      lunchPref.innerHTML = "<b>Lunch:</b> " + timeConverter(student[0].lunchPref.start) + " - " + timeConverter(student[0].lunchPref.start+student[0].lunchPref.duration);
-      const dinnerPref = document.createElement("p");
-      dinnerPref.innerHTML = "<b>Dinner:</b> " + timeConverter(student[0].dinnerPref.start) + " - " + timeConverter(student[0].dinnerPref.start+student[0].dinnerPref.duration);
-      message.appendChild(lunchPref);
-      message.appendChild(dinnerPref);
-    }
-  });
+  const form = document.getElementById("preferences-trigger");
+  form.style.display = "inline-block";
 }
 
 function loadSchedule(cafeteria) {
-  const url = "/cafeteria-scheduler?cafeteria="+cafeteria.key;
-  fetch(url).then(response => response.json()).then((schedule) => {
-    const scheduleElem = document.getElementById("schedule");
+  const addCafeteriaForm = document.getElementById("school-preferences-card");;
+  addCafeteriaForm.style.display = "none";
+  const lunchElem = document.getElementById("lunch");
+  lunchElem.innerHTML = "<h5>Lunch Schedule</h5>";
+  lunchElem.classList.add("center-align");
+  const dinnerElem = document.getElementById("dinner");
+  dinnerElem.innerHTML = "<h5>Dinner Schedule</h5>";
+  dinnerElem.classList.add("center-align");
+  const scheduleElem = document.getElementById("schedule");
+  if (cafeteria.is_scheduled) {
     scheduleElem.style.display = "block";
-    const lunchElem = document.getElementById("lunch");
-    console.log(schedule);
-    createMealBlocks(lunchElem, schedule[0]);
-    const dinnerElem = document.getElementById("dinner");
-    createMealBlocks(dinnerElem, schedule[1]);
-  });
+    const url = "/cafeteria-scheduler?cafeteria="+cafeteria.key;
+    fetch(url).then(response => response.json()).then((schedule) => {
+      createMealBlocks(lunchElem, schedule[0], cafeteria, "lunch");
+      createMealBlocks(dinnerElem, schedule[1], cafeteria, "dinner");
+    });
+  } else {
+    scheduleElem.style.display = "none";
+  }
 }
 
 /*
- * ################# CAFETERIA ELEMS ############
+ * ################# DOM ELEMS ############
  */
 
 function createCafeteriaElement(cafeteria) {
   const cafeteriaElement = document.createElement('div');
   cafeteriaElement.style.width = "fit-content";
-  cafeteriaElement.classList.add('card', 'indigo', 'lighten-5');
+  cafeteriaElement.style.marginRight = "10px";
+  cafeteriaElement.classList.add('card', 'deep-purple', 'darken-2', 'white-text', 'col');
   const container = document.createElement('div');
   container.classList.add('card-content');
   const name = document.createElement('p');
   name.classList.add('card-title', 'center');
-  const mealTime = document.createElement('p');
-  const maxCapacity = document.createElement('p');
+  const meal_time = document.createElement('p');
+  const max_capacity = document.createElement('p');
   const lunch = document.createElement('p');
   const dinner = document.createElement('p');
 
   name.innerText = cafeteria.name;
-  mealTime.innerHTML = "<b>Meal Time:</b> " + cafeteria.mealTime;
-  maxCapacity.innerHTML = "<b>Dining Hall Capacity:</b> " + cafeteria.maxCapacity;
+  meal_time.innerHTML = "<b>Meal Time:</b> " + cafeteria.meal_time;
+  max_capacity.innerHTML = "<b>Dining Hall Capacity:</b> " + cafeteria.max_capacity;
   lunch.innerHTML = "<b>Lunch:</b> " + timeConverter(cafeteria.lunch_start) + " to " + timeConverter(cafeteria.lunch_end);
   dinner.innerHTML = "<b>Dinner:</b> " + timeConverter(cafeteria.dinner_start) + " to " + timeConverter(cafeteria.dinner_end);
 
   container.appendChild(name);
-  container.appendChild(maxCapacity);
-  container.appendChild(mealTime);
+  container.appendChild(max_capacity);
+  container.appendChild(meal_time);
   container.appendChild(lunch);
   container.appendChild(dinner);
 
   loadScheduleBtn(cafeteria, container, cafeteria.is_scheduled);
 
-  if (cafeteria.is_scheduled) {
-    loadSchedule(cafeteria);
-  }
-
   cafeteriaElement.appendChild(container);
 
-  return cafeteriaElement
+  const preview = document.getElementById("cafeteria-preview");
+  preview.style.display = "block";
+  preview.innerHTML = "";
+  preview.appendChild(cafeteriaElement);
+}
+
+function addToDropDown(cafeteria) {
+  const dropdownElem = document.createElement('option');
+  dropdownElem.innerText = cafeteria.name;
+  dropdownElem.value = cafeteria.name;
+  const dropdownMenu = document.getElementById("cafeteria-select");
+  dropdownMenu.appendChild(dropdownElem);
+}
+
+function addCafeteriaOption() {
+  const dropdownMenu = document.getElementById("cafeteria-select");
+  const dropdownElem = document.createElement('option');
+  dropdownElem.innerText = "Add Cafeteria";
+  dropdownElem.value = "Add Cafeteria";
+  dropdownMenu.appendChild(dropdownElem);
+}
+
+function changeCafeteria() {
+  const dropdownMenu = document.getElementById("cafeteria-select");
+  const value = dropdownMenu.value;
+  if (value === "Add Cafeteria") {
+    loadCafeteriaForm();
+    const schedule = document.getElementById("schedule");
+    schedule.style.display = "none";
+    const cafeteriaCard = document.getElementById("cafeteria-preview");
+    cafeteriaCard.style.display = "none";
+  }
+  cafeteriasArray.forEach(cafeteria => {
+    if (value === cafeteria.name) {
+      createCafeteriaElement(cafeteria);
+      loadSchedule(cafeteria);
+    }
+  });
 }
 
 function timeConverter(time) {
@@ -236,31 +301,129 @@ function timeConverter(time) {
   }
 }
 
-function createMealBlocks(elem, blocks) {
+function createMealBlocks(elem, blocks, cafeteria, meal) {
+  const table = document.createElement('table');
+  table.classList.add("responsive-table", "striped");
+  const thead = document.createElement('thead');
+  const trow = document.createElement('tr');
+
   var blockIndex = 1;
   blocks.forEach(block => {
-    const blockElem = document.createElement('li');
-    blockElem.innerHTML = "<b>Block" + blockIndex + "</b>";
+    const blockElem = document.createElement('td');
+    blockElem.classList.add("vgrid", "center", "center-align");
+    const blockTitle = document.createElement('p');
+    blockTitle.classList.add("center-align", "center");
+    blockTitle.innerHTML = "<b>Block " + blockIndex + "</b>";
     const time = document.createElement('p');
-    time.innerText = timeConverter(block.time.start) + " : " + timeConverter(block.time.start+block.time.duration);
+    time.innerHTML = "<b>Time: </b>" + timeConverter(block.time.start) + " - " + timeConverter(block.time.start+block.time.duration);
     //const is_mine = block.students.includes(user.name);
-    const students = document.createElement('ul');
-    if (Object.keys(block.students).length == 0) {
-      students.innerHTML = "This block is empty";
+    const students = document.createElement('p');
+    students.innerHTML = "<b>Capacity: </b>" + Object.keys(block.students).length + "/" + cafeteria.max_capacity;
+    const flag = document.createElement('i');
+    flag.classList.add("material-icons");
+    flag.innerText = "brightness_1";
+    
+    if (Object.keys(block.students).length / cafeteria.max_capacity < 0.8) {
+      flag.classList.add('tiny', 'green-text');
+    } else if (Object.keys(block.students).length / cafeteria.max_capacity < 1) {
+      flag.classList.add('tiny', 'yellow-text');
     } else {
-      block.students.forEach(student => {
-        const studentElem = document.createElement('li');
-        studentElem.innerText = student.name;
-        students.appendChild(studentElem);
-      })
+      flag.classList.add('tiny', 'red-text');
     }
 
+    blockTitle.appendChild(flag);
+    blockElem.appendChild(blockTitle);
     blockElem.appendChild(time);
     blockElem.appendChild(students);
-    elem.appendChild(blockElem);
+
+    var found = false;
+    block.students.forEach(student => {
+      if (student.name === user.name) {
+        blockElem.classList.add("light-blue", "lighten-5");
+        found = true;
+      }
+    });
+
+    if (found == false) {
+      const addBtn = document.createElement('button');
+      addBtn.innerText = "Join";
+      addBtn.classList.add('btn');
+      addBtn.addEventListener('click', () => {
+        const params = new URLSearchParams();
+        params.append("cafeteriaKey", cafeteria.key);
+        params.append("targetCafeteriaName", cafeteria.name);
+        params.append("blockStart", block.time.start);
+        params.append("mealDuration", cafeteria.meal_time);
+        params.append("currCafeteria", currCafeteria);
+        if (meal === "lunch") {
+          params.append("currTimeRangeStart", currLunch.start);
+          params.append("currTimeRangeEnd", currLunch.start + currLunch.duration);
+        } else {
+          params.append("currTimeRangeStart", currDinner.start);
+          params.append("currTimeRangeEnd", currDinner.start + currDinner.duration);
+        }
+        params.append("meal", meal);
+        fetch('/change-cafeteria', {
+          method: 'POST',
+          body: params
+        }).then(location.reload());
+      });
+      blockElem.appendChild(addBtn);
+    }
+
+    trow.appendChild(blockElem);
     blockIndex++;
   })
+
+  thead.appendChild(trow);
+  table.appendChild(thead);
+  elem.appendChild(table);
 }
+
+function createPreferences(message, student) {
+  message.classList.add('row');
+
+  const preferences = document.createElement('div');
+  preferences.classList.add('col', 's6');
+  preferences.style.padding = 0;
+  preferences.innerText = "You indicated the following preferences:";
+
+  const lunchPref = document.createElement("p");
+  lunchPref.innerHTML = "<b>Lunch:</b> " + timeConverter(student.lunchPref.start) + " - " + timeConverter(student.lunchPref.start+student.lunchPref.duration);
+  const dinnerPref = document.createElement("p");
+  dinnerPref.innerHTML = "<b>Dinner:</b> " + timeConverter(student.dinnerPref.start) + " - " + timeConverter(student.dinnerPref.start+student.dinnerPref.duration);
+  const cafeteriaPref = document.createElement("p");
+  cafeteriaPref.innerHTML = "<b>Cafeteria:</b> " + student.cafeteria;
+
+  preferences.appendChild(cafeteriaPref);
+  preferences.appendChild(lunchPref);
+  preferences.appendChild(dinnerPref);
+  message.appendChild(preferences);
+
+  // If student was assigned
+  if (student.hasOwnProperty("lunchReceived")) {
+    currLunch = student.lunchReceived;
+    currDinner = student.dinnerReceived;
+    currCafeteria = student.cafeteriaReceived;
+    const received = document.createElement('div');
+    received.classList.add('col', 's6');
+    received.style.padding = 0;
+    received.innerText = "You were assigned the following slots:";
+
+    // Implement proper functionality to actually find student
+    const lunchReceived = document.createElement("p");
+    lunchReceived.innerHTML = "<b>Lunch:</b> " + timeConverter(student.lunchReceived.start) + " - " + timeConverter(student.lunchReceived.start+student.lunchReceived.duration);
+    const dinnerReceived = document.createElement("p");
+    dinnerReceived.innerHTML = "<b>Dinner:</b> " + timeConverter(student.dinnerReceived.start) + " - " + timeConverter(student.dinnerReceived.start+student.dinnerReceived.duration);
+    const cafeteriaReceived = document.createElement("p");
+    cafeteriaReceived.innerHTML = "<b>Cafeteria:</b> " + student.cafeteriaReceived;
+
+    received.appendChild(cafeteriaReceived);
+    received.appendChild(lunchReceived);
+    received.appendChild(dinnerReceived);
+    message.appendChild(received);
+  }
+} 
 
 /*
  * ################# VALIDATORS #################

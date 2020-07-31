@@ -112,13 +112,29 @@ public class PreferencesServlet extends HttpServlet {
         long lunch_end = (long) entity.getProperty("lunch_end");
         long dinner_start = (long) entity.getProperty("dinner_start");
         long dinner_end = (long) entity.getProperty("dinner_end");
+        String cafeteria = (String) entity.getProperty("cafeteria");
 
         TimeRange lunch = TimeRange.fromStartEnd(Math.toIntExact(lunch_start), Math.toIntExact(lunch_end), false);
         TimeRange dinner = TimeRange.fromStartEnd(Math.toIntExact(dinner_start), Math.toIntExact(dinner_end), false);
+        // If the student has received a schedule
+        if (entity.getProperty("cafeteria_received") != null) {
+          String cafeteria_received = (String) entity.getProperty("cafeteria_received");
+          long lunch_start_assigned = (long) entity.getProperty("lunch_start_assigned");
+          long lunch_end_assigned = (long) entity.getProperty("lunch_end_assigned");
+          long dinner_start_assigned = (long) entity.getProperty("dinner_start_assigned");
+          long dinner_end_assigned = (long) entity.getProperty("dinner_end_assigned");
 
-        Student newStudent = new Student(name, lunch, dinner);
-        
-        student.add(newStudent);
+          TimeRange lunchReceived = TimeRange
+            .fromStartEnd(Math.toIntExact(lunch_start_assigned), Math.toIntExact(lunch_end_assigned), false);
+          TimeRange dinnerReceived = TimeRange
+            .fromStartEnd(Math.toIntExact(dinner_start_assigned), Math.toIntExact(dinner_end_assigned), false);
+
+          Student newStudent = new Student(name, lunch, dinner, cafeteria, lunchReceived, dinnerReceived, cafeteria_received);
+          student.add(newStudent);
+        } else {
+          Student newStudent = new Student(name, lunch, dinner, cafeteria);
+          student.add(newStudent);
+        }
       }
     }
 

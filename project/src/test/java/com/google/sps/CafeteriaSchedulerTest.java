@@ -289,9 +289,6 @@ public final class CafeteriaSchedulerTest {
     Assert.assertEquals(CAPACITY_125, actual.getDinnerBlocks().get(2).getCapacity());
     Assert.assertEquals(CAPACITY_125, actual.getDinnerBlocks().get(3).getCapacity());
 
-
-    System.out.println(actual.getHappiness());
-
     Assert.assertTrue(actual.getLunchBlocks().get(0).contains(63, "Student A"));
     Assert.assertTrue(actual.getLunchBlocks().get(0).contains(62, "Student H"));
     Assert.assertTrue(actual.getLunchBlocks().get(1).contains(37, "Student A"));
