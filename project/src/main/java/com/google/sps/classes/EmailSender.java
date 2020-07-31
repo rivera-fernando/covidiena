@@ -16,7 +16,7 @@ import javax.mail.Session;
   
 /*EmailSender creates and sends an email when users create and account to verify that they created the account*/
 public class EmailSender{ 
-    public static void sendEmail(String to) {
+    public static void sendEmail(String to, String newPassword) {
 
       // Put sender’s address
       String from = "covidiena@gmail.com";
@@ -49,13 +49,20 @@ public class EmailSender{
         // Set To: header field
         message.setRecipients(Message.RecipientType.TO,
                 InternetAddress.parse(to));
-    
-        message.setSubject("[Covidiena] Account Verification");
         StringBuilder htmlBuilder = new StringBuilder();
-        htmlBuilder.append("<p>");
-        htmlBuilder.append("An account on Covidiena has been created with this email. To verify this is you, please click ");
-        htmlBuilder.append("<a href='covidiena.appspot.com/login.html'>here</a>.");
-        htmlBuilder.append("</p>");
+        if (password.equals("")){
+            message.setSubject("[Covidiena] Account Verification");
+            htmlBuilder.append("<p>");
+            htmlBuilder.append("An account on Covidiena has been created with this email. To verify this is you, please click ");
+            htmlBuilder.append(" <a href='covidiena.appspot.com/login.html'>here</a>.");
+            htmlBuilder.append("</p>");
+        } else {
+            message.setSubject("[Covidiena] Reset Account Password");
+            htmlBuilder.append("<p>");
+            htmlBuilder.append("The account linked to this email requested a password change. The new password is: " + newPassword + ".");
+            htmlBuilder.append(" Log in <a href='covidiena.appspot.com/login.html'>here</a>.");
+            htmlBuilder.append("</p>");
+        }
         String html = htmlBuilder.toString();
         message.setContent(html, "text/html");
         Transport.send(message);
