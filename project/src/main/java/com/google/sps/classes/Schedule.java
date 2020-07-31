@@ -65,6 +65,14 @@ public final class Schedule {
 
   public List<Block> getDinnerBlocks() {return this.dinnerBlocks;}
 
+  public void setLunchBlocks(List<Block> newBlocks) {
+    this.lunchBlocks = newBlocks;
+  }
+
+  public void setDinnerBlocks(List<Block> newBlocks) {
+    this.dinnerBlocks = newBlocks;
+  }
+
   public void incrementHappiness() {
     this.happy++;
   }
