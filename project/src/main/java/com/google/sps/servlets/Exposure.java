@@ -63,20 +63,15 @@ public class Exposure extends HttpServlet {
         new FilterPredicate("email", FilterOperator.EQUAL, email);
       Query query = new Query("User").setFilter(emailFilter);
       PreparedQuery results = datastore.prepare(query);
-      if (action.equals("revert")) {
-          for (Entity entity: results.asIterable()) {
-              entity.setProperty("diagnosed", "negative");
-              datastore.put(entity);
-              session.setAttribute("diagnosed", "negative");
-          }
+      String diagnosed = action.equals("revert")? "negative" : "positive";
+      for (Entity entity: results.asIterable()) {
+          entity.setProperty("diagnosed", diagnosed);
+          datastore.put(entity);
+          session.setAttribute("diagnosed", diagnosed);
+      }
+      if (diagnosed.equals("negative")) {
           return;
       }
-      for (Entity entity: results.asIterable()) {
-          entity.setProperty("diagnosed", "positive");
-          datastore.put(entity);
-          session.setAttribute("diagnosed", "positive");
-      }
-
       
       query = new Query("LocationLog").setFilter(emailFilter);
       results = datastore.prepare(query);
@@ -86,12 +81,11 @@ public class Exposure extends HttpServlet {
           Filter dateFilter = 
             new FilterPredicate("date", FilterOperator.EQUAL, entity.getProperty("date"));
           Filter latFilter = 
-            new FilterPredicate("lat", FilterOperator.EQUAL, entity.getProperty("lat"));
+            new FilterPredicate("latitude", FilterOperator.EQUAL, entity.getProperty("latitude"));
           Filter lngFilter =
-            new FilterPredicate("lng", FilterOperator.EQUAL, entity.getProperty("lng"));
+            new FilterPredicate("longitude", FilterOperator.EQUAL, entity.getProperty("longitude"));
           Filter timeAndPlaceFilter =
             CompositeFilterOperator.and(dateFilter, latFilter, lngFilter);
-          //somedthing
 
           query = new Query("LocationLog").setFilter(timeAndPlaceFilter);
           all = datastore.prepare(query);
@@ -100,8 +94,8 @@ public class Exposure extends HttpServlet {
                   Entity exposedEntity = new Entity("ExposedEmails");
                   exposedEntity.setProperty("email", (String) new_entity.getProperty("email"));
                   exposedEntity.setProperty("place", (String) new_entity.getProperty("name"));
-                  exposedEntity.setProperty("lat", (String) new_entity.getProperty("lat"));
-                  exposedEntity.setProperty("lng", (String) new_entity.getProperty("lng"));
+                  exposedEntity.setProperty("latitude", (String) new_entity.getProperty("latitude"));
+                  exposedEntity.setProperty("longitude", (String) new_entity.getProperty("longitude"));
                   datastore.put(exposedEntity);
               }
           }
@@ -118,8 +112,8 @@ public class Exposure extends HttpServlet {
         ArrayList<Object> personAndPlace = new ArrayList<Object>();
         personAndPlace.add((String) entity.getProperty("email"));
         personAndPlace.add((String) entity.getProperty("place"));
-        personAndPlace.add((String) entity.getProperty("lat"));
-        personAndPlace.add((String) entity.getProperty("lng"));
+        personAndPlace.add((String) entity.getProperty("latitude"));
+        personAndPlace.add((String) entity.getProperty("longitude"));
 
 
         data.add(personAndPlace);
