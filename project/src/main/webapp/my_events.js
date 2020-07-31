@@ -62,7 +62,7 @@ function loadPending() {
     // Right now this if statement won't work for admins
     if (Object.keys(events).length == 0) {
       pendingEvents.innerText = "You have no pending events";
-    } else if (user.admin == true) {
+    } else if (user.is_admin == true) {
       events.forEach((event) => {
         var eventElement = createEventElement(event);
         addApprovalBtn(eventElement);

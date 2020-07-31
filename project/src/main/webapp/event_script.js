@@ -640,4 +640,3 @@ function validateEvent() {
   }
   return true;
 }
- 
