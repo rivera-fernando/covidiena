@@ -33,7 +33,7 @@
   </head>
   <body style="background-color:#eeeeee;"onload ="updateLogIn();populateLinks();populateAnnouncements();heatmap();createMap();exposed();checkDiagnose();">
       <nav>
-    	<div class="nav-wrapper blue darken-4 z-depth-0">
+    	<div style="" class="nav-wrapper blue darken-4 z-depth-0">
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons white-text">menu</i></a>
             <a href="../" class="brand-logo"><img src="./static/logo.png" height="65"></a>
             <ul id="nav-mobile" class="right">
@@ -59,31 +59,31 @@
       <main>
         <div class="container">
         <h1>Student Dashboard</h1>
-                <div class="card-panel z-depth-0">
+                <div class="card-cool z-depth-0">
                     <div class="row">
                         <div class="col s12 m8 l6">
                             <p id="text">You have not reported testing COVID-19 positive. Stay healthy, and click the "positive" button if you receive a diagnosis.</p>
                         </div>
                         <div class="center-align col s12 m4 l6">
-                            <a style="width: 100%;" id="report"class="center-align waves-effect waves-light btn blue accent-2" onclick="exposure();">Positive</a>
+                            <a style="width: 100%;" id="report"class="center-align waves-effect waves-light btn  teal accent-4" onclick="exposure();">Positive</a>
                             &nbsp
-                            <a style="width: 100%;" id="deny"class="center-align waves-effect waves-light btn blue accent-2" onclick="mistake();">Negative</a>
+                            <a style="width: 100%;" id="deny"class="center-align waves-effect waves-light btn  teal accent-4" onclick="mistake();">Negative</a>
                         </div>
                     </div>
                 </div>
-                <div class="card-panel z-depth-0">
+                <div class="card-cool z-depth-0">
                     <div class="row">
                         <div class="col s12 m8 l6">
                             <p>Have you left campus? Log where you have gone</p>
                         </div>
                         <div class="center-align col s12 m4 l6">
-                            <a style="width: 100%;" class="center-align waves-effect waves-light btn blue accent-2" onclick="showLocationForm()">Log Location</a>
+                            <a style="width: 100%;" class="center-align waves-effect waves-light btn  teal accent-4" onclick="showLocationForm()">Log Location</a>
                             &nbsp
-                            <a style="width: 100%;" class="waves-effect waves-light btn blue accent-2 modal-trigger" href="#modal1">View Heatmap</a>
+                            <a style="width: 100%;" class="waves-effect waves-light btn  teal accent-4 modal-trigger" href="#modal1">View Heatmap</a>
                         </div>
                     </div>
                 </div>
-                <div id="logLocationCard" style="border-radius: 10px; display:none" class="card-panel z-depth-0">
+                <div id="logLocationCard" style="border-radius: 10px; display:none" class="card-cool z-depth-0">
                     <a href="#pastLocations" class="modal-trigger" onclick="getPastLocations()">View Logged Locations</a>
                     <div id="pastLocations" class="modal">
                         <div class="modal-content">
@@ -122,14 +122,14 @@
                                 </div>
                                 <div class="row">
                                     <div class="input-field center" style="display:"";">
-                                        <button id="logLocationButton" class ="btn" style="background-color: #42a5f5; display:none;" type="submit" value="submit" >Log Location</button>
+                                        <button id="logLocationButton" class ="btn  teal accent-4" style="display:none;" type="submit" value="submit" >Log Location</button>
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-                <div class="card-panel z-depth-0">
+                <div class="card-cool z-depth-0">
                     <div class="row">
                         <div class="col s12 m7">
                                 <div class="blue-grey-text-darken-2">
@@ -148,7 +148,7 @@
                 </div>
                 <div class="row">
                     <div class="col s12 m5">
-                        <div class="card-panel z-depth-0">
+                        <div class="card-cool z-depth-0">
                             <div class="blue-grey-text-darken-2">
                                     <h5>Daily Temperature</h5>
                                     <div class="input-field">
@@ -157,13 +157,13 @@
                                         <label for="temp">Temperature</label>
                                     </div>
                                     <div class="center-align">
-                                        <button class="btn waves-effect waves-light blue accent-2" onclick="sendTemp();">Submit</button>
+                                        <button class="btn waves-effect waves-light  teal accent-4" onclick="sendTemp();">Submit</button>
                                     </div>
                                 </div>
                         </div>
                     </div>
                     <div class="col s12 m7">
-                        <div class="card-panel z-depth-0">
+                        <div class="card-cool z-depth-0">
                             <div class="blue-grey-text-darken-2">
                                     <h5>Temperature Trends</h5>
                                     <div id="chart" class="goog-chart">
@@ -177,56 +177,56 @@
                 </div>
                 <div class="row">
                     <div class="col s12 m5">
-                        <div class="card-panel z-depth-0">
+                        <div class="card-cool z-depth-0">
                             <div class=" blue-grey-text-darken-2">
                                     <h5>Possible Symptoms</h5>
                                     <ul onchange="populateLinks()">
                                         <li>
                                             <label>
                                             <input type="checkbox" id="fever" class="filled-in"/>
-                                            <span>Fever or chills</span>
+                                            <span style="color: #000000;">Fever or chills</span>
                                             </label>
                                         </li>
                                         <li>
                                             <label>
                                             <input type="checkbox" id="cough" class="filled-in"/>
-                                            <span>Cough</span>
+                                            <span style="color: #000000";>Cough</span>
                                             </label>
                                         </li>
                                         <li>
                                             <label>
                                             <input type="checkbox" id="sob" class="filled-in"/>
-                                            <span>Shortness of breath</span>
+                                            <span style="color: #000000;">Shortness of breath</span>
                                             </label>
                                         </li>
                                         <li>
                                             <label>
                                             <input type="checkbox" id="fatigue" class="filled-in"/>
-                                            <span>Fatigue</span>
+                                            <span style="color: #000000">Fatigue</span>
                                             </label>
                                         </li>
                                         <li>
                                             <label>
                                             <input type="checkbox" id="aches" class="filled-in"/>
-                                            <span>Muscle or body aches</span>
+                                            <span style="color: #000000">Muscle or body aches</span>
                                             </label>
                                         </li>
                                         <li>
                                             <label>
                                             <input type="checkbox" id="head" class="filled-in"/>
-                                            <span>Headache</span>
+                                            <span style="color: #000000">Headache</span>
                                             </label>
                                         </li>
                                         <li>
                                             <label>
                                             <input type="checkbox" id="throat" class="filled-in"/>
-                                            <span>Sore throat</span>
+                                            <span style="color: #000000">Sore throat</span>
                                             </label>
                                         </li>
                                         <li>
                                             <label>
                                             <input type="checkbox" id="nausea" class="filled-in" />
-                                            <span>Nausea or vomiting</span>
+                                            <span style="color: #000000">Nausea or vomiting</span>
                                             </label>
                                         </li>
                                     </ul>
@@ -234,7 +234,7 @@
                         </div>
                     </div>
                     <div class="col s12 m7">
-                        <div class="card-panel z-depth-0">
+                        <div class="card-cool z-depth-0">
                             <div class="blue-grey-text-darken-2">
                                     <h5>Helpful Links</h5>
                                     <ul id="links"> 
