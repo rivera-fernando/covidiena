@@ -12,11 +12,12 @@
     <script src="tracing.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGiqqHxV-dvFdgBu_CXqovT85uLxs5m-c&callback=createMap&libraries=places&v=weekly" defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGiqqHxV-dvFdgBu_CXqovT85uLxs5m-c&callback=createMap&libraries=places,visualization&v=weekly" defer></script>
     <script>
     $(document).ready(function(){
         $('.sidenav').sidenav();
         $('.collapsible').collapsible();
+        $('.modal').modal();
     });
     $(window).resize(function(){
         drawBasic();
@@ -30,7 +31,7 @@
       google.charts.setOnLoadCallback(drawBasic);
     </script>
   </head>
-  <body onload ="updateLogIn();populateLinks();populateAnnouncements();createMap();">
+  <body onload ="updateLogIn();populateLinks();populateAnnouncements();heatmap();createMap();exposed();checkDiagnose();">
       <nav>
     	<div class="nav-wrapper blue-grey lighten-4">
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
@@ -42,6 +43,7 @@
                 <li class="active"><a style="color: #42a5f5;" href="/dashboard.html" id= "dashboardButton">Dashboard</a></li>
                 <li><a style="color: #42a5f5;" href="/info.html">Information</a></li>
                 <li><a style="color: #42a5f5;" href="/events.html" id= "eventButton">Events</a></li>
+                <li><a style="color: #42a5f5;" href="/cafeteria.html">Cafeteria</a></li>
                 <li style="width: 50px; height: 60px;">&nbsp;</li>
                 <li><a style="color: #42a5f5;" href="/signup.html" class="signupButton">Sign Up</a></li>
                 <li><a style="color: #42a5f5;" class= "loginButton" href="/login.html">Log In</a></li>
@@ -52,6 +54,7 @@
         <li><a style="color: #42a5f5;" href="/dashboard.html" id= "dashboardButton">Dashboard</a></li>
         <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
         <li><a style="color: #42a5f5;" href="/events.html" id= "eventButton">Events</a></li>
+        <li><a style="color: #42a5f5;" href="/cafeteria.html">Cafeteria</a></li>
         <li><a style="color: #42a5f5;" href="/signup.html" class="signupButton">Sign Up</a></li>
         <li><a style="color: #42a5f5;" class= "loginButton" href="/login.html">Log In</a></li>
       </ul>
@@ -61,13 +64,12 @@
                 <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
                     <div class="row">
                         <div class="col s12 m8 l6">
-                            <p>Have you been diagnosed with COVID-19?</p>
+                            <p id="text">You have not reported testing COVID-19 positive. Stay healthy, and click the "positive" button if you receive a diagnosis.</p>
                         </div>
-                        <div class="center-align col s6 m2 l3">
-                            <a style="width: 100%;" class="center-align waves-effect waves-light btn blue lighten-1" href="#">Yes</a>
-                        </div>
-                        <div class="center-align col s6 m2 l3">
-                            <a style="width: 100%;" class="waves-effect waves-light btn blue lighten-1" href="#">No</a>
+                        <div class="center-align col s12 m4 l6">
+                            <a style="width: 100%;" id="report"class="center-align waves-effect waves-light btn blue lighten-1" onclick="exposure();">Positive</a>
+                            &nbsp
+                            <a style="width: 100%;" id="deny"class="center-align waves-effect waves-light btn blue lighten-1" onclick="mistake();">Negative</a>
                         </div>
                     </div>
                 </div>
@@ -76,8 +78,10 @@
                         <div class="col s12 m8 l6">
                             <p>Have you left campus? Log where you have gone</p>
                         </div>
-                        <div class="center-align col s6 m4 l6">
-                            <a style="width: 50%;" class="center-align waves-effect waves-light btn blue lighten-1" onclick="showLocationForm()">Log Location</a>
+                        <div class="center-align col s12 m4 l6">
+                            <a style="width: 100%;" class="center-align waves-effect waves-light btn blue lighten-1" onclick="showLocationForm()">Log Location</a>
+                            &nbsp
+                            <a style="width: 100%;" class="waves-effect waves-light btn modal-trigger" href="#modal1">View Heatmap</a>
                         </div>
                     </div>
                 </div>
@@ -129,17 +133,18 @@
                 </div>
                 <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
                     <div class="row">
-                        <div class="col s12 m8">
+                        <div class="col s12 m7">
                             <div style="border-radius: 10px;" class="card white">
                                 <div class="card-content blue-grey-text-darken-2">
-                                    <p>Have you been exposed (according to our maps data).</p>
+                                    <p>Have you been exposed? (according to the maps data that our users provide)</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="center-align col s12 m4">
-                            <div style="border-radius: 10px;" class="card white">
+                        <div class="center-align col s12 m5">
+                            <div style="border-radius: 10px;" class="card white" id="status-holder">
                                 <div class="card-content blue-grey-text-darken-2">
-                                    <p>Not that we know of</p>
+                                    <p id="status">Not that we know of</p>
+                                    <ul id="places"></ul>
                                 </div>
                             </div>
                         </div>
@@ -256,6 +261,9 @@
                 </div>
         <h2>Announcements</h2>
         <ul style="border-radius: 10px;" id="announcements" class="collapsible popout"> </ul>
+        <div style="height: 500px" id="modal1" class="modal">
+            <div id="heat"></div>
+        </div>
         </div>
     </main>
     <footer class="page-footer blue-grey lighten-2 ">
@@ -267,5 +275,4 @@
         </div>
     </footer>
   </body>
-  <script src="tracing.js"></script>
 </html>

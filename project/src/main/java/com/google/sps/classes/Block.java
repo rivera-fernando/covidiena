@@ -37,6 +37,18 @@ public final class Block {
     this.duration = time.duration();
   }
 
+  public Block(List<String> students, TimeRange time, boolean noPrefs) {
+    this.students = new ArrayList<Student>();
+    if (students != null) {
+      for (String student : students) {
+        Student newStudent = new Student(student);
+        this.students.add(newStudent);
+      }
+    }
+    this.time = time;
+    this.duration = time.duration();
+  }
+
   public void addStudent(Student student) {this.students.add(student);}
 
   public void addStudents(List<Student> students) {

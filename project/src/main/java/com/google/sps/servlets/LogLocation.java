@@ -55,8 +55,8 @@ public class LogLocation extends HttpServlet {
         Entity locationEntity = new Entity("LocationLog");
         locationEntity.setProperty("name", name);
         locationEntity.setProperty("state", state);
-        locationEntity.setProperty("lng", longitude);
-        locationEntity.setProperty("lat", latitude);
+        locationEntity.setProperty("longitude", longitude);
+        locationEntity.setProperty("latitude", latitude);
         locationEntity.setProperty("email", email);
         locationEntity.setProperty("date", dateStamp);
 
@@ -73,8 +73,8 @@ public class LogLocation extends HttpServlet {
         PreparedQuery results = datastore.prepare(query);
         for(Entity entity:results.asIterable()) {
             ArrayList<Object> location = new ArrayList<Object>();
-            location.add(entity.getProperty("lat"));
-            location.add(entity.getProperty("lng"));
+            location.add(entity.getProperty("latitude"));
+            location.add(entity.getProperty("longitude"));
             locations.add(location);
         }
         response.setContentType("application/json;");

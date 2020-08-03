@@ -15,10 +15,9 @@
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="materialize.min.js"></script>
-    <script src="event_script.js"></script>
-    <script src="my_events.js"></script>
+    <script src="cafeteria.js"></script>
   </head>
-  <body onload="loadMyEvents(); updateLogIn()">
+  <body onload="updateLogIn(); loadPage()">
       <nav>
         <div class="nav-wrapper blue-grey lighten-4">
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
@@ -30,6 +29,7 @@
                 <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
                 <li><a style="color: #42a5f5;" href="/info.html">Information</a></li>
                 <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+                <li class="active"><a style="color: #42a5f5;" href="/cafeteria.html">Cafeteria</a></li>
                 <li style="width: 50px; height: 60px;">&nbsp;</li>
                 <li><a style="color: #42a5f5;" href="/signup.html" class="signupButton">Sign Up</a></li>
                 <li><a style="color: #42a5f5;" class= "loginButton">Log In</a></li>
@@ -39,17 +39,127 @@
       <ul class="sidenav" id="mobile-demo">
         <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
         <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+        <li class="active"><a style="color: #42a5f5;" href="/cafeteria.html">Cafeteria</a></li>
         <li><a style="color: #42a5f5;" href="/signup.html" class="signupButton">Sign Up</a></li>
         <li><a style="color: #42a5f5;" class ="loginButton">Log In</a></li>
       </ul>
     <main>
       <div class="container">
-        <h4>Cafeteria Schedule</h4>
-        <div id="school"></div>
-        <div id="lunch-pref">You designated your lunch preference as: </div>
-        <div id="dinner-pref">You designated your dinner preference as: </div>
-        <div id="lunch">Your assigned lunch time is: </div>
-        <div id="dinner">Your assigned dinner time is: </div>
+        <div class="section">
+          <div id="header"></div>
+          <div id="message" style="margin-bottom: 0"></div>
+          <a id="preferences-trigger" class="deep-purple-text btn-flat modal-trigger" href="#preferences-form-modal" style="display: none; padding-left: 0">Submit Preferences</a>
+        </div>
+        <div id="cafeterias" style="display: none; margin-bottom: 0">
+          <h5>Available Cafeterias</h5>
+          <div class="row">
+            <form class="col s4" style="padding: 0">
+              <select id="cafeteria-select" onchange="changeCafeteria()">
+                <option disabled selected>Select a Cafeteria</option>
+              </select>
+            </form>
+          </div>
+          <div id="cafeteria-preview"></div>
+        </div>
+        <div class="modal" id="preferences-form-modal">
+          <div class="modal-content">
+            <form action="/cafeteria-preferences" method="POST" id="preferences-form" onsubmit="return validation()">
+              <p class="card-title">Submit Your Meal Preferences</p>
+              <div class="row">
+                <div class="col s3 left">
+                  <select name="cafeteria-field" id="cafeteria-field" class="validate">
+                    <option value="" disabled selected>Select Cafeteria</option>
+                  </select>
+                </div>
+              </div>
+              <p>Please indicate below when your preferences for when you would like to eat lunch and dinner.</p>
+              <div class="row">
+                <div class="col s3">
+                  <input type="text" onchange="updateTimeInput(this.value, this.id)" placeholder="Lunch Start" class="timepicker" name="lunch-pref-start" id="lunch-pref-start" style="font-color: white">
+                  <p id="lunch-pref-start-msg"></p>
+                </div>
+                <div class="col s3">
+                  <input type="text" onchange="updateTimeInput(this.value, this.id)" placeholder="Lunch End" class="timepicker" name="lunch-pref-end" id="lunch-pref-end" style="font-color: white">
+                  <p id="lunch-pref-end-msg"></p>
+                </div>
+                <div class="col s3">
+                  <input type="text" onchange="updateTimeInput(this.value, this.id)" placeholder="Dinner Start" class="timepicker" name="dinner-pref-start" id="dinner-pref-start" style="font-color: white">
+                  <p id="dinner-pref-start-msg"></p>
+                </div>
+                <div class="col s3">
+                  <input type="text" onchange="updateTimeInput(this.value, this.id)" placeholder="Dinner End" class="timepicker" name="dinner-pref-end" id="dinner-pref-end" style="font-color: white">
+                  <p id="dinner-pref-end-msg"></p>
+                </div>
+              </div>
+              <input class="btn" type="submit" value="SUBMIT">
+            </form>
+          </div>
+        </div>
+        <div class="card indigo lighten-5" id="school-preferences-card" style="display: none; border-radius: 2px">
+          <div class="card-content">
+            <form action="/school-meal-preferences" method="POST" id="school-preferences-form" onsubmit="return validation()">
+              <input type="text" placeholder="Cafeteria Name" name="cafeteria-name" id="cafeteria-name">
+              <div class="valign-wrapper">
+                <div class="row center">
+                  <div class="col s4">
+                    <p class="range-field">
+                      Max Capacity of Dining Hall
+                      <input oninput="updateTextInput(this.value, this.id)" step="10" type="range" id="max-capacity" name="max-capacity" min="0" max="1000" value="0"/>
+                    </p>
+                  </div>
+                  <div class="col s2">
+                    <p><span id="max-capacity-preview">0</span> students</p>
+                  </div>
+                  <div class="col s4">
+                    <p class="range-field">
+                      Meal Time (minutes)
+                      <input oninput="updateTextInput(this.value, this.id)" ste="10" type="range" id="meal-time" name="meal-time" min="0" max="100" value="30"/>
+                    </p>
+                  </div>
+                  <div class="col s2">
+                    <p><span id="meal-time-preview">30</span> minutes</p>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col s3">
+                  <input type="text" onchange="updateTimeInput(this.value, this.id)" placeholder="Lunch Start" class="timepicker" name="lunch-start" id="lunch-start" style="font-color: white">
+                  <p id="lunch-start-msg"></p>
+                </div>
+                <div class="col s3">
+                  <input type="text" onchange="updateTimeInput(this.value, this.id)" placeholder="Lunch End" class="timepicker" name="lunch-end" id="lunch-end" style="font-color: white">
+                  <p id="lunch-end-msg"></p>
+                </div>
+                <div class="col s3">
+                  <input type="text" onchange="updateTimeInput(this.value, this.id)" placeholder="Dinner Start" class="timepicker" name="dinner-start" id="dinner-start" style="font-color: white">
+                  <p id="dinner-start-msg"></p>
+                </div>
+                <div class="col s3">
+                  <input type="text" onchange="updateTimeInput(this.value, this.id)" placeholder="Dinner End" class="timepicker" name="dinner-end" id="dinner-end" style="font-color: white">
+                  <p id="dinner-end-msg"></p>
+                </div>
+              </div>
+              <input class="btn" type="submit" value="SUBMIT">
+            </form>
+          </div>
+        </div>
+        <div id="schedule" style="display: none">
+          <h4 id="cafeteria-title"></h4>
+          <div class="row">
+            <div class="col s12">
+              <ul class="tabs z-depth-1">
+                <li class="tab col s6"><a class="active" href="#lunch-container">Lunch</a></li>
+                <li class="tab col s6"><a href="#dinner-container">Dinner</a></li>
+              </ul>
+            </div>
+            <div id="lunch-container" class="col s12">
+              <ul id="lunch"></ul>
+            </div>
+            <div id="dinner-container" class="col s12">
+              <ul id="dinner"></ul>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
     <footer class="page-footer blue-grey lighten-2 ">
