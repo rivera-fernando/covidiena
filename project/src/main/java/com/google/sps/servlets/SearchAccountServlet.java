@@ -59,7 +59,8 @@ public class SearchAccountServlet extends HttpServlet {
                     user = datastore.get(userKey);
                 }
                 catch ( Exception EntityNotFoundException){
-                    return system.out.println("Error in getting entity using key from datastore.");
+                    System.out.println("Error in getting entity using key from datastore.");
+                    return;
                 }
                 user.setProperty("email", (String) entity.getProperty("email"));
                 user.setProperty("name", (String) entity.getProperty("name"));

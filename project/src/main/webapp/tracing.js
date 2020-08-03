@@ -90,7 +90,7 @@ function createMap() {
             markers.push(
                 new google.maps.Marker({
                 map,
-                icon: { url: "http://maps.google.com/mapfiles/ms/icons/purple-dot.png"},
+                icon: { url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"},
                 title: place.name,
                 position: place.geometry.location
                 })

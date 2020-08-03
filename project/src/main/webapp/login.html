@@ -65,38 +65,34 @@
                     </div>
                 </form>
                 <div class="row">
-                    <h6 class="left-align">Don't have an account? Create an account <a href="/signup.html">here</a></h6> 
+                    <h6 class="left-align">Don't have an account? Create an account <a href="/signup.html">here</a></h6>
+                    <h6>Forgot your password? Reset <a class="modal-trigger" href="#resetPassword">here</a></h6> 
                 </div>
-                <div class="row">
-                    <div class="col s12 l6 offset-l2">
-                        <h6>Forgot your password? Reset <a class="modal-trigger" href="#resetPassword">here</a></h6> 
-                    </div>
-                    <div id="resetPassword" class="modal">
-                        <div class="modal-content">
-                            <i style="color: #42a5f5;" class="material-icons right modal-close">close</i>
+                <div id="resetPassword" class="modal">
+                    <div class="modal-content">
+                        <i style="color: #42a5f5;" class="material-icons right modal-close">close</i>
+                        <div class="row">
+                            <div class="col s12 l8 offset-l2">
+                                <h4>Find your account</h4>
+                                <p>Please enter your email to search for your account</p>
+                            </div>
+                        </div>
+                        <form action="/search-account" method="POST">
+                            <div class="row">
+                                <div class="input-field col s12 l8 offset-l2">
+                                    <input type="text" name="searchEmail" id="searchEmail" placeholder =".edu" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.edu$" class="validate" required>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col s12 l8 offset-l2">
-                                    <h4>Find your account</h4>
-                                    <p>Please enter your email to search for your account</p>
-                                </div>
-                            </div>
-                            <form action="/search-account" method="POST">
-                                <div class="row">
-                                    <div class="input-field col s12 l8 offset-l2">
-                                        <input type="text" name="searchEmail" id="searchEmail" placeholder =".edu" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.edu$" class="validate" required>
+                                    <div class="input-field right">
+                                        <button type ="submit" class="btn white-text" style="background-color: #42a5f5;" onclick="accountVerify()">Search</button>
+                                        <a class="modal-close btn blue-grey lighten-4 white-text">Cancel</a>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col s12 l8 offset-l2">
-                                        <div class="input-field right">
-                                            <button type ="submit" class="btn white-text" style="background-color: #42a5f5;" onclick="accountVerify()">Search</button>
-                                            <a class="modal-close btn blue-grey lighten-4 white-text">Cancel</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                            <div id="emailMessage">
                             </div>
+                        </form>
+                        <div id="emailMessage">
                         </div>
                     </div>
                 </div>
