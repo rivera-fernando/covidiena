@@ -60,7 +60,7 @@ public class EmailSender{
             message.setSubject("[Covidiena] Reset Account Password");
             htmlBuilder.append("<p>");
             htmlBuilder.append("The account linked to this email requested a password change. The new password is: " + newPassword + ".");
-            htmlBuilder.append(" Log in <a href='covidiena.appspot.com/login.html'>here</a>.");
+            htmlBuilder.append("Log in <a href='covidiena.appspot.com/login.html'>here</a>.");
             htmlBuilder.append("</p>");
         }
         String html = htmlBuilder.toString();
