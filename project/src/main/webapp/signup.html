@@ -6,175 +6,179 @@
         <link rel="stylesheet" href="icons.css">
         <link rel="stylesheet" href="materialize.min.css">
         <link rel='icon' href='./static/favicon.png' type='image/x-icon'/ >
-        <script src="materialize.min.js"></script>
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="materialize.min.js"></script>
+        <script src="college_data.js"></script>
         <script>
         $(document).ready(function(){
             $('.sidenav').sidenav();
         });
         </script>
     </head>
-    <body onload="updateLogIn();fetchBlobstoreUrl();">
+    <body onload="updateLogIn();fetchBlobstoreUrl();" style="background-color: #eeeeee;">
         <nav>
-            <div class="nav-wrapper blue-grey lighten-4">
-                <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
+            <div class="nav-wrapper blue darken-4">
+                <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                 <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
                 <ul id="nav-mobile" class="right">
-                    <li><a href="/settings.html" id="settingButton"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
                 </ul>
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
-                    <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
-                    <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
-                    <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
-                    <li><a style="color: #42a5f5;" href="/cafeteria.html">Cafeteria</a></li>
-                    <li style="width: 50px; height: 60px;">&nbsp;</li>
-                    <li><a style="color: #42a5f5;" class= "loginButton" href="/login.html">Log In</a></li>
+                    <li class="white-text"><a href="/dashboard">Dashboard</a></li>
+                    <li class="white-text"><a href="/info.html">Information</a></li>
+                    <li class="white-text"><a href="/events.html">Events</a></li>
+                    <li class="white-text"><a href="/cafeteria.html">Cafeteria</a></li>
+                    <li class="white-text" style="width: 50px; height: 60px;">&nbsp;</li>
+                    <li class="white-text"><a class= "loginButton" href="/login.html">Log In</a></li>
+
                 </ul>
             </div>
         </nav>
         <ul class="sidenav" id="mobile-demo">
             <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
-            <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
+            <li><a style="color: #42a5f5;" href="/info.html">Information</a></li>
             <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
             <li><a style="color: #42a5f5;" href="/cafeteria.html">Cafeteria</a></li>
             <li><a style="color: #42a5f5;" class= "loginButton" href="/login.html">Log In</a></li>
         </ul>
         <main>
-            <div class="container">
-                <h3> Create Account</h3>
-                <h6> Use your school email to access your school's events, important announcements, and much more!</h6>
-                <form action="/user" method="POST" form id="signup-form" enctype="multipart/form-data">
-                    <div class="row">
-                        <div class = "file-field input-field col s12 l12 center">
-                            <img id="output-image" class="circle responsive-img" style="max-height: 100%; max-width: 100%; overflow: scroll; height: 300px; width: 300px; border: 2px solid #42a5f5" src="/static/blank_pic.png">
-                            <input type="file" accept="image/*" onchange="preview_image(event)" name="image" id="image">
-                        </div>
-                        <div class="file-path-wrapper">
-                            <input class="file-path validate" type="text" name="image" hidden>
+            <div class="row">
+                <div class="col s12 l10 offset-l1">
+                    <div class = "card-panel z-depth-0">
+                        <div class="container">
+                            <h3> Create Account</h3>
+                            <h6> Use your school email to access your school's events, important announcements, and much more!</h6>
+                            <form action="/user" method="POST" form id="signup-form" enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class = "file-field input-field col s12 l12 center">
+                                        <img id="output-image" class="circle responsive-img" style="max-height: 100%; max-width: 100%; overflow: scroll; height: 300px; width: 300px; border: 2px solid #00bfa5" src="/static/blank_pic.png">
+                                        <input type="file" accept="image/*" onchange="preview_image(event)" name="image" id="image">
+                                    </div>
+                                    <div class="file-path-wrapper">
+                                        <input class="file-path validate" type="text" name="image" hidden>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s12 l6">
+                                        <input type="text" name="fname" id = "fname" required>
+                                        <label for="fname">First Name</label>
+                                    </div>
+                                    <div class="input-field col s12 l6">
+                                        <input type="text" name="lname" id= "lname" required>
+                                        <label for="lname">Last Name</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s12 l8">
+                                        <input type="text" name="email" id="email" placeholder =".edu" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.edu$" class="validate" required>
+                                        <label for="schoolEmail">School Email</label>
+                                    </div>
+                                    <div class="input-field col s12 l4">
+                                        <input type="text" name="studentID" id="studentID" required>
+                                        <label for="studentID">Student ID</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s12 l6">
+                                        <input type="text" id="school" name="school" class="autocomplete" placeholder="Search Your College">
+                                        <label for="school">School Name</label>
+                                    </div>
+                                    <div class="input-field col s12 l3">
+                                        <select name="state" id= "state" required>
+                                            <option value="" disabled selected>Select School's State</option>
+                                            <option value="AL">Alabama</option>
+                                            <option value="AK">Alaska</option>
+                                            <option value="AZ">Arizona</option>
+                                            <option value="AR">Arkansas</option>
+                                            <option value="CA">California</option>
+                                            <option value="CO">Colorado</option>
+                                            <option value="CT">Connecticut</option>
+                                            <option value="DE">Delaware</option>
+                                            <option value="DC">District Of Columbia</option>
+                                            <option value="FL">Florida</option>
+                                            <option value="GA">Georgia</option>
+                                            <option value="HI">Hawaii</option>
+                                            <option value="ID">Idaho</option>
+                                            <option value="IL">Illinois</option>
+                                            <option value="IN">Indiana</option>
+                                            <option value="IA">Iowa</option>
+                                            <option value="KS">Kansas</option>
+                                            <option value="KY">Kentucky</option>
+                                            <option value="LA">Louisiana</option>
+                                            <option value="ME">Maine</option>
+                                            <option value="MD">Maryland</option>
+                                            <option value="MA">Massachusetts</option>
+                                            <option value="MI">Michigan</option>
+                                            <option value="MN">Minnesota</option>
+                                            <option value="MS">Mississippi</option>
+                                            <option value="MO">Missouri</option>
+                                            <option value="MT">Montana</option>
+                                            <option value="NE">Nebraska</option>
+                                            <option value="NV">Nevada</option>
+                                            <option value="NH">New Hampshire</option>
+                                            <option value="NJ">New Jersey</option>
+                                            <option value="NM">New Mexico</option>
+                                            <option value="NY">New York</option>
+                                            <option value="NC">North Carolina</option>
+                                            <option value="ND">North Dakota</option>
+                                            <option value="OH">Ohio</option>
+                                            <option value="OK">Oklahoma</option>
+                                            <option value="OR">Oregon</option>
+                                            <option value="PA">Pennsylvania</option>
+                                            <option value="RI">Rhode Island</option>
+                                            <option value="SC">South Carolina</option>
+                                            <option value="SD">South Dakota</option>
+                                            <option value="TN">Tennessee</option>
+                                            <option value="TX">Texas</option>
+                                            <option value="UT">Utah</option>
+                                            <option value="VT">Vermont</option>
+                                            <option value="VA">Virginia</option>
+                                            <option value="WA">Washington</option>
+                                            <option value="WV">West Virginia</option>
+                                            <option value="WI">Wisconsin</option>
+                                            <option value="WY">Wyoming</option>
+                                        </select>
+                                        <label for="state">State</label>				
+                                    </div>
+                                    <div class="input-field col s12 l3">
+                                        <select name="sex" id= "sex" required>
+                                            <option value="" disabled selected>Select Your Sex</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Male">Male</option>
+                                        </select>
+                                        <label for="sex">Sex</label>
+                                    </div>
+                                </div>
+                                <div class ="row">
+                                    <div class="input-field col s12 l6">
+                                        <input type="text" placeholder="MM/DD/YYYY" name="birthdate" id="birthdate" class= "datepicker" required>
+                                        <label for="birthdate">Birthdate</label>
+                                    </div>
+                                    <div class="input-field col s12 l6">
+                                        <input type="tel" name="phone" id="phone" placeholder= "000-000-0000" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+                                        <label for="phone">Cell Phone</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <input type="password" name="password" class="validate" id="password" pattern=".{8,}" title="Eight or more characters"required>
+                                        <label for="password">Password</label>
+                                        <i style="color: #00bfa5;" class="material-icons prefix" onclick="viewPassword()">remove_red_eye</i>
+                                    </div>
+                                </div>
+                                <div class="input-field center">
+                                    <button type ="submit" class="btn teal accent-4 white-text" value="submit">Create My Profile</button>
+                                    <input type="reset" class="btn red darken-2 white-text " value="Reset">
+                                </div>
+                            </form>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="input-field col s12 l6">
-                            <input type="text" name="fname" id = "fname" required>
-                            <label for="fname">First Name</label>
-                        </div>
-                        <div class="input-field col s12 l6">
-                            <input type="text" name="lname" id= "lname" required>
-                            <label for="lname">Last Name</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12 l8">
-                            <input type="text" name="email" id="email" placeholder =".edu" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.edu$" class="validate" required>
-                            <label for="schoolEmail">School Email</label>
-                        </div>
-                        <div class="input-field col s12 l4">
-                            <input type="text" name="studentID" id="studentID" required>
-                            <label for="studentID">Student ID</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12 l6">
-                            <input type="text" name="school" id="school" required>
-                            <label for="school">School Name</label>
-                        </div>
-                        <div class="input-field col s12 l3">
-                            <select name="state" id= "state" required>
-                                <option value="" disabled selected>Select your School's State</option>
-                                <option value="AL">Alabama</option>
-                                <option value="AK">Alaska</option>
-                                <option value="AZ">Arizona</option>
-                                <option value="AR">Arkansas</option>
-                                <option value="CA">California</option>
-                                <option value="CO">Colorado</option>
-                                <option value="CT">Connecticut</option>
-                                <option value="DE">Delaware</option>
-                                <option value="DC">District Of Columbia</option>
-                                <option value="FL">Florida</option>
-                                <option value="GA">Georgia</option>
-                                <option value="HI">Hawaii</option>
-                                <option value="ID">Idaho</option>
-                                <option value="IL">Illinois</option>
-                                <option value="IN">Indiana</option>
-                                <option value="IA">Iowa</option>
-                                <option value="KS">Kansas</option>
-                                <option value="KY">Kentucky</option>
-                                <option value="LA">Louisiana</option>
-                                <option value="ME">Maine</option>
-                                <option value="MD">Maryland</option>
-                                <option value="MA">Massachusetts</option>
-                                <option value="MI">Michigan</option>
-                                <option value="MN">Minnesota</option>
-                                <option value="MS">Mississippi</option>
-                                <option value="MO">Missouri</option>
-                                <option value="MT">Montana</option>
-                                <option value="NE">Nebraska</option>
-                                <option value="NV">Nevada</option>
-                                <option value="NH">New Hampshire</option>
-                                <option value="NJ">New Jersey</option>
-                                <option value="NM">New Mexico</option>
-                                <option value="NY">New York</option>
-                                <option value="NC">North Carolina</option>
-                                <option value="ND">North Dakota</option>
-                                <option value="OH">Ohio</option>
-                                <option value="OK">Oklahoma</option>
-                                <option value="OR">Oregon</option>
-                                <option value="PA">Pennsylvania</option>
-                                <option value="RI">Rhode Island</option>
-                                <option value="SC">South Carolina</option>
-                                <option value="SD">South Dakota</option>
-                                <option value="TN">Tennessee</option>
-                                <option value="TX">Texas</option>
-                                <option value="UT">Utah</option>
-                                <option value="VT">Vermont</option>
-                                <option value="VA">Virginia</option>
-                                <option value="WA">Washington</option>
-                                <option value="WV">West Virginia</option>
-                                <option value="WI">Wisconsin</option>
-                                <option value="WY">Wyoming</option>
-                            </select>
-                            <label for="state">State</label>				
-                        </div>
-                        <div class="input-field col s12 l3">
-                            <select name="sex" id= "sex" required>
-                                <option value="" disabled selected>Select Your Sex</option>
-                                <option value="Female">Female</option>
-                                <option value="Male">Male</option>
-                            </select>
-                            <label for="sex">Sex</label>
-                        </div>
-                    </div>
-                    <div class ="row">
-                        <div class="input-field col s12 l6">
-                            <input type="text" placeholder="MM/DD/YYYY" name="birthdate" id="birthdate" class= "datepicker" required>
-                            <label for="birthdate">Birthdate</label>
-                        </div>
-                        <div class="input-field col s12 l6">
-                            <input type="tel" name="phone" id="phone" placeholder= "000-000-0000" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
-                            <label for="phone">Cell Phone</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <input type="password" name="password" class="validate" id="password" pattern=".{8,}" title="Eight or more characters"required>
-                            <label for="password">Password</label>
-                            <i style="color: #42a5f5;" class="material-icons prefix" onclick="viewPassword()">remove_red_eye</i>
-                        </div>
-                    </div>
-                    <div class="input-field center">
-                        <button type ="submit" class="btn white-text" style="background-color: #42a5f5;" value="submit">Create My Profile</button>
-                        <input type="reset" class="btn red white-text " value="Reset">
-                    </div>
-                </form>
+                </div>
             </div>
         </main>
-        <footer class="page-footer blue-grey lighten-2 ">
-        <div class="footer-copyright blue-grey lighten-2">
-            <div class="container blue-grey-text text-darken-2 left">
-            © 2020 Covidiena. All Rights Reserved.
-            <a class="blue-text text-darken-1 right" href="mailto: covidiena@gmail.com">Contact Us</a>
-            </div>
-        </div>
-        </footer>
+        <footer class="page-footer blue-grey darken-2">
+      <div class="footer-copyright blue-grey darken-2">
+        <p class="white-text center-block">© 2020 Covidiena. All Rights Reserved.</p>
+      </div>
+    </footer>
     </body>
 </html>

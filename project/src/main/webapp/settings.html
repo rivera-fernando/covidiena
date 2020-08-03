@@ -14,21 +14,22 @@
         });
         </script>
     </head>
-    <body onload ="populateUser();updateLogIn();fetchBlobstoreUrl();">
+    <body onload ="populateUser();updateLogIn();fetchBlobstoreUrl();" style="background-color: #eeeeee;">
         <nav>
-            <div class="nav-wrapper blue-grey lighten-4">
-                <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
+            <div class="nav-wrapper blue darken-4">
+                <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                 <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
                 <ul id="nav-mobile" class="right">
                     <li><a href="/settings.html" id="settingButton"><img class = "profilePic"></a></li>
                 </ul>
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
-                    <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
-                    <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
-                    <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+                    <li><a href="/dashboard">Dashboard</a></li>
+                    <li><a href="/info.html">Information</a></li>
+                    <li><a href="/events.html">Events</a></li>
                     <li><a style="color: #42a5f5;" href="/cafeteria.html">Cafeteria</a></li>
+            
                     <li style="width: 50px; height: 60px;">&nbsp;</li>
-                    <li><a style="color: #42a5f5;" class= "loginButton" href="/login.html">Log In</a></li>
+                    <li><a class= "loginButton" href="/login.html">Log In</a></li>
                 </ul>
             </div>
         </nav>
@@ -41,95 +42,102 @@
         </ul>
         <main>
             <div class="container">
-                <h3>Profile</h3>
-                <form action="/edit-user" method="POST" form id="edit-user-form" enctype="multipart/form-data">
-                    <input name="userEmail" id="userEmail" value="" type ="hidden">
-                    <div class="row">
-                        <div class = "file-field input-field col s12 l12 center">
-                            <img id="edit-output-image" style="max-height: 100%; max-width: 100%; overflow: scroll;">
-                            <input type="file" accept="image/*" onchange="preview_image(event)" name="edit-image" id="edit-image">
-                        </div>
-                        <div class="file-path-wrapper">
-                            <input class="file-path validate" type="text" name="edit-image" hidden>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12 l12">
-                            <input type="text" name="name" id= "name" placeholder="name">
-                            <label for="name">Name</label>
-                            <i style="color: #42a5f5;" class="material-icons prefix">edit</i>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12 l12">
-                            <input type="password" name="password" class="validate" id="password">
-                            <label for="password">Password</label>
-                            <i style="color: #42a5f5;" class="material-icons prefix" onclick="viewPassword()">remove_red_eye</i>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s12 l12">
-                            <input type="text" name="birthday" id="birthday" placeholder ="birthday" readonly="true" >
-                            <label for="birthday">Birthdate</label>
-                        </div>
-                    </div>
-                    <div class ="row">
-                        <div class="input-field col s12 l12">
-                            <input type="text" name="sex" id="sex" placeholder="sex" readonly="true">
-                            <label for="sex">Sex</label>
-                        </div>
-                    </div>
-                    <div class= "row">
-                        <div class="input-field col s12 l12">
-                            <input type="text" name="school" id="school" placeholder= "school" readonly="true">
-                            <label for="school">School</label>
-                        </div>
-                    </div>
-                    <h3>Contact Information</h3>
-                    <div class="row">
-                        <div class="input-field col s12 l12">
-                            <input type="text" name="email" id="email" placeholder="email.edu" readonly="true">
-                            <label for="email">Email</label>
-                        </div>
-                    </div>
-                    <div class= "row">
-                        <div class="input-field col s12 l12">
-                            <input type="tel" name="phone" id="phone" placeholder= "000-000-0000" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
-                            <label for="phone">Cell Phone #</label>
-                            <i style="color: #42a5f5;" class="material-icons prefix">edit</i>
-                        </div>
-                    </div>
-                    <div class ="row">
-                        <div class="input-field col s12 right-align">
-                            <button type ="submit" class="btn white-text" style="background-color: #42a5f5;" value="submit">Save Changes</button>
-                        </div>
-                        <div class="input-field col s12 right-align">
-                            <button onclick= "requestAdmin()" class="btn white-text" style="background-color: #42a5f5;" id="requestAdminButton">Request Admin Access</button>
-                        </div>
-                        <div class = "input-field col s12 right-align">
-                            <a href="#warning" class="btn modal-trigger red lighten-1 white-text" id="deleteButton">Delete My Accont</a>
-                            <div class="modal" id="warning">
-                                <div class="modal-content center">
-                                    <h4>Warning</h4>
-                                    <p>When you delete your account, all the data assocaited with this account will also be deleted.</p>
+                <div class="row">
+                    <div class="col s12 l10 offset-l1">
+                        <div class = "card-panel z-depth-0">
+                            <h3>Profile</h3>
+                            <form action="/edit-user" method="POST" form id="edit-user-form" enctype="multipart/form-data">
+                                <input name="userEmail" id="userEmail" value="" type ="hidden">
+                                <div class="row">
+                                    <div class = "file-field input-field col s12 l12 center">
+                                        <img id="edit-output-image" style="max-height: 100%; max-width: 100%; overflow: scroll;">
+                                        <input type="file" accept="image/*" onchange="preview_image(event)" name="edit-image" id="edit-image">
+                                    </div>
+                                    <div class="file-path-wrapper">
+                                        <input class="file-path validate" type="text" name="edit-image" hidden>
+                                    </div>
                                 </div>
-                                <div class= "modal-footer">
-                                    <a onclick="deleteUser()" class ="btn modal-close red lighten-1 white-text">Delete Account</a>
-                                    <a class ="btn modal-close" style="background-color: #42a5f5;">Cancel</a>
+                                <div class="row">
+                                    <div class="input-field col s12 l12">
+                                        <i style="color: #00bfa5;" class="material-icons prefix">edit</i>
+                                        <input type="text" name="name" id= "name" placeholder="name">
+                                        <label for="name">Name</label>
+                                    </div>
                                 </div>
-                            </div>
+                                <div class="row">
+                                    <div class="input-field col s12 l12">
+                                        <i style="color: #00bfa5;" class="material-icons prefix" onclick="viewPassword()">remove_red_eye</i>
+                                        <input type="password" name="password" class="validate" id="password">
+                                        <label for="password">Password</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s12 l12">
+                                        <i style="color: #00bfa5;" class="material-icons prefix">do_not_disturb</i>
+                                        <input type="text" name="birthday" id="birthday" placeholder ="birthday" readonly="true" >
+                                        <label for="birthday">Birthdate</label>
+                                    </div>
+                                </div>
+                                <div class ="row">
+                                    <div class="input-field col s12 l12">
+                                        <i style="color: #00bfa5;" class="material-icons prefix">do_not_disturb</i>
+                                        <input type="text" name="sex" id="sex" placeholder="sex" readonly="true">
+                                        <label for="sex">Sex</label>
+                                    </div>
+                                </div>
+                                <div class= "row">
+                                    <div class="input-field col s12 l12">
+                                        <i style="color: #00bfa5;" class="material-icons prefix">do_not_disturb</i>
+                                        <input type="text" name="school" id="school" placeholder= "school" readonly="true">
+                                        <label for="school">School</label>
+                                    </div>
+                                </div>
+                                <h3>Contact Information</h3>
+                                <div class="row">
+                                    <div class="input-field col s12 l12">
+                                        <i style="color: #00bfa5;" class="material-icons prefix">do_not_disturb</i>
+                                        <input type="text" name="email" id="email" placeholder="email.edu" readonly="true">
+                                        <label for="email">Email</label>
+                                    </div>
+                                </div>
+                                <div class= "row">
+                                    <div class="input-field col s12 l12">
+                                        <i style="color: #00bfa5;" class="material-icons prefix">edit</i>
+                                        <input type="tel" name="phone" id="phone" placeholder= "000-000-0000" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
+                                        <label for="phone">Cell Phone #</label>
+                                    </div>
+                                </div>
+                                <div class ="row">
+                                    <div class="input-field col s12 right-align">
+                                        <button type ="submit" class="btn white-text" style="background-color: #00bfa5;" value="submit">Save Changes</button>
+                                    </div>
+                                    <div class="input-field col s12 right-align">
+                                        <button onclick= "requestAdmin()" class="btn white-text" style="background-color: #00bfa5;" id="requestAdminButton">Request Admin Access</button>
+                                    </div>
+                                    <div class = "input-field col s12 right-align">
+                                        <a href="#warning" class="btn modal-trigger red darken-2 lighten-1 white-text" id="deleteButton">Delete My Accont</a>
+                                        <div class="modal" id="warning">
+                                            <div class="modal-content center">
+                                                <h4>Warning</h4>
+                                                <p>When you delete your account, all the data assocaited with this account will also be deleted.</p>
+                                            </div>
+                                            <div class= "modal-footer">
+                                                <a onclick="deleteUser()" class ="btn modal-close red lighten-1 white-text">Delete Account</a>
+                                                <a class ="btn modal-close" style="background-color: #00bfa5;">Cancel</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                </form>
-            </div>
-        </main>
-        <footer class="page-footer blue-grey lighten-2 ">
-            <div class="footer-copyright blue-grey lighten-2">
-                <div class="container blue-grey-text text-darken-2 left">
-                © 2020 Covidiena. All Rights Reserved.
-                <a class="blue-text text-darken-1 right" href="mailto: covidiena@gmail.com">Contact Us</a>
                 </div>
             </div>
-        </footer>
+        </main>
+        <footer class="page-footer blue-grey darken-2">
+      <div class="footer-copyright blue-grey darken-2">
+        <p class="white-text center-block">© 2020 Covidiena. All Rights Reserved.</p>
+      </div>
+    </footer>
   </body>
 </html>

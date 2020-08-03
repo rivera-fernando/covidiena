@@ -60,6 +60,7 @@ public class SignUpServlet extends HttpServlet {
         ArrayList<String> users = new ArrayList<String>();
         for (Entity entity:results.asIterable()){
             if (entity.getProperty("email").equals(email)){
+                EmailSender.sendEmail(email, "");
                 response.sendRedirect("/login.html");
                 return;
             }
