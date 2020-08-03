@@ -33,7 +33,7 @@ public class LogInServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session = request.getSession(false);  
+        HttpSession session = request.getSession();
         Gson gson = new Gson();
         response.setContentType("application/json");
         // First if handles log out
