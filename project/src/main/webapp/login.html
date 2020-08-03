@@ -3,31 +3,27 @@
   <head>
       <meta charset="UTF-8">
       <title>Log In</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <link rel="stylesheet" href="icons.css">
       <link rel="stylesheet" href="materialize.min.css">
       <link rel='icon' href='./static/favicon.png' type='image/x-icon'/ >
-      <script src="materialize.min.js"></script>
       <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+      <script src="materialize.min.js"></script>
       <script>
       $(document).ready(function(){
           $('.sidenav').sidenav();
       });
       </script>
     </head>
-    <body onload = "updateLogIn()">
+    <body style="background-color: #eeeeee;" onload = "updateLogIn()">
         <nav>
-    	<div class="nav-wrapper blue-grey lighten-4">
-            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
+    	<div class="nav-wrapper blue darken-4">
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons white-text">menu</i></a>
             <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
-            <ul id="nav-mobile" class="right">
-                <li><a href="/settings.html" id="settingButton"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
-            </ul>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
-                <li><a style="color: #42a5f5;" href="/info.html">Information</a></li>
-                <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
-                <li><a style="color: #42a5f5;" href="/cafeteria.html">Cafeteria</a></li>
-                <li style="width: 50px; height: 60px;">&nbsp;</li>
+                <li class="white-text"><a href="/dashboard">Dashboard</a></li>
+                <li class="white-text"><a href="/info.html">Information</a></li>
+                <li class="white-text"><a href="/events.html">Events</a></li>
             </ul>
     	</div>
         </nav>
@@ -39,45 +35,47 @@
         </ul>
         <main>
             <div class="container">
+                <br>
                 <div class="row">
                     <div class="col s12 l8 offset-l2">
-                        <h3>Log In</h3>
-                        <h6>Please remember to use your school email!</h6>
-                    </div>
-                </div>
-                <form action="/login" method="POST">
+                        <div class="card-cool-second z-depth-0">
+                            <div class="row">
+                                <h3>Log In</h3>
+                                <h6>Please remember to use your school email!</h6>
+                            </div>
+                            <form action="/login" method="POST">
                     <div class="row">
-                        <div class="input-field col s12 l8 offset-l2">
+                        <div class="input-field">
+                            <i style="color: #00bfa5;" class="material-icons prefix">email</i>
                             <input type="text" name="email" id="email" placeholder =".edu" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.edu$" class="validate" required>
                             <label for="schoolEmail">School Email</label>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="input-field col s12 l8 offset-l2">
+                        <div class="input-field">
+                            <i style="color: #00bfa5;" class="material-icons prefix" onclick="viewPassword()">remove_red_eye</i>
                             <input type="password" name="password" class="validate" id="password" required>
                             <label for="password">Password</label>
-                            <i style="color: #42a5f5;" class="material-icons prefix" onclick="viewPassword()">remove_red_eye</i>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col s12 l8 offset-l2">
                             <div class="input-field right">
-                                <button class="btn white-text" style="background-color: #42a5f5;">Log In</button>
+                                <button class="btn teal accent-4 white-text">Log In</button>
                             </div>
-                        </div>
                     </div>
                 </form>
                 <div id="error"></div>
                 <div class="row">
-                    <div class="col s12 l8 offset-l2">
-                        <h6>Don't have an account? Create an account <a href="/signup.html">here</a></h6> 
+                    <h6 class="left-align">Don't have an account? Create an account <a href="/signup.html">here</a></h6> 
+                </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </main>
-        <footer class="page-footer blue-grey lighten-2 ">
-            <div class="footer-copyright blue-grey lighten-2">
-                <div class="container blue-grey-text text-darken-2 left">
+        <footer class="page-footer blue darken-4 ">
+            <div class="footer-copyright blue darken-4 ">
+                <div class="container white-text left">
                 © 2020 Covidiena. All Rights Reserved.
                 <a class="blue-text text-darken-1 right" href="mailto: covidiena@gmail.com">Contact Us</a>
                 </div>
