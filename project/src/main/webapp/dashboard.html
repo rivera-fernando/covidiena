@@ -12,11 +12,12 @@
     <script src="tracing.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGiqqHxV-dvFdgBu_CXqovT85uLxs5m-c&callback=createMap&libraries=places&v=weekly" defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGiqqHxV-dvFdgBu_CXqovT85uLxs5m-c&callback=createMap&libraries=places,visualization&v=weekly" defer></script>
     <script>
     $(document).ready(function(){
         $('.sidenav').sidenav();
         $('.collapsible').collapsible();
+        $('.modal').modal();
     });
     $(window).resize(function(){
         drawBasic();
@@ -30,74 +31,82 @@
       google.charts.setOnLoadCallback(drawBasic);
     </script>
   </head>
-  <body onload ="updateLogIn();populateLinks();populateAnnouncements();createMap();">
+  <body style="background-color:#eeeeee;"onload ="updateLogIn();populateLinks();populateAnnouncements();heatmap();createMap();exposed();checkDiagnose();">
       <nav>
-    	<div class="nav-wrapper blue-grey lighten-4">
-            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
-            <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
+    	<div style="" class="nav-wrapper blue darken-4 z-depth-0">
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons white-text">menu</i></a>
+            <a href="../" class="brand-logo"><img src="./static/logo.png" height="65"></a>
             <ul id="nav-mobile" class="right">
                 <li><a href="/settings.html" id="settingButton"><img class = "profilePic"></a></li>
             </ul>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li class="active"><a style="color: #42a5f5;" href="/dashboard.html" id= "dashboardButton">Dashboard</a></li>
-                <li><a style="color: #42a5f5;" href="/info.html">Information</a></li>
-                <li><a style="color: #42a5f5;" href="/events.html" id= "eventButton">Events</a></li>
-                <li><a style="color: #42a5f5;" href="/cafeteria.html">Cafeteria</a></li>
+                <li class="active white-text"><a href="/dashboard.html" id= "dashboardButton">Dashboard</a></li>
+                <li class="white-text"><a href="/info.html">Information</a></li>
+                <li class="white-text"><a href="/events.html" id= "eventButton">Events</a></li>
                 <li style="width: 50px; height: 60px;">&nbsp;</li>
-                <li><a style="color: #42a5f5;" href="/signup.html" class="signupButton">Sign Up</a></li>
-                <li><a style="color: #42a5f5;" class= "loginButton" href="/login.html">Log In</a></li>
+                <li class="white-text"><a href="/signup.html" class="signupButton">Sign Up</a></li>
+                <li class="white-text"><a class= "loginButton" href="/login.html">Log In</a></li>
             </ul>
     	</div>
       </nav>
-      <ul class="sidenav" id="mobile-demo">
-        <li><a style="color: #42a5f5;" href="/dashboard.html" id= "dashboardButton">Dashboard</a></li>
-        <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
-        <li><a style="color: #42a5f5;" href="/events.html" id= "eventButton">Events</a></li>
-        <li><a style="color: #42a5f5;" href="/cafeteria.html">Cafeteria</a></li>
-        <li><a style="color: #42a5f5;" href="/signup.html" class="signupButton">Sign Up</a></li>
-        <li><a style="color: #42a5f5;" class= "loginButton" href="/login.html">Log In</a></li>
+      <ul class="sidenav blue darken-4" id="mobile-demo">
+        <li><a style="color: #ffffff" href="/dashboard.html" id= "dashboardButton">Dashboard</a></li>
+        <li><a style="color: #ffffff" href="/info.html">Information</a></li>
+        <li><a style="color: #ffffff" href="/events.html" id= "eventButton">Events</a></li>
+        <li><a style="color: #ffffff" href="/signup.html" class="signupButton">Sign Up</a></li>
+        <li><a style="color: #ffffff" class= "loginButton" href="/login.html">Log In</a></li>
       </ul>
       <main>
+        <div class="blue darken-4 center center-align">
+            <div class="section blue darken-4 white-text center center-align">
+                <div class="row">
+                    <div class="col s8 offset-s2">
+                        <h1 class="center"><b>Student Dashboard</b></h1>
+                        <p>Keep us informed about your diagnosis in case you get tested, log your locations, and more!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="container">
-        <h1>Student Dashboard</h1>
-                <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
+                <div class="card-cool z-depth-0">
                     <div class="row">
                         <div class="col s12 m8 l6">
-                            <p>Have you been diagnosed with COVID-19?</p>
+                            <p id="text">You have not reported testing COVID-19 positive. Stay healthy, and click the "positive" button if you receive a diagnosis.</p>
                         </div>
-                        <div class="center-align col s6 m2 l3">
-                            <a style="width: 100%;" class="center-align waves-effect waves-light btn blue lighten-1" href="#">Yes</a>
-                        </div>
-                        <div class="center-align col s6 m2 l3">
-                            <a style="width: 100%;" class="waves-effect waves-light btn blue lighten-1" href="#">No</a>
+                        <div class="center-align col s12 m4 l6">
+                            <a style="width: 100%;" id="report"class="center-align waves-effect waves-light btn  teal accent-4" onclick="exposure();">Positive</a>
+                            &nbsp
+                            <a style="width: 100%;" id="deny"class="center-align waves-effect waves-light btn  teal accent-4" onclick="mistake();">Negative</a>
                         </div>
                     </div>
                 </div>
-                <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
+                <div class="card-cool z-depth-0">
                     <div class="row">
                         <div class="col s12 m8 l6">
                             <p>Have you left campus? Log where you have gone</p>
                         </div>
-                        <div class="center-align col s6 m4 l6">
-                            <a style="width: 50%;" class="center-align waves-effect waves-light btn blue lighten-1" onclick="showLocationForm()">Log Location</a>
+                        <div class="center-align col s12 m4 l6">
+                            <a style="width: 100%;" class="center-align waves-effect waves-light btn  teal accent-4" onclick="showLocationForm()">Log Location</a>
+                            &nbsp
+                            <a style="width: 100%;" class="waves-effect waves-light btn  teal accent-4 modal-trigger" href="#modal1">View Heatmap</a>
                         </div>
                     </div>
                 </div>
-                <div id="logLocationCard" style="border-radius: 10px; display:none" class="card-panel blue-grey lighten-4">
+                <div id="logLocationCard" style="border-radius: 10px; display:none" class="card-panel z-depth-0">
                     <a href="#pastLocations" class="modal-trigger" onclick="getPastLocations()">View Logged Locations</a>
                     <div id="pastLocations" class="modal">
                         <div class="modal-content">
-                            <i style="color: #42a5f5;" class="material-icons right modal-close">close</i>
+                            <i style="color: #0d47a1;" class="material-icons right modal-close">close</i>
                             <h4>Logged Locations</h4>
                             <table id="oldLocations" class="responsive-table highlight" style="width: 100%; overflow: scroll;"></table>
                         </div>
                     </div>
-                    <i style="color: #42a5f5;" class="material-icons right" onclick="hideLocationForm()">close</i>
+                    <i style="color: #0d47a1;" class="material-icons right" onclick="hideLocationForm()">close</i>
                     <div id="tracing-map">
                         <p class="center">Search for a location or choose a purple tag</p>
                         <div class="row">
                             <div class="input-field col s12 l12">
-                                <i style="color: #42a5f5;" class="material-icons prefix" onclick="viewPassword()">search</i>
+                                <i style="color: #0d47a1;" class="material-icons prefix" onclick="viewPassword()">search</i>
                                 <input id="pac-input" class="controls pac-target-input input-field" type="text" placeholder="Search Location">
                             </div>
                         </div>
@@ -122,125 +131,121 @@
                                 </div>
                                 <div class="row">
                                     <div class="input-field center" style="display:"";">
-                                        <button id="logLocationButton" class ="btn" style="background-color: #42a5f5; display:none;" type="submit" value="submit" >Log Location</button>
+                                        <button id="logLocationButton" class ="btn  teal accent-4" style="display:none;" type="submit" value="submit" >Log Location</button>
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-                <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
+                <div class="card-cool z-depth-0">
                     <div class="row">
-                        <div class="col s12 m8">
-                            <div style="border-radius: 10px;" class="card white">
-                                <div class="card-content blue-grey-text-darken-2">
-                                    <p>Have you been exposed (according to our maps data).</p>
+                        <div class="col s12 m7">
+                                <div class="blue-grey-text-darken-2">
+                                    <p>Have you been exposed? (according to the maps data that our users provide)</p>
                                 </div>
-                            </div>
                         </div>
-                        <div class="center-align col s12 m4">
-                            <div style="border-radius: 10px;" class="card white">
+                        <div class="center-align col s12 m5">
+                            <div class="card white" id="status-holder">
                                 <div class="card-content blue-grey-text-darken-2">
-                                    <p>Not that we know of</p>
+                                    <p id="status">Not that we know of</p>
+                                    <ul id="places"></ul>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
-                    <div class="row">
-                        <div class="col s12 m5">
-                            <div style="border-radius: 10px;" class="card white">
-                                <div class="card-content blue-grey-text-darken-2">
-                                    <span class="card-title">Daily Temperature</span>
+                <div class="row">
+                    <div class="col s12 m5">
+                        <div class="card-cool z-depth-0">
+                            <div class="blue-grey-text-darken-2">
+                                    <h5>Daily Temperature</h5>
                                     <div class="input-field">
                                         <i class="material-icons prefix">whatshot</i>
                                         <input id="temp" type="number" step="0.1">
                                         <label for="temp">Temperature</label>
                                     </div>
                                     <div class="center-align">
-                                        <button class="btn waves-effect waves-light blue lighten-1" onclick="sendTemp();">Submit</button>
+                                        <button class="btn waves-effect waves-light  teal accent-4" onclick="sendTemp();">Submit</button>
                                     </div>
                                 </div>
-                            </div>
                         </div>
-                        <div class="col s12 m7">
-                            <div style="border-radius: 10px;" class="card white">
-                                <div class="card-content blue-grey-text-darken-2">
-                                    <span class="card-title">Temperature Trends</span>
+                    </div>
+                    <div class="col s12 m7">
+                        <div class="card-cool z-depth-0">
+                            <div class="blue-grey-text-darken-2">
+                                    <h5>Temperature Trends</h5>
                                     <div id="chart" class="goog-chart">
                                         <div class="progress">
                                             <div class="indeterminate"></div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
                     </div>
                 </div>
-                <div style="border-radius: 10px;" class="card-panel blue-grey lighten-4">
-                    <div class="row">
-                        <div class="col s12 m5">
-                            <div style="border-radius: 10px;" class="card white">
-                                <div class="card-content blue-grey-text-darken-2">
-                                    <span class="card-title">Possible Symptoms</span>
-                                    <div onchange="populateLinks()">
-                                        <p>
+                <div class="row">
+                    <div class="col s12 m5">
+                        <div class="card-cool z-depth-0">
+                            <div class=" blue-grey-text-darken-2">
+                                    <h5>Possible Symptoms</h5>
+                                    <ul onchange="populateLinks()">
+                                        <li>
                                             <label>
                                             <input type="checkbox" id="fever" class="filled-in"/>
-                                            <span>Fever or chills</span>
+                                            <span style="color: #000000;">Fever or chills</span>
                                             </label>
-                                        </p>
-                                        <p>
+                                        </li>
+                                        <li>
                                             <label>
                                             <input type="checkbox" id="cough" class="filled-in"/>
-                                            <span>Cough</span>
+                                            <span style="color: #000000";>Cough</span>
                                             </label>
-                                        </p>
-                                        <p>
+                                        </li>
+                                        <li>
                                             <label>
                                             <input type="checkbox" id="sob" class="filled-in"/>
-                                            <span>Shortness of breath</span>
+                                            <span style="color: #000000;">Shortness of breath</span>
                                             </label>
-                                        </p>
-                                        <p>
+                                        </li>
+                                        <li>
                                             <label>
                                             <input type="checkbox" id="fatigue" class="filled-in"/>
-                                            <span>Fatigue</span>
+                                            <span style="color: #000000">Fatigue</span>
                                             </label>
-                                        </p>
-                                        <p>
+                                        </li>
+                                        <li>
                                             <label>
                                             <input type="checkbox" id="aches" class="filled-in"/>
-                                            <span>Muscle or body aches</span>
+                                            <span style="color: #000000">Muscle or body aches</span>
                                             </label>
-                                        </p>
-                                        <p>
+                                        </li>
+                                        <li>
                                             <label>
                                             <input type="checkbox" id="head" class="filled-in"/>
-                                            <span>Headache</span>
+                                            <span style="color: #000000">Headache</span>
                                             </label>
-                                        </p>
-                                        <p>
+                                        </li>
+                                        <li>
                                             <label>
                                             <input type="checkbox" id="throat" class="filled-in"/>
-                                            <span>Sore throat</span>
+                                            <span style="color: #000000">Sore throat</span>
                                             </label>
-                                        </p>
-                                        <p>
+                                        </li>
+                                        <li>
                                             <label>
                                             <input type="checkbox" id="nausea" class="filled-in" />
-                                            <span>Nausea or vomiting</span>
+                                            <span style="color: #000000">Nausea or vomiting</span>
                                             </label>
-                                        </p>
-                                    </div>
-                                </div>
+                                        </li>
+                                    </ul>
                             </div>
                         </div>
-                        <div class="col s12 m7">
-                            <div style="border-radius: 10px;" class="card white">
-                                <div class="card-content blue-grey-text-darken-2">
-                                    <span class="card-title">Helpful Links</span>
+                    </div>
+                    <div class="col s12 m7">
+                        <div class="card-cool z-depth-0">
+                            <div class="blue-grey-text-darken-2">
+                                    <h5>Helpful Links</h5>
                                     <ul id="links"> 
                                         <li style="display:none;"id="fever_info"><a href="https://medlineplus.gov/ency/article/003091.htm#:~:text=Chills%20are%20caused%20by%20rapid,certain%20diseases%20such%20as%20malaria.">Chills</a></li>
                                         <li style="display:none;"id="cough_info"><a href="https://www.mayoclinic.org/symptoms/cough/basics/definition/sym-20050846#:~:text=A%20cough%20is%20your%20body's,cough%20is%20normal%20and%20healthy.">Cough</a></li>
@@ -251,23 +256,25 @@
                                         <li style="display:none;"id="throat_info"><a href="https://www.mayoclinic.org/diseases-conditions/sore-throat/symptoms-causes/syc-20351635">Sore Throat</a></li>
                                         <li style="display:none;"id="nausea_info"><a href="https://www.webmd.com/digestive-disorders/digestive-diseases-nausea-vomiting">Nausea</a></li>
                                     </ul>
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
         <h2>Announcements</h2>
-        <ul style="border-radius: 10px;" id="announcements" class="collapsible popout"> </ul>
+        <ul id="announcements" class="collapsible popout"> </ul>
+        <div style="height: 500px" id="modal1" class="modal">
+            <div id="heat"></div>
         </div>
+        </div>
+        <br>
     </main>
-    <footer class="page-footer blue-grey lighten-2 ">
-        <div class="footer-copyright blue-grey lighten-2">
-            <div class="container blue-grey-text text-darken-2 left">
+    <footer class="page-footer blue darken-4 ">
+        <div class="footer-copyright blue darken-4">
+            <div class="container white-text left">
             © 2020 Covidiena. All Rights Reserved.
             <a class="blue-text text-darken-1 right" href="mailto: covidiena@gmail.com">Contact Us</a>
             </div>
         </div>
     </footer>
   </body>
-  <script src="tracing.js"></script>
 </html>
