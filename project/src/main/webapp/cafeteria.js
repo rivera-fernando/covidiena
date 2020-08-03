@@ -101,6 +101,9 @@ async function loadPage() {
 
 async function loadUser() {
   await fetch('/login').then(response => response.json()).then((users) => {
+    if (users[0] == null) {
+      location.href = '/login.html';
+    }
     user = users[0]; 
     const header = document.getElementById("header");
     const name = document.createElement("h4");
