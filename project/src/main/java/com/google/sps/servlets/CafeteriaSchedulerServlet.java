@@ -174,7 +174,7 @@ public class CafeteriaSchedulerServlet extends HttpServlet {
   }
 
   public List<Block> getMealData(Entity cafeteria, EmbeddedEntity scheduleEntity, int mealTime, String meal) {
-    EmbeddedEntity blocksEntity = (EmbeddedEntity) scheduleEntity.getProperty("lunch_blocks");
+    EmbeddedEntity blocksEntity = (EmbeddedEntity) scheduleEntity.getProperty(meal.concat("_blocks"));
     List<Block> blockList = new ArrayList<Block>();
     String blockStr = "block";
 

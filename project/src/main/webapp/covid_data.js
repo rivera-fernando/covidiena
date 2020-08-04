@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
- 
+
 function loadCovidData() {
   const url = "/load-covid-data";
   fetch(url, {
@@ -69,7 +69,7 @@ function createTableRow(tableBodyDOM, country) {
   
   tableBodyDOM.appendChild(tableRowDOM);
 }
- 
+/*
 function loadUpdates() {
   const url = "/updates";
   fetch(url, {
@@ -113,3 +113,4 @@ function createUpdateElement(update) {
  
   return updateElement;
 }
+*/

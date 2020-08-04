@@ -82,8 +82,10 @@ async function loadEvents() {
 
 async function loadUser() {
   await fetch('/login').then(response => response.json()).then((users) => {
+    if (users[0] == null) {
+      location.href = '/login.html';
+    }
     user = users[0]; 
-    console.log(user);
   });
 }
  
@@ -100,7 +102,7 @@ function loadExplore(week, filter, type, attendance) {
     tableBody.innerHTML = '';
     var isFull = 0;
     const today = (new Date()).getDay();
-    var dayIndex = -1;
+    var dayIndex = 0;
     // Load dates
     week.forEach((day) => {
       const date = document.getElementById(day.name+"-date");
@@ -418,7 +420,7 @@ function createEventElement(event) {
     headerColumn.appendChild(rejected);
   }
 
-  if (event.edited) {
+  if (event.edited && user.is_admin) {
     const edited = document.createElement('p');
     edited.innerText = 'Edited';
     edited.style.color = "red";
@@ -518,21 +520,22 @@ function addRSVPBtn(eventElement) {
   dropdownList.appendChild(RSVPBtn);
 }
 
-function addViewDetailsBtn(eventElement, event) {
+async function addViewDetailsBtn(eventElement, event) {
   const viewDetails = document.createElement('li');
 
   viewDetails.innerText = "Event Details";
   viewDetails.classList.add('waves-light', 'btn-flat', 'btn-small');
 
-  viewDetails.addEventListener('click', () => {
+  viewDetails.addEventListener('click', async () => {
     const params = new URLSearchParams();
+    console.log(eventElement.id);
+    console.log(event.entityType);
     params.append('eventId', eventElement.id);
     params.append('eventType', event.entityType);
-    fetch ('event-details', {
+    await fetch ('event-details', {
       method: 'POST',
       body: params
-    });
-    location.replace('/event-details.html');
+    }).then(location.replace('/event-details.html'));
   });
 
   var dropdownList = eventElement.getElementsByTagName('ul')[0];

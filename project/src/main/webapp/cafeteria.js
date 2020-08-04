@@ -101,10 +101,13 @@ async function loadPage() {
 
 async function loadUser() {
   await fetch('/login').then(response => response.json()).then((users) => {
+    if (users[0] == null) {
+      location.href = '/login.html';
+    }
     user = users[0]; 
     const header = document.getElementById("header");
     const name = document.createElement("h4");
-    name.innerText = user.name + "'s Cafeteria Schedule";
+    name.innerText = "Welcome " + user.name;
     const school = document.createElement("h5");
     school.innerText = user.school;
     header.appendChild(name);
@@ -222,8 +225,8 @@ function loadSchedule(cafeteria) {
 function createCafeteriaElement(cafeteria) {
   const cafeteriaElement = document.createElement('div');
   cafeteriaElement.style.width = "fit-content";
-  cafeteriaElement.style.marginRight = "10px";
-  cafeteriaElement.classList.add('card', 'deep-purple', 'darken-2', 'white-text', 'col');
+  cafeteriaElement.style.borderRadius = "3px";
+  cafeteriaElement.classList.add('card', 'blue', 'darken-4', 'white-text', 'col');
   const container = document.createElement('div');
   container.classList.add('card-content');
   const name = document.createElement('p');
@@ -303,13 +306,14 @@ function timeConverter(time) {
 
 function createMealBlocks(elem, blocks, cafeteria, meal) {
   const table = document.createElement('table');
-  table.classList.add("responsive-table", "striped");
+  table.classList.add("striped");
   const thead = document.createElement('thead');
   const trow = document.createElement('tr');
 
   var blockIndex = 1;
   blocks.forEach(block => {
     const blockElem = document.createElement('td');
+    blockElem.style.paddingTop = 0;
     blockElem.classList.add("vgrid", "center", "center-align");
     const blockTitle = document.createElement('p');
     blockTitle.classList.add("center-align", "center");
@@ -339,36 +343,38 @@ function createMealBlocks(elem, blocks, cafeteria, meal) {
     var found = false;
     block.students.forEach(student => {
       if (student.name === user.name) {
-        blockElem.classList.add("light-blue", "lighten-5");
+        blockElem.classList.add("blue", "lighten-5");
         found = true;
       }
     });
 
-    if (found == false) {
-      const addBtn = document.createElement('button');
-      addBtn.innerText = "Join";
-      addBtn.classList.add('btn');
-      addBtn.addEventListener('click', () => {
-        const params = new URLSearchParams();
-        params.append("cafeteriaKey", cafeteria.key);
-        params.append("targetCafeteriaName", cafeteria.name);
-        params.append("blockStart", block.time.start);
-        params.append("mealDuration", cafeteria.meal_time);
-        params.append("currCafeteria", currCafeteria);
-        if (meal === "lunch") {
-          params.append("currTimeRangeStart", currLunch.start);
-          params.append("currTimeRangeEnd", currLunch.start + currLunch.duration);
-        } else {
-          params.append("currTimeRangeStart", currDinner.start);
-          params.append("currTimeRangeEnd", currDinner.start + currDinner.duration);
-        }
-        params.append("meal", meal);
-        fetch('/change-cafeteria', {
-          method: 'POST',
-          body: params
-        }).then(location.reload());
-      });
-      blockElem.appendChild(addBtn);
+    const addBtn = document.createElement('button');
+    addBtn.innerText = "Join";
+    addBtn.classList.add('btn');
+    addBtn.addEventListener('click', () => {
+    const params = new URLSearchParams();
+    params.append("cafeteriaKey", cafeteria.key);
+    params.append("targetCafeteriaName", cafeteria.name);
+    params.append("blockStart", block.time.start);
+    params.append("mealDuration", cafeteria.meal_time);
+    params.append("currCafeteria", currCafeteria);
+    if (meal === "lunch") {
+        params.append("currTimeRangeStart", currLunch.start);
+        params.append("currTimeRangeEnd", currLunch.start + currLunch.duration);
+    } else {
+        params.append("currTimeRangeStart", currDinner.start);
+        params.append("currTimeRangeEnd", currDinner.start + currDinner.duration);
+    }
+    params.append("meal", meal);
+    fetch('/change-cafeteria', {
+        method: 'POST',
+        body: params
+    }).then(location.reload());
+    });
+    blockElem.appendChild(addBtn);
+    
+    if (found == true) {
+      addBtn.disable = true;
     }
 
     trow.appendChild(blockElem);

@@ -17,51 +17,74 @@
     <script src="materialize.min.js"></script>
     <script src="cafeteria.js"></script>
   </head>
-  <body onload="updateLogIn(); loadPage()">
+  <body onload="updateLogIn();loadPage()">
       <nav>
-        <div class="nav-wrapper blue-grey lighten-4">
-            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
+        <div class="nav-wrapper blue darken-4 white-text">
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
             <ul id="nav-mobile" class="right">
-                <li><a href="/settings.html" id="settingButton"><i style="color: #42a5f5;" class="material-icons">settings</i></a></li>
+                <li><a href="/settings.html" id="settingButton"><img class = "profilePic"></a></li>                
             </ul>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
-                <li><a style="color: #42a5f5;" href="/info.html">Information</a></li>
-                <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
-                <li class="active"><a style="color: #42a5f5;" href="/cafeteria.html">Cafeteria</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/info.html">Information</a></li>
+                <li><a href="/events.html">Events</a></li>
+                <li class="active"><a href="/cafeteria.html">Cafeteria</a></li>
                 <li style="width: 50px; height: 60px;">&nbsp;</li>
-                <li><a style="color: #42a5f5;" href="/signup.html" class="signupButton">Sign Up</a></li>
-                <li><a style="color: #42a5f5;" class= "loginButton">Log In</a></li>
+                <li><a href="/signup.html" class="signupButton">Sign Up</a></li>
+                <li><a class= "loginButton">Log In</a></li>
             </ul>
         </div>
       </nav>
-      <ul class="sidenav" id="mobile-demo">
-        <li><a style="color: #42a5f5;" href="/dashboard">Dashboard</a></li>
-        <li><a style="color: #42a5f5;" href="/events.html">Events</a></li>
+      <ul class="sidenav blue darken-4 white-text" id="mobile-demo">
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li><a href="/events.html">Events</a></li>
         <li class="active"><a style="color: #42a5f5;" href="/cafeteria.html">Cafeteria</a></li>
-        <li><a style="color: #42a5f5;" href="/signup.html" class="signupButton">Sign Up</a></li>
-        <li><a style="color: #42a5f5;" class ="loginButton">Log In</a></li>
+        <li><a href="/signup.html" class="signupButton">Sign Up</a></li>
+        <li><a class ="loginButton">Log In</a></li>
       </ul>
     <main>
-      <div class="container">
-        <div class="section">
-          <div id="header"></div>
-          <div id="message" style="margin-bottom: 0"></div>
-          <a id="preferences-trigger" class="deep-purple-text btn-flat modal-trigger" href="#preferences-form-modal" style="display: none; padding-left: 0">Submit Preferences</a>
-        </div>
-        <div id="cafeterias" style="display: none; margin-bottom: 0">
-          <h5>Available Cafeterias</h5>
+      <div class="blue darken-4 center center-align">
+        <div class="section blue darken-4 white-text center center-align">
           <div class="row">
-            <form class="col s4" style="padding: 0">
+            <div class="col s8 offset-s2">
+              <h1 class="center"><b>The Cafeteria Scheduler</b></h1>
+              <div id="header"></div><br>
+              <div id="message" style="margin-bottom: 0"></div>
+              <a id="preferences-trigger" class="btn-flat modal-trigger white-text" href="#preferences-form-modal" style="display: none;">Submit Preferences</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row">
+          <h3 class="center-align"><b>Available Cafeterias</b></h3>
+          <div id="cafeterias" class="col s12 m4" style="display: none; margin-bottom: 0">
+            <form style="padding: 0">
               <select id="cafeteria-select" onchange="changeCafeteria()">
                 <option disabled selected>Select a Cafeteria</option>
               </select>
             </form>
+            <div id="cafeteria-preview" class="center center-block"></div>
           </div>
-          <div id="cafeteria-preview"></div>
+          <div id="schedule" class="col s12 m8" style="display: none">
+            <div class="row">
+              <div class="col s12">
+                <ul class="tabs">
+                  <li class="tab col s6"><a class="blue-text text-darken-4 active" href="#lunch-container">Lunch</a></li>
+                  <li class="tab col s6"><a class="blue-text text-darken-4" href="#dinner-container">Dinner</a></li>
+                </ul>
+              </div>
+              <div id="lunch-container" class="col s12">
+                <ul id="lunch"></ul>
+              </div>
+              <div id="dinner-container" class="col s12">
+                <ul id="dinner"></ul>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="modal" id="preferences-form-modal">
+        <div class="modal" style="height: 30% !important;" id="preferences-form-modal">
           <div class="modal-content">
             <form action="/cafeteria-preferences" method="POST" id="preferences-form" onsubmit="return validation()">
               <p class="card-title">Submit Your Meal Preferences</p>
@@ -143,32 +166,12 @@
             </form>
           </div>
         </div>
-        <div id="schedule" style="display: none">
-          <h4 id="cafeteria-title"></h4>
-          <div class="row">
-            <div class="col s12">
-              <ul class="tabs z-depth-1">
-                <li class="tab col s6"><a class="active" href="#lunch-container">Lunch</a></li>
-                <li class="tab col s6"><a href="#dinner-container">Dinner</a></li>
-              </ul>
-            </div>
-            <div id="lunch-container" class="col s12">
-              <ul id="lunch"></ul>
-            </div>
-            <div id="dinner-container" class="col s12">
-              <ul id="dinner"></ul>
-            </div>
-          </div>
-        </div>
       </div>
     </main>
-    <footer class="page-footer blue-grey lighten-2 ">
-        <div class="footer-copyright blue-grey lighten-2">
-            <div class="container blue-grey-text text-darken-2 left">
-            © 2020 Covidiena. All Rights Reserved.
-            <a class="blue-text text-darken-1 right" href="mailto: covidiena@gmail.com">Contact Us</a>
-            </div>
-        </div>
+    <footer class="page-footer blue-grey darken-2">
+      <div class="footer-copyright blue-grey darken-2">
+        <p class="white-text center-block">© 2020 Covidiena. All Rights Reserved.</p>
+      </div>
     </footer>
   </body>
 </html>

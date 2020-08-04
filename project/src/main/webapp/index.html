@@ -8,6 +8,7 @@
     <script src="covid_data.js"></script>
     <link rel="stylesheet" href="materialize.min.css">
     <link rel='icon' href='./static/favicon.png' type='image/x-icon'/ >
+    <script src="https://kit.fontawesome.com/1bb7eb9069.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="materialize.min.js"></script>
     <script>
@@ -16,155 +17,230 @@
     });
     </script>
   </head>
-  <body onload ="loadUpdates();loadCovidData();updateLogIn()">
-      <nav>
-    	<div class="nav-wrapper blue-grey lighten-4">
-            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i style="color: #42a5f5;" class="material-icons">menu</i></a>
-            <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
-            <ul id="nav-mobile" class="right">
-                <li><a href="/settings.html" id="settingButton"><img class = "profilePic"></a></li>
-            </ul>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a style="color: #42a5f5;" href="/dashboard" id= "dashboardButton">Dashboard</a></li>
-                <li><a style="color: #42a5f5;" href="/info.html">Information</a></li>
-                <li><a style="color: #42a5f5;" href="/events.html" id= "eventButton">Events</a></li>
-                <li><a style="color: #42a5f5;" href="/cafeteria.html">Cafeteria</a></li>
-                <li style="width: 50px; height: 60px;">&nbsp;</li>
-                <li><a style="color: #42a5f5;" href="/signup.html" class="signupButton">Sign Up</a></li>
-                <li><a style="color: #42a5f5;" class= "loginButton" href="/login.html">Log In</a></li>
-            </ul>
-    	</div>
-      </nav>
-      <ul class="sidenav" id="mobile-demo">
-        <li><a style="color: #42a5f5;" href="/dashboard" id= "dashboardButton">Dashboard</a></li>
-        <li class="active"><a style="color: #42a5f5;" href="/info.html">Information</a></li>
-        <li><a style="color: #42a5f5;" href="/events.html" id= "eventButton">Events</a></li>
-        <li><a style="color: #42a5f5;" href="/cafeteria.html">Cafeteria</a></li>
-        <li><a style="color: #42a5f5;" href="/signup.html" class="signupButton">Sign Up</a></li>
-        <li><a style="color: #42a5f5;" class= "loginButton" href="/login.html">Log In</a></li>
-      </ul>
-      <main>
+  <body onload ="loadCovidData();updateLogIn()">
+    <nav>
+    <div class="nav-wrapper blue darken-4">
+          <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons white-text">menu</i></a>
+          <a href="../" class="brand-logo"><img src="./static/logo.png" height="63"></a>
+          <ul id="nav-mobile" class="right">
+              <li><a href="/settings.html" id="settingButton"><img class = "profilePic"></a></li>
+          </ul>
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+              <li><a class="white-text" href="/dashboard" id= "dashboardButton">Dashboard</a></li>
+              <li><a class="white-text" href="/info.html">Information</a></li>
+              <li><a class="white-text" href="/events.html" id= "eventButton">Events</a></li>
+              <li><a class="white-text" href="/cafeteria.html">Cafeteria</a></li>
+              <li style="width: 50px; height: 60px;">&nbsp;</li>
+              <li><a class="white-text" href="/signup.html" class="signupButton">Sign Up</a></li>
+              <li><a class="white-text" class= "loginButton" href="/login.html">Log In</a></li>
+          </ul>
+    </div>
+    </nav>
+    <ul class="sidenav blue darken-4" id="mobile-demo">
+      <li><a class="white-text" href="/dashboard" id= "dashboardButton">Dashboard</a></li>
+      <li><a class="white-text" href="/info.html">Information</a></li>
+      <li><a class="white-text" href="/events.html" id= "eventButton">Events</a></li>
+      <li><a class="white-text" href="/cafeteria.html">Cafeteria</a></li>
+      <li><a class="white-text" href="/signup.html" class="signupButton">Sign Up</a></li>
+      <li><a class="white-text" class= "loginButton" href="/login.html">Log In</a></li>
+    </ul>
+    <main>
+      <div class="blue darken-4 center center-align">
+        <div class="section blue darken-4 white-text center center-align">
+          <div class="row">
+            <div class="col s8 offset-s2">
+              <h1 class="center"><b>Our Vision</b></h1>
+              <p>With the recent pandemic interrupting the education of millions of students throughout the country, colleges and universities are struggling to find ways to let students back on campus. That’s where Covidiena comes in. Our platform aims at easing the transition to in-person learning for college students, staff, and faculty during the ongoing crisis so students can continue their education in a stable and safe environment.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="section" style="padding-bottom:0">
+          <h3 class="center-align"><b>What We Do</b></h3>
+          <br>
+          <div class="row">
+            <div class="col s12 m4">
+              <div class="center promo">
+                <i class="large material-icons dp48 blue-text text-darken-4">healing</i>
+                <h5 class="card-title bold" style="margin-top: 0;">Symptom Tracking</h5>
+                <p class="promo-caption grey-text text-darken-2 center-align">Log your symptoms and keep track of you health, daily!</p>
+              </div>
+            </div>
+            <div class="col s12 m4">
+              <div class="center promo">
+                <i class="large material-icons dp48 blue-text text-darken-4">event</i>
+                <h5 class="card-title bold" style="margin-top: 0;">Events & Contact Tracing</h5>
+                <p class="promo-caption grey-text text-darken-2 center-align">Sign up for <a href='/events.html'>events</a> worry-free with our new contact tracing feature.</p>
+              </div>
+            </div>
+            <div class="col s12 m4">
+              <div class="center promo">
+                <i class="large material-icons dp48 blue-text text-darken-4">restaurant</i>
+                <h5 class="card-title bold" style="margin-top: 0;">Cafeteria Scheduling</h5>
+                <p class="promo-caption grey-text text-darken-2 center-align">Our <a href='/cafeteria.html'>cafeteria scheduling</a> feature will ensure you'll always be able to social distance at your school's dining halls.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grey lighten-3 center center-align">
+        <div class="container" style="padding-top:0;padding-bottom:0">
+          <br>
+          <h3 class="center"><b>The Data</b></h3>
+          <div class="row">
+            <div class="col s12 m6" style="padding-top: 20px">
+              <h5 class="center">World Data</h5>
+              <div class="row">
+                <div class="col s12 m4 14">
+                    <b>Cases</b> <div id="world-cases"></div>
+                </div>
+                <div class="col s12 m4 14">
+                    <b>Deaths</b> <div id="world-deaths"></div>
+                </div>
+                <div class="col s12 m4 14">
+                    <b>Recoveries</b> <div id="world-recoveries"></div>
+                </div>
+              </div>
+              <h5 class="center">Country Data</h5>
+              <table id="country-table" class="tableBodyScroll">
+                <thead id="country-table-head">
+                  <tr>
+                    <th colspan="2">Location</th>
+                    <th>Cases</th>
+                    <th>Deaths</th>
+                    <th>Recoveries</th>
+                  </tr>
+                </thead>
+                <tbody id="country-table-body"></tbody>
+              </table>
+              <p>This data is taken from <a class="blue-text text-accent-2" href="https://en.wikipedia.org/wiki/Template:COVID-19_pandemic_data"><b>this</b></a> wikipedia page.</p>
+            </div>
+            <div class="col s12 m6" style="padding: 20px">
+              <iframe src="https://ourworldindata.org/grapher/daily-covid-cases-deaths?tab=map" loading="lazy" style="width: 100%; height: 600px; border: 0px none;"></iframe>
+              <p class="grey-text" style="font-size: 10px">Max Roser, Hannah Ritchie, Esteban Ortiz-Ospina and Joe Hasell (2020) - "Coronavirus Pandemic (COVID-19)". Published online at OurWorldInData.org. Retrieved from: 'https://ourworldindata.org/coronavirus' [Online Resource]<p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="section" style="padding-top:0;padding-bottom:0">
+          <h3 class="center center-align"><b>The Team</b></h3>
+          <div class="row center">
+            <div class="col s12 m4">
+              <h5>Christina Chance</h5>
+              <img src="/images/christina.jpg" style="max-width: 80%" class="circle">
+              <p class="grey-text text-darken-1">Emory University</p>
+              <div class="row">
+                <div class="col s8 offset-s2">
+                  <div class="row">
+                    <div class="col s4" style="padding: 0">
+                      <form action="https://github.com/christinachance" target="_blank">
+                          <button type="submit" class="contact-icon"><i class="fab fa-github fa-2x"></i></button>
+                      </form>
+                    </div>
+                    <div class="col s4">
+                      <form action="https://www.linkedin.com/in/christina-chance-147666166/" target="_blank">
+                          <button type="submit" class="contact-icon"><i class="fab fa-linkedin fa-2x"></i></button>
+                      </form>
+                    </div>
+                    <div class="col s4">
+                      <form action="http://cchance-step.appspot.com/" target="_blank">
+                          <button type="submit" class="contact-icon"><i class="fas fa-code fa-2x"></i></button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col s12 m4">
+              <h5>Fernando Rivera</h5>
+              <img src="/images/fernando.jpg" style="max-width: 80%" class="circle">
+              <p class="grey-text text-darken-1" >University of Florida</p>
+              <div class="row">
+                <div class="col s8 offset-s2">
+                  <div class="row">
+                    <div class="col s4" style="padding: 0">
+                      <form action="https://github.com/rivera-fernando/" target="_blank">
+                          <button type="submit" class="contact-icon"><i class="fab fa-github fa-2x"></i></button>
+                      </form>
+                    </div>
+                    <div class="col s4">
+                      <form action="https://www.linkedin.com/in/fernando-rivera-04559019b" target="_blank">
+                          <button type="submit" class="contact-icon"><i class="fab fa-linkedin fa-2x"></i></button>
+                      </form>
+                    </div>
+                    <div class="col s4">
+                      <form action="https://fernandorivera.dev" target="_blank">
+                          <button type="submit" class="contact-icon"><i class="fas fa-code fa-2x"></i></button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col s12 m4">
+              <h5>Thomas Cintra</h5>
+              <img src="/images/thomas.jpg" style="max-width: 80%" class="circle">
+              <p class="grey-text text-darken-1">Harvey Mudd College</p>
+              <div class="row">
+                <div class="col s8 offset-s2">
+                  <div class="row">
+                    <div class="col s4" style="padding: 0">
+                      <form action="https://github.com/Tcintra" target="_blank">
+                          <button type="submit" class="contact-icon"><i class="fab fa-github fa-2x"></i></button>
+                      </form>
+                    </div>
+                    <div class="col s4">
+                      <form action="https://www.linkedin.com/in/thomascintra/" target="_blank">
+                          <button type="submit" class="contact-icon"><i class="fab fa-linkedin fa-2x"></i></button>
+                      </form>
+                    </div>
+                    <div class="col s4">
+                      <form action="http://www.tncintra-step.appspot.com" target="_blank">
+                          <button type="submit" class="contact-icon"><i class="fas fa-code fa-2x"></i></button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>        
+        </div>
+      </div>
+      <div class="blue darken-4 white-text">
         <div class="container">
-        <div class="section">
-            <h4>Our Vision</h4>
-            <p>With the recent pandemic interrupting the education of millions of students throughout the country, colleges and universities are struggling to find ways to let students back on campus. That’s where Covidiena comes in. Our platform aims at easing the transition to in-person learning for college students, staff, and faculty during the ongoing crisis so students can continue their education in a stable and safe environment.</p>
+          <br>
+          <h3 class="center-align"><b>Contact Us</b></h3>
+          <form action="mailto:covidiena@gmail.com?subject=Feedback" method="POST" enctype="text/plain" autocomplete="off">
+            <div class="row" style="margin-bottom:0">
+              <div class="col s12 m6">
+                <div class="input-field">
+                  <input type="text" class="white-text" id="name" name="name"><br>
+                  <label for="name" class="white-text">Name</label>
+                </div>
+                <div class="input-field">                
+                  <input type="text" class="white-text" id="email" name="mail"><br>
+                  <label for="email" class="white-text">Return Email</label>
+                </div>
+              </div>
+              <div class="input-field col s12 m6">
+                <input type="text" class="white-text" id="comment" name="comment" class="materialize-textarea"><br><br>
+                <label for="comment" class="white-text">Your Comment</label>
+                <div class="right">
+                  <input class="btn-flat red" class="white-text" type="reset" value="Reset">
+                  <input class="btn" class="white-text" type="submit" value="Send">
+                </div>
+              </div>
+            </div>
+          </form>
+          <br>
         </div>
-        <div class="card-panel blue-grey lighten-4">
-            <h4>What We Do</h4>
-            <div class="row">
-            <div class="col s12 m4 14">
-                <div style="border-radius: 10px;" class="card medium white hoverable">
-                <div class="card-content blue-grey-text-darken-2" style="overflow-y: scroll">
-                    <div class="center promo promo-example">
-                    <i class="large material-icons dp48">healing</i>
-                    <span class="card-title bold">Symptom Tracking</span>
-                    <p class="promo-caption">Students are encouraged to report their daily temperature and any other symptoms they might be experiencing. This allows the college's administration to monitor any possible cases of Covid19 on campus, and react appropriately.</p>
-                    </div>
-                </div>
-                </div>
-            </div>
-            <div class="col s12 m4 14">
-                <div style="border-radius: 10px;" class="card medium white hoverable">
-                <div class="card-content blue-grey-text-darken-2" style="overflow-y: scroll">
-                    <div class="center promo">
-                    <i class="large material-icons dp48">event</i>
-                    <span class="card-title bold">Event Tracking</span>
-                    <p class="promo-caption">All official on-campus events are submitted to Covidiena, where students, staff, and faculty can browse through events, their health/safety regulations, and maximum capacity.</p>
-                    </div>
-                </div>
-                </div>
-            </div>
-            <div class="col s12 m4 14">
-                <div style="border-radius: 10px;" class="card medium white hoverable">
-                <div class="card-content blue-grey-text-darken-2" style="overflow-y: scroll">
-                    <div class="center promo">
-                    <i class="large material-icons dp48">info_outline</i>
-                    <span class="card-title bold">Spread Information</span>
-                    <p class="promo-caption">Valuable information on how to keep yourself and your community healthy and safe is available at our <a style="color: #42a5f5;font-weight: bold;" href="/info.html">Stay Informed</a> page. </p>
-                    </div>
-                </div>
-                </div>
-            </div>
-            </div>
-        </div>
-        <div class="section">
-            <h4>News and Updates</h4>
-            <div class="card-panel blue-grey lighten-4">
-            <div class="row">
-                <div class="col s7">
-                <div class="row">
-                    <div class="card white hoverable center" style="border-radius: 10px;">
-                    <div class="card-content">
-                        <p class="card-title bold">World Data</p>
-                        <div class="row">
-                        <div class="col s12 m4 14">
-                            <b>Cases:</b> <div id="world-cases"></div>
-                        </div>
-                        <div class="col s12 m4 14">
-                            <b>Deaths:</b> <div id="world-deaths"></div>
-                        </div>
-                        <div class="col s12 m4 14">
-                            <b>Recoveries:</b> <div id="world-recoveries"></div>
-                        </div>
-                        </div>
-                        <p class="left">This data is taken from <a style="color: #42a5f5;font-weight: bold;" href="https://en.wikipedia.org/wiki/Template:COVID-19_pandemic_data">this</a> wikipedia page.</p>
-                    </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="card white large hoverable" style="border-radius: 10px;">
-                    <div class="card-content">
-                        <p class="card-title bold center">By Country</p>
-                    </div>
-                    <div class="card-content" style="overflow-y: scroll; overflow-x: scroll; max-height: 80%">
-                        <table id="country-table">
-                        <thead id="country-table-head">
-                            <tr>
-                            <th colspan="2">Location</th>
-                            <th>Cases</th>
-                            <th>Deaths</th>
-                            <th>Recoveries</th>
-                            </tr>
-                        </thead>
-                        <tbody id="country-table-body"></tbody>
-                        </table>
-                    </div>
-                    </div>
-                </div>
-                </div>
-                <div class="col s4 push-s1">
-                <div class="row">
-                    <div class="card large white hoverable" style="border-radius: 10px; overflow-y: hidden;">
-                    <div class="card-content">
-                        <p class="card-title bold">Covidiena Updates</p>
-                    </div>
-                    <div class="card-content" style="overflow-y: scroll; max-height: 80%">
-                        <div id="updates"></div>
-                    </div>
-                    </div>
-                <div class="row" id="update-form" style="display: none;">
-                    <h5>Post an update</h5>
-                    <form action="/updates" method="POST">
-                    <input name="update-title" placeholder="Update Title" autocomplete="off" spellcheck="false">
-                    <textarea class="materialize-textarea" name="update-description" placeholder="Update description" autocomplete="off" spellcheck="false"></textarea>
-                    <button class="btn waves-effect waves-light" type="submit" name="action">POST
-                        <i class="material-icons right">send</i>
-                    </button>
-                    </form>
-                </div>
-                </div>
-            </div>
-            </div>
-        </div>
-        </div>
-        </div>
+      </div>
     </main>
-    <footer class="page-footer blue-grey lighten-2 ">
-      <div class="footer-copyright blue-grey lighten-2">
-        <div class="container blue-grey-text text-darken-2 left">
-          © 2020 Covidiena. All Rights Reserved.
-          <a class="blue-text text-darken-1 right" href="mailto: covidiena@gmail.com">Contact Us</a>
-        </div>
+    <footer class="page-footer blue-grey darken-2">
+      <div class="footer-copyright blue-grey darken-2">
+        <p class="white-text center-block">© 2020 Covidiena. All Rights Reserved.</p>
       </div>
     </footer>
   </body>
