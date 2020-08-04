@@ -420,7 +420,7 @@ function createEventElement(event) {
     headerColumn.appendChild(rejected);
   }
 
-  if (event.edited) {
+  if (event.edited && user.is_admin) {
     const edited = document.createElement('p');
     edited.innerText = 'Edited';
     edited.style.color = "red";
